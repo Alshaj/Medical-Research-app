@@ -65,15 +65,15 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Molecular Genetics': record.diagnostics?.molecularGenetics || '',
     'CT Scan / Imaging Findings': record.diagnostics?.ctScanImaging || '',
 
-    // Section 5: Diagnosis & Outcome
-    'Diagnosis': record.diagnosis || '',
-    'Sub Type': record.subType || '',
+    // Section 5: Diagnosis
+    'Hematological Malignancy Diagnosis': record.diagnosis || '',
+    'Disease Subtype / FAB / WHO Classification': record.subType || '',
     'Stage / Risk Group': record.stageRiskGroup || '',
-    'IHC Markers': record.ihcMarkers || '',
-    'Induction Protocol': record.inductionProtocol || '',
-    'Treatment Response': record.treatmentResponse || '',
-    'Relapse Date': record.relapseDate || '',
-    'Outcome': record.outcome || '',
+    'Immunohistochemistry (IHC) Markers': record.ihcMarkers || '',
+
+    // Section 6: Treatment & Outcome
+    'Line of Treatment': record.lineOfTreatment || record.inductionProtocol || '',
+    'Treatment Outcome': record.treatmentOutcome || record.outcome || '',
     
     // Metadata
     'Date Created': record.createdAt ? new Date(record.createdAt).toLocaleDateString() : '',

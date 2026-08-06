@@ -51,7 +51,7 @@ export interface MedicalRecord {
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
 
-  // Demographics
+  // Section 1: Demographics
   studyId: string; // Study ID (Required *)
   mrn?: string; // Medical Record Number
   patientId?: string; // Legacy fallback
@@ -72,18 +72,20 @@ export interface MedicalRecord {
   // Section 3: Laboratory Data
   labs: LaboratoryData;
 
-  // Section 4: Diagnostics (Exact match to screenshot)
+  // Section 4: Diagnostics
   diagnostics: DiagnosticsData;
 
-  // Section 5: Diagnosis & Outcome
-  diagnosis: string; // Required *
-  subType?: string;
-  stageRiskGroup?: string;
-  ihcMarkers?: string;
-  inductionProtocol?: string;
-  treatmentResponse?: string;
-  relapseDate?: string;
-  outcome?: string;
+  // Section 5: Diagnosis
+  diagnosis: string; // Hematological Malignancy Diagnosis * (Required)
+  subType?: string; // Disease Subtype / FAB / WHO Classification
+  stageRiskGroup?: string; // Stage / Risk Group
+  ihcMarkers?: string; // Immunohistochemistry (IHC) Markers
+
+  // Section 6: Treatment & Outcome
+  inductionProtocol?: string; // Line of Treatment
+  lineOfTreatment?: string;
+  outcome?: string; // Treatment Outcome
+  treatmentOutcome?: string;
 
   tags?: string[];
   notes?: string;

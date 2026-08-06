@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
-import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethoscope, Microchip } from 'lucide-react';
+import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethoscope, Microchip, Award } from 'lucide-react';
 
 import { recordRepository } from '../../db/repository';
 import { useRecordStore } from '../../stores/useRecordStore';
@@ -59,6 +59,27 @@ const MARITAL_STATUS_OPTIONS = [
   { value: 'Married', label: 'Married' },
   { value: 'Divorced', label: 'Divorced' },
   { value: 'Widowed', label: 'Widowed' }
+];
+
+const LINE_OF_TREATMENT_OPTIONS = [
+  { value: '', label: 'Select Line of Treatment' },
+  { value: 'First-Line / Induction Protocol', label: 'First-Line / Induction Protocol' },
+  { value: 'Second-Line / Relapsed Protocol', label: 'Second-Line / Relapsed Protocol' },
+  { value: 'Consolidation Therapy', label: 'Consolidation Therapy' },
+  { value: 'Maintenance Therapy', label: 'Maintenance Therapy' },
+  { value: 'Salvage Therapy', label: 'Salvage Therapy' },
+  { value: 'Palliative Care', label: 'Palliative Care' },
+];
+
+const TREATMENT_OUTCOME_OPTIONS = [
+  { value: '', label: 'Select Treatment Outcome' },
+  { value: 'Complete Remission', label: 'Complete Remission' },
+  { value: 'Partial Remission', label: 'Partial Remission' },
+  { value: 'Stable Disease', label: 'Stable Disease' },
+  { value: 'Relapse / Progressive Disease', label: 'Relapse / Progressive Disease' },
+  { value: 'Refractory', label: 'Refractory' },
+  { value: 'Deceased', label: 'Deceased' },
+  { value: 'Under Evaluation', label: 'Under Evaluation' },
 ];
 
 // Zod Validation Schema matching exact fields from screenshots
@@ -123,13 +144,12 @@ const patientFormSchema = z.object({
     ctScanImaging: z.string().optional(),
   }),
 
-  diagnosis: z.string().min(1, 'Diagnosis is required'),
+  diagnosis: z.string().min(1, 'Hematological Malignancy Diagnosis is required'),
   subType: z.string().optional(),
   stageRiskGroup: z.string().optional(),
   ihcMarkers: z.string().optional(),
-  inductionProtocol: z.string().optional(),
-  treatmentResponse: z.string().optional(),
-  relapseDate: z.string().optional(),
+
+  lineOfTreatment: z.string().optional(),
   outcome: z.string().optional(),
 });
 
@@ -196,10 +216,8 @@ export const PatientForm: React.FC = () => {
     subType: editingRecord?.subType || '',
     stageRiskGroup: editingRecord?.stageRiskGroup || '',
     ihcMarkers: editingRecord?.ihcMarkers || '',
-    inductionProtocol: editingRecord?.inductionProtocol || '',
-    treatmentResponse: editingRecord?.treatmentResponse || '',
-    relapseDate: editingRecord?.relapseDate || '',
-    outcome: editingRecord?.outcome || '',
+    lineOfTreatment: editingRecord?.lineOfTreatment || editingRecord?.inductionProtocol || '',
+    outcome: editingRecord?.outcome || editingRecord?.treatmentOutcome || '',
   };
 
   const {
@@ -254,10 +272,10 @@ export const PatientForm: React.FC = () => {
         subType: data.subType,
         stageRiskGroup: data.stageRiskGroup,
         ihcMarkers: data.ihcMarkers,
-        inductionProtocol: data.inductionProtocol,
-        treatmentResponse: data.treatmentResponse,
-        relapseDate: data.relapseDate,
+        lineOfTreatment: data.lineOfTreatment,
+        inductionProtocol: data.lineOfTreatment,
         outcome: data.outcome,
+        treatmentOutcome: data.outcome,
       });
 
       setSaveSuccess(true);
@@ -288,7 +306,7 @@ export const PatientForm: React.FC = () => {
             <ArrowLeft className="w-4 h-4" /> Back to Records
           </Button>
           <h1 className="text-2xl font-bold text-slate-800">
-            {editingRecord ? `Edit Patient Record (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Record'}
+            {editingRecord ? `Edit Patient Record (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Case'}
           </h1>
         </div>
 
@@ -306,7 +324,7 @@ export const PatientForm: React.FC = () => {
         <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center gap-3 animate-fade-in">
           <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">✓</div>
           <div>
-            <p className="font-semibold text-sm">Patient Record Saved Successfully!</p>
+            <p className="font-semibold text-sm">Patient Case Record Saved Successfully!</p>
             <p className="text-xs text-emerald-700">Stored safely in your device's IndexedDB JSON collection.</p>
           </div>
         </div>
@@ -494,7 +512,7 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 4: Diagnostics (Exact match to Screenshot) */}
+        {/* Section 4: Diagnostics */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <Microchip className="w-5 h-5 text-teal-700" />
@@ -502,8 +520,8 @@ export const PatientForm: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Peripheral Blast (%)" placeholder="Peripheral Blast (%)" type="number" step="0.1" {...register('diagnostics.peripheralBlast')} />
-            <Input label="Bone Marrow Blast (%)" placeholder="Bone Marrow Blast (%)" type="number" step="0.1" {...register('diagnostics.boneMarrowBlast')} />
+            <Input label="Peripheral Blast" placeholder="Peripheral Blast" type="number" step="0.1" {...register('diagnostics.peripheralBlast')} />
+            <Input label="Bone Marrow Blast" placeholder="Bone Marrow Blast" type="number" step="0.1" {...register('diagnostics.boneMarrowBlast')} />
           </div>
 
           <Textarea label="Peripheral Blood Smear Findings" placeholder="Peripheral Blood Smear Findings" {...register('diagnostics.pbsFindings')} />
@@ -528,51 +546,52 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 5: Diagnosis & Outcome */}
+        {/* Section 5: Diagnosis (Exact match to Screenshot 5) */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <FileText className="w-5 h-5 text-teal-700" />
-            <span>5. Diagnosis & Outcome</span>
+            <span>5. Diagnosis</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
-              label="Diagnosis"
+              label="Hematological Malignancy Diagnosis"
               required
-              placeholder="Diagnosis"
+              placeholder="Hematological Malignancy Diagnosis *"
               error={errors.diagnosis?.message as string}
               {...register('diagnosis')}
             />
-            <Input label="Sub Type" placeholder="Sub Type" {...register('subType')} />
+            <Input label="Disease Subtype / FAB / WHO Classification" placeholder="Disease Subtype / FAB / WHO Classification" {...register('subType')} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input label="Stage / Risk Group" placeholder="Stage / Risk Group" {...register('stageRiskGroup')} />
-            <Input label="IHC Markers" placeholder="IHC Markers" {...register('ihcMarkers')} />
-            <Input label="Induction Protocol" placeholder="Induction Protocol" {...register('inductionProtocol')} />
+            <Input label="Immunohistochemistry (IHC) Markers" placeholder="Immunohistochemistry (IHC) Markers" {...register('ihcMarkers')} />
+          </div>
+        </div>
+
+        {/* Section 6: Treatment & Outcome (Exact match to Screenshot 6) */}
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
+            <Award className="w-5 h-5 text-teal-700" />
+            <span>6. Treatment & Outcome</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Input label="Treatment Response" placeholder="Treatment Response" {...register('treatmentResponse')} />
-            <Input label="Relapse Date" type="date" {...register('relapseDate')} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
-              label="Outcome"
-              options={[
-                { value: '', label: 'Select outcome' },
-                { value: 'Complete Remission', label: 'Complete Remission' },
-                { value: 'Partial Remission', label: 'Partial Remission' },
-                { value: 'Relapse', label: 'Relapse' },
-                { value: 'Refractory', label: 'Refractory' },
-                { value: 'Deceased', label: 'Deceased' },
-                { value: 'Stable', label: 'Stable' },
-                { value: 'Under Treatment', label: 'Under Treatment' },
-              ]}
+              label="Line of Treatment"
+              options={LINE_OF_TREATMENT_OPTIONS}
+              {...register('lineOfTreatment')}
+            />
+            <Select
+              label="Treatment Outcome"
+              options={TREATMENT_OUTCOME_OPTIONS}
               {...register('outcome')}
             />
           </div>
         </div>
 
-        {/* Floating / Sticky Save Patient Bar matching screenshots */}
+        {/* Floating / Sticky Save Clinical Case Record Bar matching screenshots */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur border-t border-slate-200 shadow-lg z-30">
           <div className="max-w-4xl mx-auto flex flex-col items-center gap-1.5">
             <Button
@@ -581,7 +600,7 @@ export const PatientForm: React.FC = () => {
               className="w-full sm:w-auto px-12 py-3 bg-teal-800 hover:bg-teal-900 text-white font-semibold text-base rounded-xl shadow-md transition-transform active:scale-95"
               icon={<Save className="w-5 h-5" />}
             >
-              {isSubmitting ? 'Saving to Device...' : 'Save Patient'}
+              {isSubmitting ? 'Saving to Device...' : 'Save Clinical Case Record'}
             </Button>
             <p className="text-xs text-slate-500 text-center">
               Saved to this device first — syncs automatically when you are back online

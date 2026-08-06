@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, FileText, Activity, FlaskConical, Stethoscope, Copy, Microchip } from 'lucide-react';
+import { X, FileText, Activity, FlaskConical, Stethoscope, Copy, Microchip, Award } from 'lucide-react';
 import { MedicalRecord } from '../../types/record';
 import { Button } from '../../components/ui/Button';
 
@@ -58,7 +58,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
           {/* General Demographics */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <Stethoscope className="w-4 h-4" /> Demographics & Admission
+              <Stethoscope className="w-4 h-4" /> 1. Demographics & Admission
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
@@ -91,7 +91,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
           {/* Clinical Symptoms */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <Activity className="w-4 h-4" /> Clinical Symptoms & History
+              <Activity className="w-4 h-4" /> 2. Clinical Symptoms & History
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3">
               <div>
@@ -191,16 +191,30 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* 5. Diagnosis & Outcome */}
+          {/* 5. Diagnosis */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <FileText className="w-4 h-4" /> 5. Diagnosis & Outcome
+              <FileText className="w-4 h-4" /> 5. Diagnosis
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <div><span className="text-slate-400 block">Stage / Risk:</span><span className="font-semibold text-slate-700">{record.stageRiskGroup || 'N/A'}</span></div>
-                <div><span className="text-slate-400 block">Protocol:</span><span className="font-semibold text-slate-700">{record.inductionProtocol || 'N/A'}</span></div>
-                <div><span className="text-slate-400 block">Outcome:</span><span className="font-semibold text-emerald-700">{record.outcome || 'N/A'}</span></div>
+              <div><span className="text-slate-400 block">Hematological Malignancy Diagnosis:</span><span className="font-bold text-slate-800 text-sm">{record.diagnosis}</span></div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                <div><span className="text-slate-400 block">Subtype / Classification:</span><span className="font-semibold text-slate-700">{record.subType || 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">Stage / Risk Group:</span><span className="font-semibold text-slate-700">{record.stageRiskGroup || 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">IHC Markers:</span><span className="font-semibold text-slate-700">{record.ihcMarkers || 'N/A'}</span></div>
+              </div>
+            </div>
+          </div>
+
+          {/* 6. Treatment & Outcome */}
+          <div className="space-y-2">
+            <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
+              <Award className="w-4 h-4" /> 6. Treatment & Outcome
+            </h3>
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div><span className="text-slate-400 block">Line of Treatment:</span><span className="font-semibold text-slate-800">{record.lineOfTreatment || record.inductionProtocol || 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">Treatment Outcome:</span><span className="font-bold text-emerald-700">{record.outcome || record.treatmentOutcome || 'N/A'}</span></div>
               </div>
             </div>
           </div>
