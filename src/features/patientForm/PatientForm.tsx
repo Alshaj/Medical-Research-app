@@ -5,6 +5,7 @@ import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethosco
 
 import { recordRepository } from '../../db/repository';
 import { useRecordStore } from '../../stores/useRecordStore';
+import { useToastStore } from '../../stores/useToastStore';
 import { Input } from '../../components/ui/Input';
 import { Textarea } from '../../components/ui/Textarea';
 import { Select } from '../../components/ui/Select';
@@ -182,6 +183,7 @@ type PatientFormData = z.infer<typeof patientFormSchema>;
 
 export const PatientForm: React.FC = () => {
   const { editingRecord, setEditingRecord, setActiveTab } = useRecordStore();
+  const { addToast } = useToastStore();
   const [saveSuccess, setSaveSuccess] = React.useState(false);
 
   const defaultValues: PatientFormData = {
@@ -319,6 +321,8 @@ export const PatientForm: React.FC = () => {
       });
 
       setSaveSuccess(true);
+      addToast('success', `Patient Record (${generatedStudyId}) saved to IndexedDB!`);
+
       setTimeout(() => {
         setSaveSuccess(false);
         setEditingRecord(null);
@@ -326,7 +330,7 @@ export const PatientForm: React.FC = () => {
       }, 1200);
     } catch (err) {
       console.error('Error saving patient record:', err);
-      alert('Failed to save record into local IndexedDB.');
+      addToast('error', 'Failed to save patient record into local storage.');
     }
   };
 
@@ -353,7 +357,10 @@ export const PatientForm: React.FC = () => {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => reset()}
+          onClick={() => {
+            reset();
+            addToast('info', 'Form inputs reset.');
+          }}
           icon={<RotateCcw className="w-3.5 h-3.5" />}
         >
           Reset Form

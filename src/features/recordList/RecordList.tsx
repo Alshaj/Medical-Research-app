@@ -5,6 +5,7 @@ import { Search, Download, Plus, Edit3, Trash2, Eye, Filter, FileSpreadsheet, Up
 import { db } from '../../db/database';
 import { recordRepository } from '../../db/repository';
 import { useRecordStore } from '../../stores/useRecordStore';
+import { useToastStore } from '../../stores/useToastStore';
 import { exportRecordsToExcel } from '../../services/excelExporter';
 import { MedicalRecord } from '../../types/record';
 import { Button } from '../../components/ui/Button';
@@ -69,6 +70,8 @@ export const RecordList: React.FC = () => {
     setEditingRecord,
     setViewingRecord,
   } = useRecordStore();
+
+  const { addToast, openConfirmModal } = useToastStore();
 
   // Reactive IndexedDB query using Dexie liveQuery
   const records = useLiveQuery(
@@ -137,10 +140,16 @@ export const RecordList: React.FC = () => {
     });
   }, [records, searchQuery, selectedGenderFilter, selectedCityFilter, selectedDiagnosisFilter, selectedOutcomeFilter]);
 
-  const handleDelete = async (id: string, studyId: string) => {
-    if (confirm(`Are you sure you want to delete patient record "${studyId}"?`)) {
-      await recordRepository.deleteRecord(id);
-    }
+  const handleDelete = (id: string, studyId: string) => {
+    openConfirmModal({
+      title: 'Delete Patient Record',
+      message: `Are you sure you want to delete patient record "${studyId}"? This action cannot be undone.`,
+      confirmText: 'Delete Record',
+      onConfirm: async () => {
+        await recordRepository.deleteRecord(id);
+        addToast('warning', `Record "${studyId}" deleted.`);
+      },
+    });
   };
 
   const handleExportJSON = async () => {
@@ -152,6 +161,7 @@ export const RecordList: React.FC = () => {
     a.download = `MedResearch_Backup_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    addToast('info', 'Downloaded JSON database backup file.');
   };
 
   const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,12 +173,21 @@ export const RecordList: React.FC = () => {
       try {
         const jsonContent = event.target?.result as string;
         const count = await recordRepository.importJSONBackup(jsonContent);
-        alert(`Successfully restored ${count} records into your device storage.`);
+        addToast('success', `Successfully restored ${count} records into local storage.`);
       } catch (err) {
-        alert('Invalid JSON file format. Restore failed.');
+        addToast('error', 'Invalid JSON file format. Restore failed.');
       }
     };
     reader.readAsText(file);
+  };
+
+  const handleExportExcelClick = () => {
+    if (filteredRecords.length === 0) {
+      addToast('warning', 'No patient records available to export.');
+      return;
+    }
+    exportRecordsToExcel(filteredRecords);
+    addToast('success', `Exported ${filteredRecords.length} records to Excel spreadsheet!`);
   };
 
   return (
@@ -187,7 +206,7 @@ export const RecordList: React.FC = () => {
             variant="outline"
             size="sm"
             icon={<FileSpreadsheet className="w-4 h-4 text-emerald-700" />}
-            onClick={() => exportRecordsToExcel(filteredRecords)}
+            onClick={handleExportExcelClick}
             disabled={filteredRecords.length === 0}
           >
             Export to Excel
@@ -232,7 +251,10 @@ export const RecordList: React.FC = () => {
           </span>
           {hasActiveFilters && (
             <button
-              onClick={resetFilters}
+              onClick={() => {
+                resetFilters();
+                addToast('info', 'Filters reset.');
+              }}
               className="flex items-center gap-1 text-teal-700 hover:text-teal-900 font-medium transition"
             >
               <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
