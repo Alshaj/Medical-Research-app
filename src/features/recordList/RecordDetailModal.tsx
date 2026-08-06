@@ -64,10 +64,10 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
 
         {/* Content */}
         <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto text-sm">
-          {/* General Demographics */}
+          {/* Section 1 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <Stethoscope className="w-4 h-4" /> 1. Demographics & Admission
+              <Stethoscope className="w-4 h-4" /> 1. General & Demographics
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
@@ -97,10 +97,10 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* Clinical Symptoms */}
+          {/* Section 2 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <Activity className="w-4 h-4" /> 2. Clinical Symptoms & History
+              <Activity className="w-4 h-4" /> 2. Clinical Symptoms
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3">
               <div>
@@ -127,7 +127,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* 3. Laboratory Data */}
+          {/* Section 3 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <FlaskConical className="w-4 h-4" /> 3. Laboratory Data
@@ -164,15 +164,15 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* 4. Diagnostics */}
+          {/* Section 4 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Microchip className="w-4 h-4" /> 4. Diagnostics
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <div><span className="text-slate-400 block">Peripheral Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.peripheralBlast ?? 'N/A'}%</span></div>
-                <div><span className="text-slate-400 block">BM Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.boneMarrowBlast ?? 'N/A'}%</span></div>
+                <div><span className="text-slate-400 block">Peripheral Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.peripheralBlast ?? 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">BM Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.boneMarrowBlast ?? 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">LN Biopsy:</span><span className="font-semibold text-slate-700">{record.diagnostics?.lymphNodeBiopsyPerformed ? 'Yes' : 'No'}</span></div>
               </div>
 
@@ -203,7 +203,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* 5. Diagnosis */}
+          {/* Section 5 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <FileText className="w-4 h-4" /> 5. Diagnosis
@@ -218,7 +218,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* 6. Treatment & Outcome */}
+          {/* Section 6 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Award className="w-4 h-4" /> 6. Treatment & Outcome

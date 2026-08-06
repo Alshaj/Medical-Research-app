@@ -111,7 +111,7 @@ const TREATMENT_OUTCOME_OPTIONS = [
 const patientFormSchema = z.object({
   studyId: z.string().optional(),
   mrn: z.string().optional(),
-  age: z.string().optional(), // Accepts decimals/fractions e.g. 0.2
+  age: z.string().optional(),
   gender: z.string().optional(),
   city: z.string().optional(),
   customCity: z.string().optional(),
@@ -133,7 +133,6 @@ const patientFormSchema = z.object({
 
   chiefComplaint: z.string().optional(),
 
-  // Labs fields accept numbers or strings (e.g. "8.2", "12-14", "<0.5") and are all optional
   labs: z.object({
     hemoglobin: z.string().optional(),
     wbcCount: z.string().optional(),
@@ -154,7 +153,6 @@ const patientFormSchema = z.object({
     ast: z.string().optional(),
   }),
 
-  // Diagnostics fields accept numbers or strings and are all optional
   diagnostics: z.object({
     peripheralBlast: z.string().optional(),
     boneMarrowBlast: z.string().optional(),
@@ -169,7 +167,6 @@ const patientFormSchema = z.object({
     ctScanImaging: z.string().optional(),
   }),
 
-  // Hematological Malignancy Diagnosis is the ONLY REQUIRED FIELD!
   diagnosis: z.string().min(1, 'Hematological Malignancy Diagnosis is required'),
   customDiagnosis: z.string().optional(),
   subType: z.string().optional(),
@@ -376,7 +373,7 @@ export const PatientForm: React.FC = () => {
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <Stethoscope className="w-5 h-5 text-teal-700" />
-            <span>General & Demographics</span>
+            <span>1. General & Demographics</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -438,7 +435,7 @@ export const PatientForm: React.FC = () => {
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <Activity className="w-5 h-5 text-teal-700" />
-            <span>Clinical Symptoms</span>
+            <span>2. Clinical Symptoms</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
