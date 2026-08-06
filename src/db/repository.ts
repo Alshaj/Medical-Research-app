@@ -8,6 +8,7 @@ export const recordRepository = {
   async saveRecord(record: MedicalRecordInput): Promise<string> {
     const now = new Date().toISOString();
     const id = record.id || `PAT-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const studyId = record.studyId || record.patientId || `STU-${Date.now().toString().slice(-6)}`;
 
     const defaultSymptoms = {
       fever: false,
@@ -24,6 +25,8 @@ export const recordRepository = {
     const fullRecord: MedicalRecord = {
       ...record,
       id,
+      studyId,
+      patientId: studyId,
       createdAt: record.createdAt || now,
       updatedAt: now,
       symptoms: {
@@ -32,6 +35,9 @@ export const recordRepository = {
       },
       labs: {
         ...(record.labs || {}),
+      },
+      diagnostics: {
+        ...(record.diagnostics || {}),
       },
     };
 

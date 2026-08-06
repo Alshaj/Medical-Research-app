@@ -107,11 +107,11 @@ const TREATMENT_OUTCOME_OPTIONS = [
   { value: 'Ongoing Treatment', label: 'Ongoing Treatment' }
 ];
 
-// Zod Validation Schema matching exact fields from screenshots
+// Zod Validation Schema - ONLY diagnosis is required!
 const patientFormSchema = z.object({
-  studyId: z.string().min(1, 'Study ID is required'),
+  studyId: z.string().optional(),
   mrn: z.string().optional(),
-  age: z.coerce.number().optional().nullable(),
+  age: z.string().optional(), // Accepts decimals/fractions e.g. 0.2
   gender: z.string().optional(),
   city: z.string().optional(),
   customCity: z.string().optional(),
@@ -133,32 +133,31 @@ const patientFormSchema = z.object({
 
   chiefComplaint: z.string().optional(),
 
+  // Labs fields accept numbers or strings (e.g. "8.2", "12-14", "<0.5") and are all optional
   labs: z.object({
-    // Complete Blood Count (CBC) Profile
-    hemoglobin: z.coerce.number().optional().nullable(),
-    wbcCount: z.coerce.number().optional().nullable(),
-    rbcCount: z.coerce.number().optional().nullable(),
-    hematocrit: z.coerce.number().optional().nullable(),
-    plateletCount: z.coerce.number().optional().nullable(),
-    mcv: z.coerce.number().optional().nullable(),
-    mch: z.coerce.number().optional().nullable(),
-    mchc: z.coerce.number().optional().nullable(),
-    rdw: z.coerce.number().optional().nullable(),
-    absoluteGranulocytes: z.coerce.number().optional().nullable(),
-    absoluteLymphocytes: z.coerce.number().optional().nullable(),
+    hemoglobin: z.string().optional(),
+    wbcCount: z.string().optional(),
+    rbcCount: z.string().optional(),
+    hematocrit: z.string().optional(),
+    plateletCount: z.string().optional(),
+    mcv: z.string().optional(),
+    mch: z.string().optional(),
+    mchc: z.string().optional(),
+    rdw: z.string().optional(),
+    absoluteGranulocytes: z.string().optional(),
+    absoluteLymphocytes: z.string().optional(),
     differentialCount: z.string().optional(),
-
-    // Biochemistry & Other Labs
-    ldh: z.coerce.number().optional().nullable(),
-    uricAcid: z.coerce.number().optional().nullable(),
-    serumCreatinine: z.coerce.number().optional().nullable(),
-    alt: z.coerce.number().optional().nullable(),
-    ast: z.coerce.number().optional().nullable(),
+    ldh: z.string().optional(),
+    uricAcid: z.string().optional(),
+    serumCreatinine: z.string().optional(),
+    alt: z.string().optional(),
+    ast: z.string().optional(),
   }),
 
+  // Diagnostics fields accept numbers or strings and are all optional
   diagnostics: z.object({
-    peripheralBlast: z.coerce.number().optional().nullable(),
-    boneMarrowBlast: z.coerce.number().optional().nullable(),
+    peripheralBlast: z.string().optional(),
+    boneMarrowBlast: z.string().optional(),
     pbsFindings: z.string().optional(),
     bmCellularity: z.string().optional(),
     bmBiopsySummary: z.string().optional(),
@@ -170,6 +169,7 @@ const patientFormSchema = z.object({
     ctScanImaging: z.string().optional(),
   }),
 
+  // Hematological Malignancy Diagnosis is the ONLY REQUIRED FIELD!
   diagnosis: z.string().min(1, 'Hematological Malignancy Diagnosis is required'),
   customDiagnosis: z.string().optional(),
   subType: z.string().optional(),
@@ -190,8 +190,8 @@ export const PatientForm: React.FC = () => {
   const defaultValues: PatientFormData = {
     studyId: editingRecord?.studyId || editingRecord?.patientId || '',
     mrn: editingRecord?.mrn || '',
-    age: editingRecord?.age ?? null,
-    gender: editingRecord?.gender || 'Male',
+    age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
+    gender: editingRecord?.gender || '',
     city: editingRecord?.city || '',
     customCity: editingRecord?.customCity || '',
     maritalStatus: editingRecord?.maritalStatus || '',
@@ -210,27 +210,27 @@ export const PatientForm: React.FC = () => {
     otherSymptomsText: editingRecord?.otherSymptomsText || '',
     chiefComplaint: editingRecord?.chiefComplaint || '',
     labs: {
-      hemoglobin: editingRecord?.labs?.hemoglobin ?? null,
-      wbcCount: editingRecord?.labs?.wbcCount ?? null,
-      rbcCount: editingRecord?.labs?.rbcCount ?? null,
-      hematocrit: editingRecord?.labs?.hematocrit ?? null,
-      plateletCount: editingRecord?.labs?.plateletCount ?? null,
-      mcv: editingRecord?.labs?.mcv ?? null,
-      mch: editingRecord?.labs?.mch ?? null,
-      mchc: editingRecord?.labs?.mchc ?? null,
-      rdw: editingRecord?.labs?.rdw ?? null,
-      absoluteGranulocytes: editingRecord?.labs?.absoluteGranulocytes ?? null,
-      absoluteLymphocytes: editingRecord?.labs?.absoluteLymphocytes ?? null,
+      hemoglobin: editingRecord?.labs?.hemoglobin !== undefined && editingRecord?.labs?.hemoglobin !== null ? String(editingRecord.labs.hemoglobin) : '',
+      wbcCount: editingRecord?.labs?.wbcCount !== undefined && editingRecord?.labs?.wbcCount !== null ? String(editingRecord.labs.wbcCount) : '',
+      rbcCount: editingRecord?.labs?.rbcCount !== undefined && editingRecord?.labs?.rbcCount !== null ? String(editingRecord.labs.rbcCount) : '',
+      hematocrit: editingRecord?.labs?.hematocrit !== undefined && editingRecord?.labs?.hematocrit !== null ? String(editingRecord.labs.hematocrit) : '',
+      plateletCount: editingRecord?.labs?.plateletCount !== undefined && editingRecord?.labs?.plateletCount !== null ? String(editingRecord.labs.plateletCount) : '',
+      mcv: editingRecord?.labs?.mcv !== undefined && editingRecord?.labs?.mcv !== null ? String(editingRecord.labs.mcv) : '',
+      mch: editingRecord?.labs?.mch !== undefined && editingRecord?.labs?.mch !== null ? String(editingRecord.labs.mch) : '',
+      mchc: editingRecord?.labs?.mchc !== undefined && editingRecord?.labs?.mchc !== null ? String(editingRecord.labs.mchc) : '',
+      rdw: editingRecord?.labs?.rdw !== undefined && editingRecord?.labs?.rdw !== null ? String(editingRecord.labs.rdw) : '',
+      absoluteGranulocytes: editingRecord?.labs?.absoluteGranulocytes !== undefined && editingRecord?.labs?.absoluteGranulocytes !== null ? String(editingRecord.labs.absoluteGranulocytes) : '',
+      absoluteLymphocytes: editingRecord?.labs?.absoluteLymphocytes !== undefined && editingRecord?.labs?.absoluteLymphocytes !== null ? String(editingRecord.labs.absoluteLymphocytes) : '',
       differentialCount: editingRecord?.labs?.differentialCount || '',
-      ldh: editingRecord?.labs?.ldh ?? null,
-      uricAcid: editingRecord?.labs?.uricAcid ?? null,
-      serumCreatinine: editingRecord?.labs?.serumCreatinine ?? null,
-      alt: editingRecord?.labs?.alt ?? null,
-      ast: editingRecord?.labs?.ast ?? null,
+      ldh: editingRecord?.labs?.ldh !== undefined && editingRecord?.labs?.ldh !== null ? String(editingRecord.labs.ldh) : '',
+      uricAcid: editingRecord?.labs?.uricAcid !== undefined && editingRecord?.labs?.uricAcid !== null ? String(editingRecord.labs.uricAcid) : '',
+      serumCreatinine: editingRecord?.labs?.serumCreatinine !== undefined && editingRecord?.labs?.serumCreatinine !== null ? String(editingRecord.labs.serumCreatinine) : '',
+      alt: editingRecord?.labs?.alt !== undefined && editingRecord?.labs?.alt !== null ? String(editingRecord.labs.alt) : '',
+      ast: editingRecord?.labs?.ast !== undefined && editingRecord?.labs?.ast !== null ? String(editingRecord.labs.ast) : '',
     },
     diagnostics: {
-      peripheralBlast: editingRecord?.diagnostics?.peripheralBlast ?? null,
-      boneMarrowBlast: editingRecord?.diagnostics?.boneMarrowBlast ?? null,
+      peripheralBlast: editingRecord?.diagnostics?.peripheralBlast !== undefined && editingRecord?.diagnostics?.peripheralBlast !== null ? String(editingRecord.diagnostics.peripheralBlast) : '',
+      boneMarrowBlast: editingRecord?.diagnostics?.boneMarrowBlast !== undefined && editingRecord?.diagnostics?.boneMarrowBlast !== null ? String(editingRecord.diagnostics.boneMarrowBlast) : '',
       pbsFindings: editingRecord?.diagnostics?.pbsFindings || '',
       bmCellularity: editingRecord?.diagnostics?.bmCellularity || '',
       bmBiopsySummary: editingRecord?.diagnostics?.bmBiopsySummary || '',
@@ -275,13 +275,15 @@ export const PatientForm: React.FC = () => {
 
   const onSubmit = async (data: PatientFormData) => {
     try {
+      const generatedStudyId = data.studyId?.trim() || `STU-${Date.now().toString().slice(-6)}`;
+
       await recordRepository.saveRecord({
         id: editingRecord?.id,
         createdAt: editingRecord?.createdAt,
-        studyId: data.studyId,
-        patientId: data.studyId,
+        studyId: generatedStudyId,
+        patientId: generatedStudyId,
         mrn: data.mrn,
-        age: data.age,
+        age: data.age ? data.age : null,
         gender: data.gender,
         city: data.city,
         customCity: data.city === 'Other City' ? data.customCity : undefined,
@@ -380,9 +382,7 @@ export const PatientForm: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
               label="Study ID"
-              required
-              placeholder="e.g. STU-2024-089"
-              error={errors.studyId?.message as string}
+              placeholder="e.g. STU-2024-089 (Optional)"
               {...register('studyId')}
             />
             <Input
@@ -393,12 +393,14 @@ export const PatientForm: React.FC = () => {
             <Input
               label="Age (Years)"
               type="number"
-              placeholder="e.g. 42"
+              step="0.01"
+              placeholder="e.g. 42 or 0.2 (2 months)"
               {...register('age')}
             />
             <Select
               label="Gender"
               options={[
+                { value: '', label: 'Select Gender' },
                 { value: 'Male', label: 'Male' },
                 { value: 'Female', label: 'Female' }
               ]}
@@ -501,7 +503,7 @@ export const PatientForm: React.FC = () => {
           <div className="pt-2">
             <Textarea
               label="Chief Complaint & History Summary"
-              placeholder="Enter Chief Complaint & History Summary"
+              placeholder="Enter Chief Complaint & History Summary (Optional)"
               rows={4}
               {...register('chiefComplaint')}
             />
@@ -521,18 +523,18 @@ export const PatientForm: React.FC = () => {
               Complete Blood Count (CBC) Profile:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              <Input label="Hemoglobin (Hb)" placeholder="Hemoglobin (Hb)" type="number" step="0.1" {...register('labs.hemoglobin')} />
-              <Input label="WBC Count" placeholder="WBC Count" type="number" step="0.1" {...register('labs.wbcCount')} />
-              <Input label="RBC Count" placeholder="RBC Count" type="number" step="0.01" {...register('labs.rbcCount')} />
-              <Input label="Hematocrit (HCT)" placeholder="Hematocrit (HCT)" type="number" step="0.1" {...register('labs.hematocrit')} />
-              <Input label="Platelet Count" placeholder="Platelet Count" type="number" step="1" {...register('labs.plateletCount')} />
-              <Input label="MCV" placeholder="MCV" type="number" step="0.1" {...register('labs.mcv')} />
-              <Input label="MCH" placeholder="MCH" type="number" step="0.1" {...register('labs.mch')} />
-              <Input label="MCHC" placeholder="MCHC" type="number" step="0.1" {...register('labs.mchc')} />
-              <Input label="RDW" placeholder="RDW" type="number" step="0.1" {...register('labs.rdw')} />
-              <Input label="Absolute Granulocytes" placeholder="Absolute Granulocytes" type="number" step="0.01" {...register('labs.absoluteGranulocytes')} />
-              <Input label="Absolute Lymphocytes" placeholder="Absolute Lymphocytes" type="number" step="0.01" {...register('labs.absoluteLymphocytes')} />
-              <Input label="Differential Count" placeholder="Differential Count" {...register('labs.differentialCount')} />
+              <Input label="Hemoglobin (Hb)" placeholder="Hemoglobin (Hb)" type="text" {...register('labs.hemoglobin')} />
+              <Input label="WBC Count" placeholder="WBC Count" type="text" {...register('labs.wbcCount')} />
+              <Input label="RBC Count" placeholder="RBC Count" type="text" {...register('labs.rbcCount')} />
+              <Input label="Hematocrit (HCT)" placeholder="Hematocrit (HCT)" type="text" {...register('labs.hematocrit')} />
+              <Input label="Platelet Count" placeholder="Platelet Count" type="text" {...register('labs.plateletCount')} />
+              <Input label="MCV" placeholder="MCV" type="text" {...register('labs.mcv')} />
+              <Input label="MCH" placeholder="MCH" type="text" {...register('labs.mch')} />
+              <Input label="MCHC" placeholder="MCHC" type="text" {...register('labs.mchc')} />
+              <Input label="RDW" placeholder="RDW" type="text" {...register('labs.rdw')} />
+              <Input label="Absolute Granulocytes" placeholder="Absolute Granulocytes" type="text" {...register('labs.absoluteGranulocytes')} />
+              <Input label="Absolute Lymphocytes" placeholder="Absolute Lymphocytes" type="text" {...register('labs.absoluteLymphocytes')} />
+              <Input label="Differential Count" placeholder="Differential Count" type="text" {...register('labs.differentialCount')} />
             </div>
           </div>
 
@@ -542,11 +544,11 @@ export const PatientForm: React.FC = () => {
               Biochemistry & Other Labs:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              <Input label="LDH" placeholder="LDH" type="number" step="1" {...register('labs.ldh')} />
-              <Input label="Uric Acid" placeholder="Uric Acid" type="number" step="0.1" {...register('labs.uricAcid')} />
-              <Input label="Serum Creatinine" placeholder="Serum Creatinine" type="number" step="0.01" {...register('labs.serumCreatinine')} />
-              <Input label="ALT" placeholder="ALT" type="number" step="1" {...register('labs.alt')} />
-              <Input label="AST" placeholder="AST" type="number" step="1" {...register('labs.ast')} />
+              <Input label="LDH" placeholder="LDH" type="text" {...register('labs.ldh')} />
+              <Input label="Uric Acid" placeholder="Uric Acid" type="text" {...register('labs.uricAcid')} />
+              <Input label="Serum Creatinine" placeholder="Serum Creatinine" type="text" {...register('labs.serumCreatinine')} />
+              <Input label="ALT" placeholder="ALT" type="text" {...register('labs.alt')} />
+              <Input label="AST" placeholder="AST" type="text" {...register('labs.ast')} />
             </div>
           </div>
         </div>
@@ -559,8 +561,8 @@ export const PatientForm: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Peripheral Blast" placeholder="Peripheral Blast" type="number" step="0.1" {...register('diagnostics.peripheralBlast')} />
-            <Input label="Bone Marrow Blast" placeholder="Bone Marrow Blast" type="number" step="0.1" {...register('diagnostics.boneMarrowBlast')} />
+            <Input label="Peripheral Blast" placeholder="Peripheral Blast (e.g. 42% or 42)" type="text" {...register('diagnostics.peripheralBlast')} />
+            <Input label="Bone Marrow Blast" placeholder="Bone Marrow Blast (e.g. 68% or 68)" type="text" {...register('diagnostics.boneMarrowBlast')} />
           </div>
 
           <Textarea label="Peripheral Blood Smear Findings" placeholder="Peripheral Blood Smear Findings" {...register('diagnostics.pbsFindings')} />

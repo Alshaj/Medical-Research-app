@@ -11,36 +11,36 @@ export interface ClinicalSymptoms {
 }
 
 export interface LaboratoryData {
-  // Complete Blood Count (CBC) Profile
-  hemoglobin?: number | null;
-  wbcCount?: number | null;
-  rbcCount?: number | null;
-  hematocrit?: number | null;
-  plateletCount?: number | null;
-  mcv?: number | null;
-  mch?: number | null;
-  mchc?: number | null;
-  rdw?: number | null;
-  absoluteGranulocytes?: number | null;
-  absoluteLymphocytes?: number | null;
+  // Complete Blood Count (CBC) Profile - Accepts numbers or strings (e.g. 0.2, "12-14", "<0.5")
+  hemoglobin?: number | string | null;
+  wbcCount?: number | string | null;
+  rbcCount?: number | string | null;
+  hematocrit?: number | string | null;
+  plateletCount?: number | string | null;
+  mcv?: number | string | null;
+  mch?: number | string | null;
+  mchc?: number | string | null;
+  rdw?: number | string | null;
+  absoluteGranulocytes?: number | string | null;
+  absoluteLymphocytes?: number | string | null;
   differentialCount?: string;
 
-  // Biochemistry & Other Labs
-  ldh?: number | null;
-  uricAcid?: number | null;
-  serumCreatinine?: number | null;
-  alt?: number | null;
-  ast?: number | null;
+  // Biochemistry & Other Labs - Accepts numbers or strings
+  ldh?: number | string | null;
+  uricAcid?: number | string | null;
+  serumCreatinine?: number | string | null;
+  alt?: number | string | null;
+  ast?: number | string | null;
 }
 
 export interface DiagnosticsData {
-  peripheralBlast?: number | null;
-  boneMarrowBlast?: number | null;
+  peripheralBlast?: number | string | null;
+  boneMarrowBlast?: number | string | null;
   pbsFindings?: string;
   bmCellularity?: string;
   bmBiopsySummary?: string;
   lymphNodeBiopsyPerformed?: boolean;
-  lymphNodeBiopsySummary?: string; // Dynamic text box when Lymph Node Biopsy is toggled ON
+  lymphNodeBiopsySummary?: string;
   flowCytometry?: string;
   cytogenetics?: string;
   molecularGenetics?: string;
@@ -52,42 +52,42 @@ export interface MedicalRecord {
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
 
-  // Section 1: Demographics
-  studyId: string; // Study ID (Required *)
-  mrn?: string; // Medical Record Number
+  // Section 1: Demographics (All optional)
+  studyId?: string; // Optional
+  mrn?: string; // Optional
   patientId?: string; // Legacy fallback
-  age?: number | null;
+  age?: number | string | null; // Accepts decimal/fraction e.g. 0.2
   gender?: 'Male' | 'Female' | string;
   city?: string;
   customCity?: string;
   maritalStatus?: 'Single' | 'Married' | 'Divorced' | 'Widowed' | string;
   admissionDate?: string;
 
-  // Section 2: Clinical Symptoms
+  // Section 2: Clinical Symptoms (All optional)
   symptoms: ClinicalSymptoms;
   otherSymptomsText?: string;
 
   // Medical History Summary
   chiefComplaint?: string;
 
-  // Section 3: Laboratory Data
+  // Section 3: Laboratory Data (All optional, accepts string/number)
   labs: LaboratoryData;
 
-  // Section 4: Diagnostics
+  // Section 4: Diagnostics (All optional, accepts string/number)
   diagnostics: DiagnosticsData;
 
-  // Section 5: Diagnosis
-  diagnosis: string; // Hematological Malignancy Diagnosis * (Required)
-  customDiagnosis?: string; // Dynamic text box when Diagnosis is 'Other Hematological Malignancy'
-  subType?: string; // Disease Subtype / FAB / WHO Classification
-  stageRiskGroup?: string; // Stage / Risk Group
-  ihcMarkers?: string; // Immunohistochemistry (IHC) Markers
+  // Section 5: Diagnosis (Only Hematological Malignancy Diagnosis is REQUIRED)
+  diagnosis: string; // Required *
+  customDiagnosis?: string;
+  subType?: string;
+  stageRiskGroup?: string;
+  ihcMarkers?: string;
 
-  // Section 6: Treatment & Outcome
+  // Section 6: Treatment & Outcome (All optional)
   lineOfTreatment?: string;
-  customLineOfTreatment?: string; // Dynamic text input when Line of Treatment is 'Other'
-  inductionProtocol?: string; // Legacy fallback
-  outcome?: string; // Treatment Outcome
+  customLineOfTreatment?: string;
+  inductionProtocol?: string;
+  outcome?: string;
   treatmentOutcome?: string;
 
   tags?: string[];

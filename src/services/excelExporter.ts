@@ -21,7 +21,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Record ID': record.id,
     'Study ID': record.studyId || record.patientId || '',
     'MRN': record.mrn || '',
-    'Age': record.age !== undefined && record.age !== null ? record.age : '',
+    'Age (Years)': record.age !== undefined && record.age !== null ? record.age : '',
     'Gender': record.gender || '',
     'City (Yemen)': displayCity,
     'Marital Status': record.maritalStatus || '',
@@ -62,8 +62,8 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'AST': record.labs?.ast ?? '',
 
     // Section 4: Diagnostics
-    'Peripheral Blast (%)': record.diagnostics?.peripheralBlast ?? '',
-    'Bone Marrow Blast (%)': record.diagnostics?.boneMarrowBlast ?? '',
+    'Peripheral Blast': record.diagnostics?.peripheralBlast ?? '',
+    'Bone Marrow Blast': record.diagnostics?.boneMarrowBlast ?? '',
     'Peripheral Blood Smear Findings': record.diagnostics?.pbsFindings || '',
     'Bone Marrow Cellularity': record.diagnostics?.bmCellularity || '',
     'Bone Marrow Biopsy Summary': record.diagnostics?.bmBiopsySummary || '',
