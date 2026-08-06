@@ -185,7 +185,7 @@ export const PatientForm: React.FC = () => {
   const [saveSuccess, setSaveSuccess] = React.useState(false);
 
   const defaultValues: PatientFormData = {
-    studyId: editingRecord?.studyId || editingRecord?.patientId || '',
+    studyId: editingRecord?.studyId || '',
     mrn: editingRecord?.mrn || '',
     age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
     gender: editingRecord?.gender || '',
@@ -272,13 +272,13 @@ export const PatientForm: React.FC = () => {
 
   const onSubmit = async (data: PatientFormData) => {
     try {
-      const generatedStudyId = data.studyId?.trim() || `STU-${Date.now().toString().slice(-6)}`;
+      const studyIdValue = data.studyId?.trim() || '';
 
       await recordRepository.saveRecord({
         id: editingRecord?.id,
         createdAt: editingRecord?.createdAt,
-        studyId: generatedStudyId,
-        patientId: generatedStudyId,
+        studyId: studyIdValue,
+        patientId: studyIdValue,
         mrn: data.mrn,
         age: data.age ? data.age : null,
         gender: data.gender,
@@ -344,7 +344,7 @@ export const PatientForm: React.FC = () => {
             <ArrowLeft className="w-4 h-4" /> Back to Records
           </Button>
           <h1 className="text-2xl font-bold text-slate-800">
-            {editingRecord ? `Edit Patient Record (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Case'}
+            {editingRecord ? `Edit Patient Record${editingRecord.studyId ? ` (${editingRecord.studyId})` : ''}` : 'New Patient Case'}
           </h1>
         </div>
 
