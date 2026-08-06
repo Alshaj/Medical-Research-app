@@ -7,6 +7,7 @@ export interface ClinicalSymptoms {
   lymphadenopathy: boolean;
   hepatomegaly: boolean;
   splenomegaly: boolean;
+  other: boolean;
 }
 
 export interface LaboratoryData {
@@ -50,6 +51,7 @@ export interface MedicalRecord {
 
   // Clinical Symptoms
   symptoms: ClinicalSymptoms;
+  otherSymptomsText?: string; // Text box for custom symptoms when 'other' is toggled
 
   // Medical History
   chiefComplaint?: string; // Chief Complaint & History Summary

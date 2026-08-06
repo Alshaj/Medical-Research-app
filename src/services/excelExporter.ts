@@ -28,6 +28,8 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Lymphadenopathy': record.symptoms?.lymphadenopathy ? 'Yes' : 'No',
     'Hepatomegaly': record.symptoms?.hepatomegaly ? 'Yes' : 'No',
     'Splenomegaly': record.symptoms?.splenomegaly ? 'Yes' : 'No',
+    'Other Symptoms': record.symptoms?.other ? 'Yes' : 'No',
+    'Other Symptoms Description': record.otherSymptomsText || '',
 
     // Narrative History Summary
     'Chief Complaint & History Summary': record.chiefComplaint || '',

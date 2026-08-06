@@ -17,8 +17,12 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
   };
 
   const presentSymptoms = Object.entries(record.symptoms || {})
-    .filter(([_, val]) => val)
+    .filter(([key, val]) => val && key !== 'other')
     .map(([key]) => key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()));
+
+  if (record.symptoms?.other) {
+    presentSymptoms.push(record.otherSymptomsText ? `Other (${record.otherSymptomsText})` : 'Other');
+  }
 
   const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
 

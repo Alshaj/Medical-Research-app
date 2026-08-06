@@ -18,6 +18,7 @@ export const recordRepository = {
       lymphadenopathy: false,
       hepatomegaly: false,
       splenomegaly: false,
+      other: false,
     };
 
     const fullRecord: MedicalRecord = {

@@ -23,7 +23,8 @@ export async function seedInitialDataIfEmpty() {
         nightSweats: true,
         lymphadenopathy: true,
         hepatomegaly: false,
-        splenomegaly: true
+        splenomegaly: true,
+        other: false,
       },
       chiefComplaint: 'Intermittent high-grade fever for 3 weeks with progressive fatigue and night sweats.',
       labs: {
@@ -71,7 +72,8 @@ export async function seedInitialDataIfEmpty() {
         nightSweats: false,
         lymphadenopathy: true,
         hepatomegaly: true,
-        splenomegaly: true
+        splenomegaly: true,
+        other: false,
       },
       chiefComplaint: 'Painless cervical lymphadenopathy and easy bruising on lower extremities.',
       labs: {
@@ -120,8 +122,10 @@ export async function seedInitialDataIfEmpty() {
         nightSweats: true,
         lymphadenopathy: false,
         hepatomegaly: false,
-        splenomegaly: false
+        splenomegaly: false,
+        other: true,
       },
+      otherSymptomsText: 'Gingival hyperplasia & severe bone pain',
       chiefComplaint: 'Severe epistaxis, mucosal bleeding, skin petechiae, and extreme lethargy.',
       labs: {
         hemoglobin: 6.4,

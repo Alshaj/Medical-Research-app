@@ -81,7 +81,9 @@ const patientFormSchema = z.object({
     lymphadenopathy: z.boolean(),
     hepatomegaly: z.boolean(),
     splenomegaly: z.boolean(),
+    other: z.boolean(),
   }),
+  otherSymptomsText: z.string().optional(),
 
   chiefComplaint: z.string().optional(),
 
@@ -142,7 +144,9 @@ export const PatientForm: React.FC = () => {
       lymphadenopathy: editingRecord?.symptoms?.lymphadenopathy || false,
       hepatomegaly: editingRecord?.symptoms?.hepatomegaly || false,
       splenomegaly: editingRecord?.symptoms?.splenomegaly || false,
+      other: editingRecord?.symptoms?.other || false,
     },
+    otherSymptomsText: editingRecord?.otherSymptomsText || '',
     chiefComplaint: editingRecord?.chiefComplaint || '',
     labs: {
       hemoglobin: editingRecord?.labs?.hemoglobin ?? null,
@@ -186,6 +190,7 @@ export const PatientForm: React.FC = () => {
   });
 
   const selectedCity = watch('city');
+  const isOtherSymptomToggled = watch('symptoms.other');
 
   useEffect(() => {
     reset(defaultValues);
@@ -197,7 +202,7 @@ export const PatientForm: React.FC = () => {
         id: editingRecord?.id,
         createdAt: editingRecord?.createdAt,
         studyId: data.studyId,
-        patientId: data.studyId, // legacy fallback
+        patientId: data.studyId,
         mrn: data.mrn,
         age: data.age,
         gender: data.gender,
@@ -214,7 +219,9 @@ export const PatientForm: React.FC = () => {
           lymphadenopathy: !!data.symptoms.lymphadenopathy,
           hepatomegaly: !!data.symptoms.hepatomegaly,
           splenomegaly: !!data.symptoms.splenomegaly,
+          other: !!data.symptoms.other,
         },
+        otherSymptomsText: data.symptoms.other ? data.otherSymptomsText : undefined,
         chiefComplaint: data.chiefComplaint,
         labs: data.labs,
         diagnosis: data.diagnosis,
@@ -291,7 +298,7 @@ export const PatientForm: React.FC = () => {
             <Input
               label="Study ID"
               required
-              placeholder="e.g. STU-2024-001"
+              placeholder="e.g. STU-2024-089"
               error={errors.studyId?.message as string}
               {...register('studyId')}
             />
@@ -349,7 +356,7 @@ export const PatientForm: React.FC = () => {
             <span>Clinical Symptoms</span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
             <Controller
               name="symptoms.fever"
               control={control}
@@ -390,7 +397,23 @@ export const PatientForm: React.FC = () => {
               control={control}
               render={({ field: { value, onChange } }) => <Switch label="Splenomegaly" checked={!!value} onChange={onChange} />}
             />
+            <Controller
+              name="symptoms.other"
+              control={control}
+              render={({ field: { value, onChange } }) => <Switch label="Other" checked={!!value} onChange={onChange} />}
+            />
           </div>
+
+          {/* Conditional Input for Other Symptoms */}
+          {isOtherSymptomToggled && (
+            <div className="pt-2 animate-fade-in">
+              <Input
+                label="Specify Other Symptoms"
+                placeholder="Type additional clinical symptoms here..."
+                {...register('otherSymptomsText')}
+              />
+            </div>
+          )}
 
           <div className="pt-2">
             <Textarea
