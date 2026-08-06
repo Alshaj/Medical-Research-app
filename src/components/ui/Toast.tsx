@@ -8,7 +8,7 @@ export const ToastContainer: React.FC = () => {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0">
+    <div className="fixed top-16 sm:top-5 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-5 z-[9999] flex flex-col gap-2.5 w-[calc(100%-2rem)] max-w-md sm:w-full sm:max-w-sm pointer-events-none">
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
       ))}
@@ -53,7 +53,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
 
   return (
     <div
-      className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl border ${style.bg} ${style.border} shadow-xl backdrop-blur transition-all duration-300 transform translate-y-0 animate-fade-in`}
+      className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl border ${style.bg} ${style.border} shadow-2xl backdrop-blur transition-all duration-300 transform translate-y-0 animate-fade-in`}
     >
       <div className="flex items-center gap-3">
         {style.icon}

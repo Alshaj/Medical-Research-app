@@ -14,8 +14,8 @@ export const ConfirmModalContainer: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-5 animate-fade-in my-auto">
+    <div className="fixed inset-0 z-[9990] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-200 p-5 sm:p-6 space-y-5 animate-fade-in my-auto">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
             <AlertTriangle className="w-6 h-6" />
