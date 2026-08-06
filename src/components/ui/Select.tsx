@@ -42,6 +42,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               key={opt.value}
               value={opt.value}
               disabled={opt.value === ''}
+              hidden={opt.value === ''}
             >
               {opt.label}
             </option>
