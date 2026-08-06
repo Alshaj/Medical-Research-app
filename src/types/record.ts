@@ -40,6 +40,7 @@ export interface DiagnosticsData {
   bmCellularity?: string;
   bmBiopsySummary?: string;
   lymphNodeBiopsyPerformed?: boolean;
+  lymphNodeBiopsySummary?: string; // Dynamic text box when Lymph Node Biopsy is toggled ON
   flowCytometry?: string;
   cytogenetics?: string;
   molecularGenetics?: string;

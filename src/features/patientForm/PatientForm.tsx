@@ -72,7 +72,6 @@ const LINE_OF_TREATMENT_OPTIONS = [
   { value: 'Other', label: 'Other' }
 ];
 
-// Exact Treatment Outcome options from screenshot
 const TREATMENT_OUTCOME_OPTIONS = [
   { value: '', label: 'Select Treatment Outcome' },
   { value: 'Complete Remission (CR)', label: 'Complete Remission (CR)' },
@@ -141,6 +140,7 @@ const patientFormSchema = z.object({
     bmCellularity: z.string().optional(),
     bmBiopsySummary: z.string().optional(),
     lymphNodeBiopsyPerformed: z.boolean(),
+    lymphNodeBiopsySummary: z.string().optional(),
     flowCytometry: z.string().optional(),
     cytogenetics: z.string().optional(),
     molecularGenetics: z.string().optional(),
@@ -211,6 +211,7 @@ export const PatientForm: React.FC = () => {
       bmCellularity: editingRecord?.diagnostics?.bmCellularity || '',
       bmBiopsySummary: editingRecord?.diagnostics?.bmBiopsySummary || '',
       lymphNodeBiopsyPerformed: editingRecord?.diagnostics?.lymphNodeBiopsyPerformed || false,
+      lymphNodeBiopsySummary: editingRecord?.diagnostics?.lymphNodeBiopsySummary || '',
       flowCytometry: editingRecord?.diagnostics?.flowCytometry || '',
       cytogenetics: editingRecord?.diagnostics?.cytogenetics || '',
       molecularGenetics: editingRecord?.diagnostics?.molecularGenetics || '',
@@ -239,6 +240,7 @@ export const PatientForm: React.FC = () => {
 
   const selectedCity = watch('city');
   const isOtherSymptomToggled = watch('symptoms.other');
+  const isLymphNodeBiopsyToggled = watch('diagnostics.lymphNodeBiopsyPerformed');
   const selectedLineOfTreatment = watch('lineOfTreatment');
 
   useEffect(() => {
@@ -273,7 +275,10 @@ export const PatientForm: React.FC = () => {
         otherSymptomsText: data.symptoms.other ? data.otherSymptomsText : undefined,
         chiefComplaint: data.chiefComplaint,
         labs: data.labs,
-        diagnostics: data.diagnostics,
+        diagnostics: {
+          ...data.diagnostics,
+          lymphNodeBiopsySummary: data.diagnostics.lymphNodeBiopsyPerformed ? data.diagnostics.lymphNodeBiopsySummary : undefined,
+        },
         diagnosis: data.diagnosis,
         subType: data.subType,
         stageRiskGroup: data.stageRiskGroup,
@@ -535,7 +540,7 @@ export const PatientForm: React.FC = () => {
           <Input label="Bone Marrow Cellularity" placeholder="Bone Marrow Cellularity" {...register('diagnostics.bmCellularity')} />
           <Textarea label="Bone Marrow Biopsy Summary" placeholder="Bone Marrow Biopsy Summary" {...register('diagnostics.bmBiopsySummary')} />
 
-          <div className="pt-1">
+          <div className="space-y-3 pt-1">
             <Controller
               name="diagnostics.lymphNodeBiopsyPerformed"
               control={control}
@@ -543,6 +548,18 @@ export const PatientForm: React.FC = () => {
                 <Switch label="Lymph Node Biopsy Performed" checked={!!value} onChange={onChange} />
               )}
             />
+
+            {/* Conditional Input when Lymph Node Biopsy Performed is toggled ON */}
+            {isLymphNodeBiopsyToggled && (
+              <div className="pt-1 animate-fade-in">
+                <Textarea
+                  label="Lymph Node Biopsy Summary"
+                  placeholder="Lymph Node Biopsy Summary findings..."
+                  rows={3}
+                  {...register('diagnostics.lymphNodeBiopsySummary')}
+                />
+              </div>
+            )}
           </div>
 
           <div className="space-y-4 pt-2">

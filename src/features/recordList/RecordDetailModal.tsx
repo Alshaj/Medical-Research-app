@@ -172,6 +172,9 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
                 <div><span className="text-slate-400 block">LN Biopsy:</span><span className="font-semibold text-slate-700">{record.diagnostics?.lymphNodeBiopsyPerformed ? 'Yes' : 'No'}</span></div>
               </div>
 
+              {record.diagnostics?.lymphNodeBiopsyPerformed && record.diagnostics?.lymphNodeBiopsySummary && (
+                <div><span className="text-slate-400 block font-medium">LN Biopsy Summary:</span><p className="text-slate-700">{record.diagnostics.lymphNodeBiopsySummary}</p></div>
+              )}
               {record.diagnostics?.pbsFindings && (
                 <div><span className="text-slate-400 block font-medium">PBS Findings:</span><p className="text-slate-700">{record.diagnostics.pbsFindings}</p></div>
               )}

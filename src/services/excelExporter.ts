@@ -64,6 +64,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Bone Marrow Cellularity': record.diagnostics?.bmCellularity || '',
     'Bone Marrow Biopsy Summary': record.diagnostics?.bmBiopsySummary || '',
     'Lymph Node Biopsy Performed': record.diagnostics?.lymphNodeBiopsyPerformed ? 'Yes' : 'No',
+    'Lymph Node Biopsy Summary': record.diagnostics?.lymphNodeBiopsySummary || '',
     'Flow Cytometry Immunophenotyping': record.diagnostics?.flowCytometry || '',
     'Cytogenetics (Karyotype)': record.diagnostics?.cytogenetics || '',
     'Molecular Genetics': record.diagnostics?.molecularGenetics || '',

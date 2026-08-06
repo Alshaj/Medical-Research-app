@@ -114,6 +114,7 @@ export async function seedInitialDataIfEmpty() {
         bmCellularity: 'Hypercellular marrow with mature lymphoid aggregates.',
         bmBiopsySummary: 'Nodular and diffuse infiltration of small mature-appearing B cells.',
         lymphNodeBiopsyPerformed: true,
+        lymphNodeBiopsySummary: 'Cervical node biopsy demonstrates diffuse effacement of architecture by monotonous small lymphocytic infiltrate.',
         flowCytometry: 'CD5+, CD19+, CD23+, CD20 (weak), Kappa light chain restricted.',
         cytogenetics: 'del(13q14) single anomaly.',
         molecularGenetics: 'IGHV mutated status.',
