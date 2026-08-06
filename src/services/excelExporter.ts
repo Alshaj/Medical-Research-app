@@ -3,7 +3,6 @@ import { MedicalRecord } from '../types/record';
 
 /**
  * Transforms JSON MedicalRecord objects into flat Excel rows
- * matching all fields from the UI screenshots + City & Marital Status.
  */
 export function transformRecordToExcelRow(record: MedicalRecord) {
   return {
@@ -26,10 +25,8 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Hepatomegaly': record.symptoms?.hepatomegaly ? 'Yes' : 'No',
     'Splenomegaly': record.symptoms?.splenomegaly ? 'Yes' : 'No',
 
-    // Narrative Medical History
-    'Chief Complaint': record.chiefComplaint || '',
-    'Past Medical History': record.pastMedicalHistory || '',
-    'Family History': record.familyHistory || '',
+    // Narrative History Summary
+    'Chief Complaint & History Summary': record.chiefComplaint || '',
 
     // Labs & Diagnostics
     'Hemoglobin (Hb, g/dL)': record.labs?.hemoglobin ?? '',
@@ -71,13 +68,9 @@ export function exportRecordsToExcel(records: MedicalRecord[], filenamePrefix = 
     return;
   }
 
-  // Map JSON objects to Excel flat row representation
   const flatRows = records.map(transformRecordToExcelRow);
-
-  // Create worksheet
   const worksheet = XLSX.utils.json_to_sheet(flatRows);
 
-  // Auto-calculate column widths
   const maxCols = Object.keys(flatRows[0] || {});
   const colWidths = maxCols.map((key) => {
     let maxLength = key.length;
@@ -92,14 +85,11 @@ export function exportRecordsToExcel(records: MedicalRecord[], filenamePrefix = 
 
   worksheet['!cols'] = colWidths;
 
-  // Create workbook and append sheet
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Patient Records');
 
-  // Format date stamp for filename
   const dateStamp = new Date().toISOString().split('T')[0];
   const filename = `${filenamePrefix}_${dateStamp}.xlsx`;
 
-  // Trigger browser download
   XLSX.writeFile(workbook, filename);
 }

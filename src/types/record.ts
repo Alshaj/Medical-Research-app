@@ -43,9 +43,7 @@ export interface MedicalRecord {
   symptoms: ClinicalSymptoms;
 
   // Medical History
-  chiefComplaint?: string;
-  pastMedicalHistory?: string;
-  familyHistory?: string;
+  chiefComplaint?: string; // Chief Complaint & History Summary
 
   // Labs & Diagnostics
   labs: LabsDiagnostics;

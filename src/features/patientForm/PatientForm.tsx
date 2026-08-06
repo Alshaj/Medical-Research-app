@@ -61,7 +61,7 @@ const MARITAL_STATUS_OPTIONS = [
   { value: 'Widowed', label: 'Widowed' }
 ];
 
-// Zod Validation Schema matching all fields from screenshots + City & Marital Status
+// Zod Validation Schema
 const patientFormSchema = z.object({
   patientId: z.string().min(1, 'Patient ID / MRN is required'),
   age: z.coerce.number().optional().nullable(),
@@ -83,8 +83,6 @@ const patientFormSchema = z.object({
   }),
 
   chiefComplaint: z.string().optional(),
-  pastMedicalHistory: z.string().optional(),
-  familyHistory: z.string().optional(),
 
   labs: z.object({
     hemoglobin: z.coerce.number().optional().nullable(),
@@ -137,8 +135,6 @@ export const PatientForm: React.FC = () => {
       splenomegaly: editingRecord?.symptoms?.splenomegaly || false,
     },
     chiefComplaint: editingRecord?.chiefComplaint || '',
-    pastMedicalHistory: editingRecord?.pastMedicalHistory || '',
-    familyHistory: editingRecord?.familyHistory || '',
     labs: {
       hemoglobin: editingRecord?.labs?.hemoglobin ?? null,
       wbc: editingRecord?.labs?.wbc ?? null,
@@ -202,8 +198,6 @@ export const PatientForm: React.FC = () => {
           splenomegaly: !!data.symptoms.splenomegaly,
         },
         chiefComplaint: data.chiefComplaint,
-        pastMedicalHistory: data.pastMedicalHistory,
-        familyHistory: data.familyHistory,
         labs: data.labs,
         diagnosis: data.diagnosis,
         subType: data.subType,
@@ -370,21 +364,12 @@ export const PatientForm: React.FC = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div className="pt-2">
             <Textarea
-              label="Chief Complaint"
-              placeholder="Chief Complaint"
+              label="Chief Complaint & History Summary"
+              placeholder="Enter Chief Complaint & History Summary"
+              rows={4}
               {...register('chiefComplaint')}
-            />
-            <Textarea
-              label="Past Medical History"
-              placeholder="Past Medical History"
-              {...register('pastMedicalHistory')}
-            />
-            <Textarea
-              label="Family History"
-              placeholder="Family History"
-              {...register('familyHistory')}
             />
           </div>
         </div>

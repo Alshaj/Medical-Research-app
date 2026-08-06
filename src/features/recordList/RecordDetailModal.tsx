@@ -98,8 +98,8 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
 
               {record.chiefComplaint && (
                 <div>
-                  <span className="text-xs text-slate-400 block">Chief Complaint:</span>
-                  <p className="text-xs text-slate-700 mt-0.5">{record.chiefComplaint}</p>
+                  <span className="text-xs text-slate-400 block font-medium">Chief Complaint & History Summary:</span>
+                  <p className="text-xs text-slate-700 mt-0.5 whitespace-pre-wrap">{record.chiefComplaint}</p>
                 </div>
               )}
             </div>
