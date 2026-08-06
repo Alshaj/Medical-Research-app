@@ -33,6 +33,19 @@ export interface LaboratoryData {
   ast?: number | null;
 }
 
+export interface DiagnosticsData {
+  peripheralBlast?: number | null;
+  boneMarrowBlast?: number | null;
+  pbsFindings?: string;
+  bmCellularity?: string;
+  bmBiopsySummary?: string;
+  lymphNodeBiopsyPerformed?: boolean;
+  flowCytometry?: string;
+  cytogenetics?: string;
+  molecularGenetics?: string;
+  ctScanImaging?: string;
+}
+
 export interface MedicalRecord {
   id: string; // Unique record UUID
   createdAt: string; // ISO string
@@ -49,17 +62,20 @@ export interface MedicalRecord {
   maritalStatus?: 'Single' | 'Married' | 'Divorced' | 'Widowed' | string;
   admissionDate?: string;
 
-  // Clinical Symptoms
+  // Section 2: Clinical Symptoms
   symptoms: ClinicalSymptoms;
-  otherSymptomsText?: string; // Text box for custom symptoms when 'other' is toggled
+  otherSymptomsText?: string;
 
-  // Medical History
-  chiefComplaint?: string; // Chief Complaint & History Summary
+  // Medical History Summary
+  chiefComplaint?: string;
 
-  // Laboratory Data
+  // Section 3: Laboratory Data
   labs: LaboratoryData;
 
-  // Diagnosis & Outcome
+  // Section 4: Diagnostics (Exact match to screenshot)
+  diagnostics: DiagnosticsData;
+
+  // Section 5: Diagnosis & Outcome
   diagnosis: string; // Required *
   subType?: string;
   stageRiskGroup?: string;

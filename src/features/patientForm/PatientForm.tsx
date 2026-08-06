@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
-import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethoscope } from 'lucide-react';
+import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethoscope, Microchip } from 'lucide-react';
 
 import { recordRepository } from '../../db/repository';
 import { useRecordStore } from '../../stores/useRecordStore';
@@ -61,7 +61,7 @@ const MARITAL_STATUS_OPTIONS = [
   { value: 'Widowed', label: 'Widowed' }
 ];
 
-// Zod Validation Schema
+// Zod Validation Schema matching exact fields from screenshots
 const patientFormSchema = z.object({
   studyId: z.string().min(1, 'Study ID is required'),
   mrn: z.string().optional(),
@@ -108,6 +108,19 @@ const patientFormSchema = z.object({
     serumCreatinine: z.coerce.number().optional().nullable(),
     alt: z.coerce.number().optional().nullable(),
     ast: z.coerce.number().optional().nullable(),
+  }),
+
+  diagnostics: z.object({
+    peripheralBlast: z.coerce.number().optional().nullable(),
+    boneMarrowBlast: z.coerce.number().optional().nullable(),
+    pbsFindings: z.string().optional(),
+    bmCellularity: z.string().optional(),
+    bmBiopsySummary: z.string().optional(),
+    lymphNodeBiopsyPerformed: z.boolean(),
+    flowCytometry: z.string().optional(),
+    cytogenetics: z.string().optional(),
+    molecularGenetics: z.string().optional(),
+    ctScanImaging: z.string().optional(),
   }),
 
   diagnosis: z.string().min(1, 'Diagnosis is required'),
@@ -167,6 +180,18 @@ export const PatientForm: React.FC = () => {
       alt: editingRecord?.labs?.alt ?? null,
       ast: editingRecord?.labs?.ast ?? null,
     },
+    diagnostics: {
+      peripheralBlast: editingRecord?.diagnostics?.peripheralBlast ?? null,
+      boneMarrowBlast: editingRecord?.diagnostics?.boneMarrowBlast ?? null,
+      pbsFindings: editingRecord?.diagnostics?.pbsFindings || '',
+      bmCellularity: editingRecord?.diagnostics?.bmCellularity || '',
+      bmBiopsySummary: editingRecord?.diagnostics?.bmBiopsySummary || '',
+      lymphNodeBiopsyPerformed: editingRecord?.diagnostics?.lymphNodeBiopsyPerformed || false,
+      flowCytometry: editingRecord?.diagnostics?.flowCytometry || '',
+      cytogenetics: editingRecord?.diagnostics?.cytogenetics || '',
+      molecularGenetics: editingRecord?.diagnostics?.molecularGenetics || '',
+      ctScanImaging: editingRecord?.diagnostics?.ctScanImaging || '',
+    },
     diagnosis: editingRecord?.diagnosis || '',
     subType: editingRecord?.subType || '',
     stageRiskGroup: editingRecord?.stageRiskGroup || '',
@@ -224,6 +249,7 @@ export const PatientForm: React.FC = () => {
         otherSymptomsText: data.symptoms.other ? data.otherSymptomsText : undefined,
         chiefComplaint: data.chiefComplaint,
         labs: data.labs,
+        diagnostics: data.diagnostics,
         diagnosis: data.diagnosis,
         subType: data.subType,
         stageRiskGroup: data.stageRiskGroup,
@@ -468,11 +494,45 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 4: Diagnosis & Outcome */}
+        {/* Section 4: Diagnostics (Exact match to Screenshot) */}
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
+            <Microchip className="w-5 h-5 text-teal-700" />
+            <span>4. Diagnostics</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Peripheral Blast (%)" placeholder="Peripheral Blast (%)" type="number" step="0.1" {...register('diagnostics.peripheralBlast')} />
+            <Input label="Bone Marrow Blast (%)" placeholder="Bone Marrow Blast (%)" type="number" step="0.1" {...register('diagnostics.boneMarrowBlast')} />
+          </div>
+
+          <Textarea label="Peripheral Blood Smear Findings" placeholder="Peripheral Blood Smear Findings" {...register('diagnostics.pbsFindings')} />
+          <Input label="Bone Marrow Cellularity" placeholder="Bone Marrow Cellularity" {...register('diagnostics.bmCellularity')} />
+          <Textarea label="Bone Marrow Biopsy Summary" placeholder="Bone Marrow Biopsy Summary" {...register('diagnostics.bmBiopsySummary')} />
+
+          <div className="pt-1">
+            <Controller
+              name="diagnostics.lymphNodeBiopsyPerformed"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Switch label="Lymph Node Biopsy Performed" checked={!!value} onChange={onChange} />
+              )}
+            />
+          </div>
+
+          <div className="space-y-4 pt-2">
+            <Textarea label="Flow Cytometry Immunophenotyping" placeholder="Flow Cytometry Immunophenotyping" {...register('diagnostics.flowCytometry')} />
+            <Textarea label="Cytogenetics (Karyotype)" placeholder="Cytogenetics (Karyotype)" {...register('diagnostics.cytogenetics')} />
+            <Textarea label="Molecular Genetics" placeholder="Molecular Genetics" {...register('diagnostics.molecularGenetics')} />
+            <Textarea label="CT Scan / Imaging Findings" placeholder="CT Scan / Imaging Findings" {...register('diagnostics.ctScanImaging')} />
+          </div>
+        </div>
+
+        {/* Section 5: Diagnosis & Outcome */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <FileText className="w-5 h-5 text-teal-700" />
-            <span>Diagnosis & Outcome</span>
+            <span>5. Diagnosis & Outcome</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

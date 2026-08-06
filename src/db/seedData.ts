@@ -46,6 +46,18 @@ export async function seedInitialDataIfEmpty() {
         alt: 32,
         ast: 28
       },
+      diagnostics: {
+        peripheralBlast: 42,
+        boneMarrowBlast: 68,
+        pbsFindings: 'Numerous circulating myeloblasts with Auer rods noted.',
+        bmCellularity: 'Hypercellular bone marrow with erythroid hypoplasia.',
+        bmBiopsySummary: 'Diffuse blast infiltration replacing normal hematopoiesis.',
+        lymphNodeBiopsyPerformed: false,
+        flowCytometry: 'Positive for CD33, CD13, CD117, MPO. Negative for CD3, CD19.',
+        cytogenetics: 't(8;21)(q22;q22.1); RUNX1-RUNX1T1.',
+        molecularGenetics: 'NPM1 negative, FLT3-ITD negative.',
+        ctScanImaging: 'Chest CT shows mild mediastinal lymphadenopathy without pulmonary consolidation.'
+      },
       diagnosis: 'Acute Myeloid Leukemia (AML)',
       subType: 'AML with t(8;21)',
       stageRiskGroup: 'Favorable Risk',
@@ -94,6 +106,18 @@ export async function seedInitialDataIfEmpty() {
         serumCreatinine: 0.9,
         alt: 45,
         ast: 51
+      },
+      diagnostics: {
+        peripheralBlast: 12,
+        boneMarrowBlast: 15,
+        pbsFindings: 'Mature small lymphocytes with smudge cells present.',
+        bmCellularity: 'Hypercellular marrow with mature lymphoid aggregates.',
+        bmBiopsySummary: 'Nodular and diffuse infiltration of small mature-appearing B cells.',
+        lymphNodeBiopsyPerformed: true,
+        flowCytometry: 'CD5+, CD19+, CD23+, CD20 (weak), Kappa light chain restricted.',
+        cytogenetics: 'del(13q14) single anomaly.',
+        molecularGenetics: 'IGHV mutated status.',
+        ctScanImaging: 'Abdominal CT reveals splenomegaly (16cm) and bilateral para-aortic lymphadenopathy.'
       },
       diagnosis: 'Chronic Lymphocytic Leukemia (CLL)',
       subType: 'B-cell CLL',
@@ -145,6 +169,18 @@ export async function seedInitialDataIfEmpty() {
         serumCreatinine: 1.3,
         alt: 22,
         ast: 19
+      },
+      diagnostics: {
+        peripheralBlast: 85,
+        boneMarrowBlast: 90,
+        pbsFindings: 'Severe pancytopenia with abundant abnormal promyelocytes containing multiple Auer rods (faggot cells).',
+        bmCellularity: 'Markedly hypercellular packed with promyelocytes.',
+        bmBiopsySummary: 'Hypergranular promyelocytic blast predominance.',
+        lymphNodeBiopsyPerformed: false,
+        flowCytometry: 'CD33 bright+, CD13+, MPO hyper-positive, CD34 negative, HLA-DR negative.',
+        cytogenetics: 't(15;17)(q24.1;q21.2); PML-RARA.',
+        molecularGenetics: 'PML-RARA isoform bcr1 positive.',
+        ctScanImaging: 'High resolution CT scan clear.'
       },
       diagnosis: 'Acute Promyelocytic Leukemia (APL)',
       subType: 'Hypergranular APL',

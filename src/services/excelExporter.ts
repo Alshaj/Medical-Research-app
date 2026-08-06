@@ -34,7 +34,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     // Narrative History Summary
     'Chief Complaint & History Summary': record.chiefComplaint || '',
 
-    // Complete Blood Count (CBC) Profile
+    // Section 3: Laboratory Data
     'Hemoglobin (Hb)': record.labs?.hemoglobin ?? '',
     'WBC Count': record.labs?.wbcCount ?? '',
     'RBC Count': record.labs?.rbcCount ?? '',
@@ -47,15 +47,25 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Absolute Granulocytes': record.labs?.absoluteGranulocytes ?? '',
     'Absolute Lymphocytes': record.labs?.absoluteLymphocytes ?? '',
     'Differential Count': record.labs?.differentialCount || '',
-
-    // Biochemistry & Other Labs
     'LDH': record.labs?.ldh ?? '',
     'Uric Acid': record.labs?.uricAcid ?? '',
     'Serum Creatinine': record.labs?.serumCreatinine ?? '',
     'ALT': record.labs?.alt ?? '',
     'AST': record.labs?.ast ?? '',
 
-    // Diagnosis & Outcome
+    // Section 4: Diagnostics
+    'Peripheral Blast (%)': record.diagnostics?.peripheralBlast ?? '',
+    'Bone Marrow Blast (%)': record.diagnostics?.boneMarrowBlast ?? '',
+    'Peripheral Blood Smear Findings': record.diagnostics?.pbsFindings || '',
+    'Bone Marrow Cellularity': record.diagnostics?.bmCellularity || '',
+    'Bone Marrow Biopsy Summary': record.diagnostics?.bmBiopsySummary || '',
+    'Lymph Node Biopsy Performed': record.diagnostics?.lymphNodeBiopsyPerformed ? 'Yes' : 'No',
+    'Flow Cytometry Immunophenotyping': record.diagnostics?.flowCytometry || '',
+    'Cytogenetics (Karyotype)': record.diagnostics?.cytogenetics || '',
+    'Molecular Genetics': record.diagnostics?.molecularGenetics || '',
+    'CT Scan / Imaging Findings': record.diagnostics?.ctScanImaging || '',
+
+    // Section 5: Diagnosis & Outcome
     'Diagnosis': record.diagnosis || '',
     'Sub Type': record.subType || '',
     'Stage / Risk Group': record.stageRiskGroup || '',

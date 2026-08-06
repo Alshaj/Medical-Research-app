@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, FileText, Activity, FlaskConical, Stethoscope, Copy } from 'lucide-react';
+import { X, FileText, Activity, FlaskConical, Stethoscope, Copy, Microchip } from 'lucide-react';
 import { MedicalRecord } from '../../types/record';
 import { Button } from '../../components/ui/Button';
 
@@ -155,10 +155,46 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* Diagnosis & Outcome */}
+          {/* 4. Diagnostics */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <FileText className="w-4 h-4" /> Outcome & Protocol
+              <Microchip className="w-4 h-4" /> 4. Diagnostics
+            </h3>
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div><span className="text-slate-400 block">Peripheral Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.peripheralBlast ?? 'N/A'}%</span></div>
+                <div><span className="text-slate-400 block">BM Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.boneMarrowBlast ?? 'N/A'}%</span></div>
+                <div><span className="text-slate-400 block">LN Biopsy:</span><span className="font-semibold text-slate-700">{record.diagnostics?.lymphNodeBiopsyPerformed ? 'Yes' : 'No'}</span></div>
+              </div>
+
+              {record.diagnostics?.pbsFindings && (
+                <div><span className="text-slate-400 block font-medium">PBS Findings:</span><p className="text-slate-700">{record.diagnostics.pbsFindings}</p></div>
+              )}
+              {record.diagnostics?.bmCellularity && (
+                <div><span className="text-slate-400 block font-medium">BM Cellularity:</span><p className="text-slate-700">{record.diagnostics.bmCellularity}</p></div>
+              )}
+              {record.diagnostics?.bmBiopsySummary && (
+                <div><span className="text-slate-400 block font-medium">BM Biopsy Summary:</span><p className="text-slate-700">{record.diagnostics.bmBiopsySummary}</p></div>
+              )}
+              {record.diagnostics?.flowCytometry && (
+                <div><span className="text-slate-400 block font-medium">Flow Cytometry Immunophenotyping:</span><p className="text-slate-700">{record.diagnostics.flowCytometry}</p></div>
+              )}
+              {record.diagnostics?.cytogenetics && (
+                <div><span className="text-slate-400 block font-medium">Cytogenetics (Karyotype):</span><p className="text-slate-700">{record.diagnostics.cytogenetics}</p></div>
+              )}
+              {record.diagnostics?.molecularGenetics && (
+                <div><span className="text-slate-400 block font-medium">Molecular Genetics:</span><p className="text-slate-700">{record.diagnostics.molecularGenetics}</p></div>
+              )}
+              {record.diagnostics?.ctScanImaging && (
+                <div><span className="text-slate-400 block font-medium">CT Scan / Imaging Findings:</span><p className="text-slate-700">{record.diagnostics.ctScanImaging}</p></div>
+              )}
+            </div>
+          </div>
+
+          {/* 5. Diagnosis & Outcome */}
+          <div className="space-y-2">
+            <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
+              <FileText className="w-4 h-4" /> 5. Diagnosis & Outcome
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
