@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
-import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethoscope, Microchip, Award } from 'lucide-react';
+import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethoscope, Microchip, Award, CheckCircle } from 'lucide-react';
 
 import { recordRepository } from '../../db/repository';
 import { useRecordStore } from '../../stores/useRecordStore';
@@ -185,7 +185,7 @@ export const PatientForm: React.FC = () => {
   const [saveSuccess, setSaveSuccess] = React.useState(false);
 
   const defaultValues: PatientFormData = {
-    studyId: editingRecord?.studyId || '',
+    studyId: editingRecord?.studyId || editingRecord?.patientId || '',
     mrn: editingRecord?.mrn || '',
     age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
     gender: editingRecord?.gender || '',
@@ -271,14 +271,16 @@ export const PatientForm: React.FC = () => {
   }, [editingRecord]);
 
   const onSubmit = async (data: PatientFormData) => {
+    if (isSubmitting || saveSuccess) return;
+
     try {
-      const studyIdValue = data.studyId?.trim() || '';
+      const generatedStudyId = data.studyId?.trim() || `STU-${Date.now().toString().slice(-6)}`;
 
       await recordRepository.saveRecord({
         id: editingRecord?.id,
         createdAt: editingRecord?.createdAt,
-        studyId: studyIdValue,
-        patientId: studyIdValue,
+        studyId: generatedStudyId,
+        patientId: generatedStudyId,
         mrn: data.mrn,
         age: data.age ? data.age : null,
         gender: data.gender,
@@ -329,7 +331,7 @@ export const PatientForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-24">
+    <div className="max-w-4xl mx-auto pb-32">
       {/* Top Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -344,7 +346,7 @@ export const PatientForm: React.FC = () => {
             <ArrowLeft className="w-4 h-4" /> Back to Records
           </Button>
           <h1 className="text-2xl font-bold text-slate-800">
-            {editingRecord ? `Edit Patient Record${editingRecord.studyId ? ` (${editingRecord.studyId})` : ''}` : 'New Patient Case'}
+            {editingRecord ? `Edit Patient Record (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Case'}
           </h1>
         </div>
 
@@ -667,16 +669,32 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Floating / Sticky Save Clinical Case Record Bar matching screenshots */}
+        {/* Floating / Sticky Save Clinical Case Record Bar */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur border-t border-slate-200 shadow-lg z-30">
           <div className="max-w-4xl mx-auto flex flex-col items-center gap-1.5">
             <Button
               type="submit"
-              disabled={isSubmitting}
-              className="w-full sm:w-auto px-12 py-3 bg-teal-800 hover:bg-teal-900 text-white font-semibold text-base rounded-xl shadow-md transition-transform active:scale-95"
-              icon={<Save className="w-5 h-5" />}
+              disabled={isSubmitting || saveSuccess}
+              className={`w-full sm:w-auto px-12 py-3 font-semibold text-base rounded-xl shadow-md transition-all ${
+                saveSuccess
+                  ? 'bg-emerald-600 text-white cursor-not-allowed opacity-90'
+                  : isSubmitting
+                  ? 'bg-teal-700 text-white opacity-80 cursor-wait'
+                  : 'bg-teal-800 hover:bg-teal-900 text-white active:scale-95'
+              }`}
+              icon={
+                saveSuccess ? (
+                  <CheckCircle className="w-5 h-5" />
+                ) : (
+                  <Save className="w-5 h-5" />
+                )
+              }
             >
-              {isSubmitting ? 'Saving to Device...' : 'Save Clinical Case Record'}
+              {isSubmitting
+                ? 'Saving Case Record...'
+                : saveSuccess
+                ? 'Case Record Saved!'
+                : 'Save Clinical Case Record'}
             </Button>
             <p className="text-xs text-slate-500 text-center">
               Saved to this device first — syncs automatically when you are back online

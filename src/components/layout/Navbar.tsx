@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stethoscope, FilePlus, List, Download, FileSpreadsheet } from 'lucide-react';
+import { Stethoscope, FilePlus, List, Download, Wifi, WifiOff, FileSpreadsheet } from 'lucide-react';
 import { useRecordStore } from '../../stores/useRecordStore';
 import { usePWAStore } from '../../stores/usePWAStore';
 import { exportRecordsToExcel } from '../../services/excelExporter';
@@ -7,7 +7,7 @@ import { db } from '../../db/database';
 
 export const Navbar: React.FC = () => {
   const { activeTab, setActiveTab, setEditingRecord } = useRecordStore();
-  const { deferredPrompt, isInstallable, clearInstallPrompt } = usePWAStore();
+  const { isOnline, deferredPrompt, isInstallable, clearInstallPrompt } = usePWAStore();
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
@@ -68,6 +68,19 @@ export const Navbar: React.FC = () => {
 
           {/* Right Utilities */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Offline Status Badge */}
+            <div
+              className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border font-medium ${
+                isOnline
+                  ? 'bg-emerald-950/40 text-emerald-300 border-emerald-700/60'
+                  : 'bg-amber-950/40 text-amber-300 border-amber-700/60'
+              }`}
+              title={isOnline ? 'Offline-Ready (Data stays local in IndexedDB)' : 'Device is offline - Fully functional!'}
+            >
+              {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">{isOnline ? 'Offline-Ready' : 'Offline Mode'}</span>
+            </div>
+
             {/* Install PWA Button if prompt captured */}
             {isInstallable && (
               <button

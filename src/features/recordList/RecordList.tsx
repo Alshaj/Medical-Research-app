@@ -138,8 +138,7 @@ export const RecordList: React.FC = () => {
   }, [records, searchQuery, selectedGenderFilter, selectedCityFilter, selectedDiagnosisFilter, selectedOutcomeFilter]);
 
   const handleDelete = async (id: string, studyId: string) => {
-    const label = studyId || 'this record';
-    if (confirm(`Are you sure you want to delete patient record "${label}"?`)) {
+    if (confirm(`Are you sure you want to delete patient record "${studyId}"?`)) {
       await recordRepository.deleteRecord(id);
     }
   };
@@ -362,7 +361,7 @@ export const RecordList: React.FC = () => {
                 setActiveTab('new');
               }}
               onView={() => setViewingRecord(record)}
-              onDelete={() => handleDelete(record.id, record.studyId || '')}
+              onDelete={() => handleDelete(record.id, record.studyId || record.patientId || 'Record')}
             />
           ))}
         </div>
@@ -401,14 +400,12 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
     ? record.customDiagnosis
     : record.diagnosis;
 
-  const studyIdLabel = record.studyId ? record.studyId : 'N/A';
-
   return (
     <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-4">
       <div>
         <div className="flex items-center justify-between">
           <span className="font-mono text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100">
-            Study ID: {studyIdLabel}
+            Study ID: {record.studyId || record.patientId}
           </span>
           <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${outcomeBadge}`}>
             {currentOutcome}
