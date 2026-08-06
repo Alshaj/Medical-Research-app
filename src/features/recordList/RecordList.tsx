@@ -263,7 +263,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
           <div>
             <span className="text-slate-400">Hb / WBC:</span>{' '}
             <span className="font-medium text-slate-700">
-              {record.labs?.hemoglobin ?? '-'} / {record.labs?.wbc ?? '-'}
+              {record.labs?.hemoglobin ?? '-'} / {record.labs?.wbcCount ?? '-'}
             </span>
           </div>
           <div>

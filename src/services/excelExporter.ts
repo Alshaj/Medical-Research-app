@@ -28,20 +28,26 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     // Narrative History Summary
     'Chief Complaint & History Summary': record.chiefComplaint || '',
 
-    // Labs & Diagnostics
-    'Hemoglobin (Hb, g/dL)': record.labs?.hemoglobin ?? '',
-    'WBC (x10^9/L)': record.labs?.wbc ?? '',
-    'Platelets (x10^9/L)': record.labs?.platelets ?? '',
-    'ALT (U/L)': record.labs?.alt ?? '',
-    'AST (U/L)': record.labs?.ast ?? '',
-    'PBS Blasts (%)': record.labs?.pbsBlasts ?? '',
-    'PBS Findings': record.labs?.pbsFindings || '',
-    'BM Aspirate Blast (%)': record.labs?.bmAspirateBlast ?? '',
-    'BM Cellularity': record.labs?.bmCellularity || '',
-    'BM Biopsy Summary': record.labs?.bmBiopsySummary || '',
-    'Flow Cytometry': record.labs?.flowCytometry || '',
-    'Cytogenetics': record.labs?.cytogenetics || '',
-    'Molecular Genetics': record.labs?.molecularGenetics || '',
+    // Complete Blood Count (CBC) Profile
+    'Hemoglobin (Hb)': record.labs?.hemoglobin ?? '',
+    'WBC Count': record.labs?.wbcCount ?? '',
+    'RBC Count': record.labs?.rbcCount ?? '',
+    'Hematocrit (HCT)': record.labs?.hematocrit ?? '',
+    'Platelet Count': record.labs?.plateletCount ?? '',
+    'MCV': record.labs?.mcv ?? '',
+    'MCH': record.labs?.mch ?? '',
+    'MCHC': record.labs?.mchc ?? '',
+    'RDW': record.labs?.rdw ?? '',
+    'Absolute Granulocytes': record.labs?.absoluteGranulocytes ?? '',
+    'Absolute Lymphocytes': record.labs?.absoluteLymphocytes ?? '',
+    'Differential Count': record.labs?.differentialCount || '',
+
+    // Biochemistry & Other Labs
+    'LDH': record.labs?.ldh ?? '',
+    'Uric Acid': record.labs?.uricAcid ?? '',
+    'Serum Creatinine': record.labs?.serumCreatinine ?? '',
+    'ALT': record.labs?.alt ?? '',
+    'AST': record.labs?.ast ?? '',
 
     // Diagnosis & Outcome
     'Diagnosis': record.diagnosis || '',

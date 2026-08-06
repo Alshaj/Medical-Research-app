@@ -61,7 +61,7 @@ const MARITAL_STATUS_OPTIONS = [
   { value: 'Widowed', label: 'Widowed' }
 ];
 
-// Zod Validation Schema
+// Zod Validation Schema matching exact fields from screenshots
 const patientFormSchema = z.object({
   patientId: z.string().min(1, 'Patient ID / MRN is required'),
   age: z.coerce.number().optional().nullable(),
@@ -85,19 +85,26 @@ const patientFormSchema = z.object({
   chiefComplaint: z.string().optional(),
 
   labs: z.object({
+    // Complete Blood Count (CBC) Profile
     hemoglobin: z.coerce.number().optional().nullable(),
-    wbc: z.coerce.number().optional().nullable(),
-    platelets: z.coerce.number().optional().nullable(),
+    wbcCount: z.coerce.number().optional().nullable(),
+    rbcCount: z.coerce.number().optional().nullable(),
+    hematocrit: z.coerce.number().optional().nullable(),
+    plateletCount: z.coerce.number().optional().nullable(),
+    mcv: z.coerce.number().optional().nullable(),
+    mch: z.coerce.number().optional().nullable(),
+    mchc: z.coerce.number().optional().nullable(),
+    rdw: z.coerce.number().optional().nullable(),
+    absoluteGranulocytes: z.coerce.number().optional().nullable(),
+    absoluteLymphocytes: z.coerce.number().optional().nullable(),
+    differentialCount: z.string().optional(),
+
+    // Biochemistry & Other Labs
+    ldh: z.coerce.number().optional().nullable(),
+    uricAcid: z.coerce.number().optional().nullable(),
+    serumCreatinine: z.coerce.number().optional().nullable(),
     alt: z.coerce.number().optional().nullable(),
     ast: z.coerce.number().optional().nullable(),
-    pbsBlasts: z.coerce.number().optional().nullable(),
-    pbsFindings: z.string().optional(),
-    bmAspirateBlast: z.coerce.number().optional().nullable(),
-    bmCellularity: z.string().optional(),
-    bmBiopsySummary: z.string().optional(),
-    flowCytometry: z.string().optional(),
-    cytogenetics: z.string().optional(),
-    molecularGenetics: z.string().optional(),
   }),
 
   diagnosis: z.string().min(1, 'Diagnosis is required'),
@@ -137,18 +144,22 @@ export const PatientForm: React.FC = () => {
     chiefComplaint: editingRecord?.chiefComplaint || '',
     labs: {
       hemoglobin: editingRecord?.labs?.hemoglobin ?? null,
-      wbc: editingRecord?.labs?.wbc ?? null,
-      platelets: editingRecord?.labs?.platelets ?? null,
+      wbcCount: editingRecord?.labs?.wbcCount ?? null,
+      rbcCount: editingRecord?.labs?.rbcCount ?? null,
+      hematocrit: editingRecord?.labs?.hematocrit ?? null,
+      plateletCount: editingRecord?.labs?.plateletCount ?? null,
+      mcv: editingRecord?.labs?.mcv ?? null,
+      mch: editingRecord?.labs?.mch ?? null,
+      mchc: editingRecord?.labs?.mchc ?? null,
+      rdw: editingRecord?.labs?.rdw ?? null,
+      absoluteGranulocytes: editingRecord?.labs?.absoluteGranulocytes ?? null,
+      absoluteLymphocytes: editingRecord?.labs?.absoluteLymphocytes ?? null,
+      differentialCount: editingRecord?.labs?.differentialCount || '',
+      ldh: editingRecord?.labs?.ldh ?? null,
+      uricAcid: editingRecord?.labs?.uricAcid ?? null,
+      serumCreatinine: editingRecord?.labs?.serumCreatinine ?? null,
       alt: editingRecord?.labs?.alt ?? null,
       ast: editingRecord?.labs?.ast ?? null,
-      pbsBlasts: editingRecord?.labs?.pbsBlasts ?? null,
-      pbsFindings: editingRecord?.labs?.pbsFindings || '',
-      bmAspirateBlast: editingRecord?.labs?.bmAspirateBlast ?? null,
-      bmCellularity: editingRecord?.labs?.bmCellularity || '',
-      bmBiopsySummary: editingRecord?.labs?.bmBiopsySummary || '',
-      flowCytometry: editingRecord?.labs?.flowCytometry || '',
-      cytogenetics: editingRecord?.labs?.cytogenetics || '',
-      molecularGenetics: editingRecord?.labs?.molecularGenetics || '',
     },
     diagnosis: editingRecord?.diagnosis || '',
     subType: editingRecord?.subType || '',
@@ -374,36 +385,46 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 3: Labs & Diagnostics */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
+        {/* Section 3: Laboratory Data (Exact Match to Screenshot) */}
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <FlaskConical className="w-5 h-5 text-teal-700" />
-            <span>Labs & Diagnostics</span>
+            <span>3. Laboratory Data</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            <Input label="Hemoglobin (Hb)" unit="g/dL" placeholder="Hb (g/dL)" type="number" step="0.1" {...register('labs.hemoglobin')} />
-            <Input label="WBC" unit="x10^9/L" placeholder="WBC" type="number" step="0.1" {...register('labs.wbc')} />
-            <Input label="Platelets" unit="x10^9/L" placeholder="Platelets" type="number" step="1" {...register('labs.platelets')} />
-            <Input label="ALT" unit="U/L" placeholder="ALT (U/L)" type="number" step="1" {...register('labs.alt')} />
-            <Input label="AST" unit="U/L" placeholder="AST (U/L)" type="number" step="1" {...register('labs.ast')} />
+          {/* Subsection A: Complete Blood Count (CBC) Profile */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider text-teal-900 border-l-4 border-teal-600 pl-2">
+              Complete Blood Count (CBC) Profile:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <Input label="Hemoglobin (Hb)" placeholder="Hemoglobin (Hb)" type="number" step="0.1" {...register('labs.hemoglobin')} />
+              <Input label="WBC Count" placeholder="WBC Count" type="number" step="0.1" {...register('labs.wbcCount')} />
+              <Input label="RBC Count" placeholder="RBC Count" type="number" step="0.01" {...register('labs.rbcCount')} />
+              <Input label="Hematocrit (HCT)" placeholder="Hematocrit (HCT)" type="number" step="0.1" {...register('labs.hematocrit')} />
+              <Input label="Platelet Count" placeholder="Platelet Count" type="number" step="1" {...register('labs.plateletCount')} />
+              <Input label="MCV" placeholder="MCV" type="number" step="0.1" {...register('labs.mcv')} />
+              <Input label="MCH" placeholder="MCH" type="number" step="0.1" {...register('labs.mch')} />
+              <Input label="MCHC" placeholder="MCHC" type="number" step="0.1" {...register('labs.mchc')} />
+              <Input label="RDW" placeholder="RDW" type="number" step="0.1" {...register('labs.rdw')} />
+              <Input label="Absolute Granulocytes" placeholder="Absolute Granulocytes" type="number" step="0.01" {...register('labs.absoluteGranulocytes')} />
+              <Input label="Absolute Lymphocytes" placeholder="Absolute Lymphocytes" type="number" step="0.01" {...register('labs.absoluteLymphocytes')} />
+              <Input label="Differential Count" placeholder="Differential Count" {...register('labs.differentialCount')} />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Input label="PBS Blasts (%)" placeholder="PBS Blasts (%)" type="number" step="0.1" {...register('labs.pbsBlasts')} />
-            <Input label="BM Aspirate Blast (%)" placeholder="BM Aspirate Blast (%)" type="number" step="0.1" {...register('labs.bmAspirateBlast')} />
-            <Input label="BM Cellularity" placeholder="BM Cellularity" {...register('labs.bmCellularity')} />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Textarea label="PBS Findings" placeholder="PBS Findings" {...register('labs.pbsFindings')} />
-            <Textarea label="BM Biopsy Summary" placeholder="BM Biopsy Summary" {...register('labs.bmBiopsySummary')} />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Textarea label="Flow Cytometry" placeholder="Flow Cytometry" {...register('labs.flowCytometry')} />
-            <Textarea label="Cytogenetics" placeholder="Cytogenetics" {...register('labs.cytogenetics')} />
-            <Textarea label="Molecular Genetics" placeholder="Molecular Genetics" {...register('labs.molecularGenetics')} />
+          {/* Subsection B: Biochemistry & Other Labs */}
+          <div className="space-y-3 pt-2">
+            <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider text-teal-900 border-l-4 border-teal-600 pl-2">
+              Biochemistry & Other Labs:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <Input label="LDH" placeholder="LDH" type="number" step="1" {...register('labs.ldh')} />
+              <Input label="Uric Acid" placeholder="Uric Acid" type="number" step="0.1" {...register('labs.uricAcid')} />
+              <Input label="Serum Creatinine" placeholder="Serum Creatinine" type="number" step="0.01" {...register('labs.serumCreatinine')} />
+              <Input label="ALT" placeholder="ALT" type="number" step="1" {...register('labs.alt')} />
+              <Input label="AST" placeholder="AST" type="number" step="1" {...register('labs.ast')} />
+            </div>
           </div>
         </div>
 

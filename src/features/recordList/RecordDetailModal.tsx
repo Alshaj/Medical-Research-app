@@ -105,17 +105,40 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </div>
           </div>
 
-          {/* Labs */}
+          {/* 3. Laboratory Data */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
-              <FlaskConical className="w-4 h-4" /> Key Labs & Diagnostics
+              <FlaskConical className="w-4 h-4" /> 3. Laboratory Data
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
-              <div><span className="text-slate-400 block">Hb:</span><span className="font-mono font-bold text-slate-700">{record.labs?.hemoglobin ?? 'N/A'} g/dL</span></div>
-              <div><span className="text-slate-400 block">WBC:</span><span className="font-mono font-bold text-slate-700">{record.labs?.wbc ?? 'N/A'}</span></div>
-              <div><span className="text-slate-400 block">Platelets:</span><span className="font-mono font-bold text-slate-700">{record.labs?.platelets ?? 'N/A'}</span></div>
-              <div><span className="text-slate-400 block">PBS Blasts:</span><span className="font-mono font-bold text-slate-700">{record.labs?.pbsBlasts ?? 'N/A'}%</span></div>
-              <div><span className="text-slate-400 block">BM Blast:</span><span className="font-mono font-bold text-slate-700">{record.labs?.bmAspirateBlast ?? 'N/A'}%</span></div>
+            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
+              <div>
+                <span className="font-semibold text-slate-700 block mb-1">Complete Blood Count (CBC) Profile:</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-slate-700">
+                  <div><span className="text-slate-400">Hb:</span> {record.labs?.hemoglobin ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">WBC Count:</span> {record.labs?.wbcCount ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">RBC Count:</span> {record.labs?.rbcCount ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Hematocrit:</span> {record.labs?.hematocrit ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Platelet Count:</span> {record.labs?.plateletCount ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">MCV:</span> {record.labs?.mcv ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">MCH:</span> {record.labs?.mch ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">MCHC:</span> {record.labs?.mchc ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">RDW:</span> {record.labs?.rdw ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Abs Granulocytes:</span> {record.labs?.absoluteGranulocytes ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Abs Lymphocytes:</span> {record.labs?.absoluteLymphocytes ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Diff Count:</span> {record.labs?.differentialCount ?? 'N/A'}</div>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-slate-200">
+                <span className="font-semibold text-slate-700 block mb-1">Biochemistry & Other Labs:</span>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-slate-700">
+                  <div><span className="text-slate-400">LDH:</span> {record.labs?.ldh ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Uric Acid:</span> {record.labs?.uricAcid ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">Creatinine:</span> {record.labs?.serumCreatinine ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">ALT:</span> {record.labs?.alt ?? 'N/A'}</div>
+                  <div><span className="text-slate-400">AST:</span> {record.labs?.ast ?? 'N/A'}</div>
+                </div>
+              </div>
             </div>
           </div>
 

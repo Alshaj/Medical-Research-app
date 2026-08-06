@@ -9,20 +9,27 @@ export interface ClinicalSymptoms {
   splenomegaly: boolean;
 }
 
-export interface LabsDiagnostics {
+export interface LaboratoryData {
+  // Complete Blood Count (CBC) Profile
   hemoglobin?: number | null;
-  wbc?: number | null;
-  platelets?: number | null;
+  wbcCount?: number | null;
+  rbcCount?: number | null;
+  hematocrit?: number | null;
+  plateletCount?: number | null;
+  mcv?: number | null;
+  mch?: number | null;
+  mchc?: number | null;
+  rdw?: number | null;
+  absoluteGranulocytes?: number | null;
+  absoluteLymphocytes?: number | null;
+  differentialCount?: string;
+
+  // Biochemistry & Other Labs
+  ldh?: number | null;
+  uricAcid?: number | null;
+  serumCreatinine?: number | null;
   alt?: number | null;
   ast?: number | null;
-  pbsBlasts?: number | null;
-  pbsFindings?: string;
-  bmAspirateBlast?: number | null;
-  bmCellularity?: string;
-  bmBiopsySummary?: string;
-  flowCytometry?: string;
-  cytogenetics?: string;
-  molecularGenetics?: string;
 }
 
 export interface MedicalRecord {
@@ -45,8 +52,8 @@ export interface MedicalRecord {
   // Medical History
   chiefComplaint?: string; // Chief Complaint & History Summary
 
-  // Labs & Diagnostics
-  labs: LabsDiagnostics;
+  // Laboratory Data (Exact match to screenshot)
+  labs: LaboratoryData;
 
   // Diagnosis & Outcome
   diagnosis: string; // Required *
