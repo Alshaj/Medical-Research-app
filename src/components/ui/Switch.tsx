@@ -13,9 +13,13 @@ export const Switch: React.FC<SwitchProps> = ({ label, checked, onChange, id }) 
   return (
     <div
       onClick={() => onChange(!checked)}
-      className="flex items-center justify-between py-2.5 px-3 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 cursor-pointer active:bg-slate-50 transition-all select-none"
+      className="flex items-center justify-between gap-2 py-2.5 px-3 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 cursor-pointer active:bg-slate-50 transition-all select-none w-full min-w-0"
     >
-      <label htmlFor={switchId} className="text-sm font-medium text-slate-700 cursor-pointer select-none">
+      <label
+        htmlFor={switchId}
+        className="text-xs sm:text-sm font-medium text-slate-700 cursor-pointer select-none truncate flex-1 min-w-0"
+        title={label}
+      >
         {label}
       </label>
       <button

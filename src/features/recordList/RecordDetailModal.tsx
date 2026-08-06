@@ -2,7 +2,6 @@ import React from 'react';
 import { X, FileText, Activity, FlaskConical, Stethoscope, Copy, Microchip, Award } from 'lucide-react';
 import { MedicalRecord } from '../../types/record';
 import { Button } from '../../components/ui/Button';
-import { useToastStore } from '../../stores/useToastStore';
 
 interface RecordDetailModalProps {
   record: MedicalRecord | null;
@@ -10,13 +9,11 @@ interface RecordDetailModalProps {
 }
 
 export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, onClose }) => {
-  const { addToast } = useToastStore();
-
   if (!record) return null;
 
   const handleCopyJSON = () => {
     navigator.clipboard.writeText(JSON.stringify(record, null, 2));
-    addToast('info', 'Full Record JSON copied to clipboard!');
+    alert('Full Record JSON copied to clipboard!');
   };
 
   const presentSymptoms = Object.entries(record.symptoms || {})

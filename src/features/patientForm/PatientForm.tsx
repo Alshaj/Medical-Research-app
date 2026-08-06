@@ -5,7 +5,6 @@ import { Save, ArrowLeft, RotateCcw, Activity, FileText, FlaskConical, Stethosco
 
 import { recordRepository } from '../../db/repository';
 import { useRecordStore } from '../../stores/useRecordStore';
-import { useToastStore } from '../../stores/useToastStore';
 import { Input } from '../../components/ui/Input';
 import { Textarea } from '../../components/ui/Textarea';
 import { Select } from '../../components/ui/Select';
@@ -183,7 +182,6 @@ type PatientFormData = z.infer<typeof patientFormSchema>;
 
 export const PatientForm: React.FC = () => {
   const { editingRecord, setEditingRecord, setActiveTab } = useRecordStore();
-  const { addToast } = useToastStore();
   const [saveSuccess, setSaveSuccess] = React.useState(false);
 
   const defaultValues: PatientFormData = {
@@ -321,8 +319,6 @@ export const PatientForm: React.FC = () => {
       });
 
       setSaveSuccess(true);
-      addToast('success', `Patient Record (${generatedStudyId}) saved to IndexedDB!`);
-
       setTimeout(() => {
         setSaveSuccess(false);
         setEditingRecord(null);
@@ -330,15 +326,15 @@ export const PatientForm: React.FC = () => {
       }, 1200);
     } catch (err) {
       console.error('Error saving patient record:', err);
-      addToast('error', 'Failed to save patient record into local storage.');
+      alert('Failed to save record into local IndexedDB.');
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-32">
+    <div className="max-w-4xl mx-auto pb-36 px-1 sm:px-0">
       {/* Top Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Button
             variant="ghost"
             size="sm"
@@ -349,18 +345,15 @@ export const PatientForm: React.FC = () => {
           >
             <ArrowLeft className="w-4 h-4" /> Back to Records
           </Button>
-          <h1 className="text-2xl font-bold text-slate-800">
-            {editingRecord ? `Edit Patient Record (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Case'}
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
+            {editingRecord ? `Edit Case (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Case'}
           </h1>
         </div>
 
         <Button
           variant="outline"
           size="sm"
-          onClick={() => {
-            reset();
-            addToast('info', 'Form inputs reset.');
-          }}
+          onClick={() => reset()}
           icon={<RotateCcw className="w-3.5 h-3.5" />}
         >
           Reset Form
@@ -377,15 +370,15 @@ export const PatientForm: React.FC = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
         {/* Section 1: Demographics & Admission */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
-            <Stethoscope className="w-5 h-5 text-teal-700" />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4 sm:space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-base sm:text-lg border-b border-slate-100 pb-3">
+            <Stethoscope className="w-5 h-5 text-teal-700 shrink-0" />
             <span>1. General & Demographics</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Input
               label="Study ID"
               placeholder="e.g. STU-2024-089 (Optional)"
@@ -441,13 +434,14 @@ export const PatientForm: React.FC = () => {
         </div>
 
         {/* Section 2: Clinical Symptoms */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
-            <Activity className="w-5 h-5 text-teal-700" />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4 sm:space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-base sm:text-lg border-b border-slate-100 pb-3">
+            <Activity className="w-5 h-5 text-teal-700 shrink-0" />
             <span>2. Clinical Symptoms</span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-3">
+          {/* Grid layout tuned for mobile screens to prevent switch overflow */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <Controller
               name="symptoms.fever"
               control={control}
@@ -517,15 +511,15 @@ export const PatientForm: React.FC = () => {
         </div>
 
         {/* Section 3: Laboratory Data */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
-          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
-            <FlaskConical className="w-5 h-5 text-teal-700" />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-6">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-base sm:text-lg border-b border-slate-100 pb-3">
+            <FlaskConical className="w-5 h-5 text-teal-700 shrink-0" />
             <span>3. Laboratory Data</span>
           </div>
 
           {/* Subsection A: Complete Blood Count (CBC) Profile */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider text-teal-900 border-l-4 border-teal-600 pl-2">
+            <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-teal-900 border-l-4 border-teal-600 pl-2">
               Complete Blood Count (CBC) Profile:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -546,7 +540,7 @@ export const PatientForm: React.FC = () => {
 
           {/* Subsection B: Biochemistry & Other Labs */}
           <div className="space-y-3 pt-2">
-            <h4 className="text-sm font-semibold text-slate-700 uppercase tracking-wider text-teal-900 border-l-4 border-teal-600 pl-2">
+            <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-teal-900 border-l-4 border-teal-600 pl-2">
               Biochemistry & Other Labs:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -560,9 +554,9 @@ export const PatientForm: React.FC = () => {
         </div>
 
         {/* Section 4: Diagnostics */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
-            <Microchip className="w-5 h-5 text-teal-700" />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4 sm:space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-base sm:text-lg border-b border-slate-100 pb-3">
+            <Microchip className="w-5 h-5 text-teal-700 shrink-0" />
             <span>4. Diagnostics</span>
           </div>
 
@@ -606,9 +600,9 @@ export const PatientForm: React.FC = () => {
         </div>
 
         {/* Section 5: Diagnosis */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
-            <FileText className="w-5 h-5 text-teal-700" />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4 sm:space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-base sm:text-lg border-b border-slate-100 pb-3">
+            <FileText className="w-5 h-5 text-teal-700 shrink-0" />
             <span>5. Diagnosis</span>
           </div>
 
@@ -643,9 +637,9 @@ export const PatientForm: React.FC = () => {
         </div>
 
         {/* Section 6: Treatment & Outcome */}
-        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-          <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
-            <Award className="w-5 h-5 text-teal-700" />
+        <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4 sm:space-y-5">
+          <div className="flex items-center gap-2 text-teal-800 font-semibold text-base sm:text-lg border-b border-slate-100 pb-3">
+            <Award className="w-5 h-5 text-teal-700 shrink-0" />
             <span>6. Treatment & Outcome</span>
           </div>
 
@@ -677,12 +671,12 @@ export const PatientForm: React.FC = () => {
         </div>
 
         {/* Floating / Sticky Save Clinical Case Record Bar */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/95 backdrop-blur border-t border-slate-200 shadow-lg z-30">
-          <div className="max-w-4xl mx-auto flex flex-col items-center gap-1.5">
+        <div className="fixed bottom-0 left-0 right-0 p-3 sm:p-4 bg-white/95 backdrop-blur border-t border-slate-200 shadow-lg z-30">
+          <div className="max-w-4xl mx-auto flex flex-col items-center gap-1">
             <Button
               type="submit"
               disabled={isSubmitting || saveSuccess}
-              className={`w-full sm:w-auto px-12 py-3 font-semibold text-base rounded-xl shadow-md transition-all ${
+              className={`w-full sm:w-auto px-10 py-3 font-semibold text-sm sm:text-base rounded-xl shadow-md transition-all ${
                 saveSuccess
                   ? 'bg-emerald-600 text-white cursor-not-allowed opacity-90'
                   : isSubmitting
@@ -703,7 +697,7 @@ export const PatientForm: React.FC = () => {
                 ? 'Case Record Saved!'
                 : 'Save Clinical Case Record'}
             </Button>
-            <p className="text-xs text-slate-500 text-center">
+            <p className="text-[11px] sm:text-xs text-slate-500 text-center">
               Saved to this device first — syncs automatically when you are back online
             </p>
           </div>
