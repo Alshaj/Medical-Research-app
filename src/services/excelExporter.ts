@@ -3,7 +3,7 @@ import { MedicalRecord } from '../types/record';
 
 /**
  * Transforms JSON MedicalRecord objects into flat Excel rows
- * matching all 39 fields from the UI screenshots.
+ * matching all fields from the UI screenshots + City & Marital Status.
  */
 export function transformRecordToExcelRow(record: MedicalRecord) {
   return {
@@ -11,6 +11,8 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Patient ID / MRN': record.patientId || '',
     'Age': record.age !== undefined && record.age !== null ? record.age : '',
     'Gender': record.gender || '',
+    'City (Yemen)': record.city || '',
+    'Marital Status': record.maritalStatus || '',
     'Occupation': record.occupation || '',
     'Admission Date': record.admissionDate || '',
     
@@ -82,7 +84,7 @@ export function exportRecordsToExcel(records: MedicalRecord[], filenamePrefix = 
     flatRows.forEach((row) => {
       const val = String((row as Record<string, unknown>)[key] || '');
       if (val.length > maxLength) {
-        maxLength = Math.min(val.length, 50); // cap max width at 50 for text areas
+        maxLength = Math.min(val.length, 50);
       }
     });
     return { wch: maxLength + 3 };

@@ -10,6 +10,8 @@ export async function seedInitialDataIfEmpty() {
       patientId: 'PT-2024-001',
       age: 45,
       gender: 'Male',
+      city: "Sana'a",
+      maritalStatus: 'Married',
       occupation: 'Civil Engineer',
       admissionDate: '2024-05-12',
       symptoms: {
@@ -53,6 +55,8 @@ export async function seedInitialDataIfEmpty() {
       patientId: 'PT-2024-002',
       age: 62,
       gender: 'Female',
+      city: 'Aden',
+      maritalStatus: 'Widowed',
       occupation: 'Teacher',
       admissionDate: '2024-06-01',
       symptoms: {
@@ -96,6 +100,8 @@ export async function seedInitialDataIfEmpty() {
       patientId: 'PT-2024-003',
       age: 28,
       gender: 'Female',
+      city: 'Taiz',
+      maritalStatus: 'Single',
       occupation: 'Software Developer',
       admissionDate: '2024-06-20',
       symptoms: {

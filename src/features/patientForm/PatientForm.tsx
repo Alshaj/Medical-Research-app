@@ -30,11 +30,44 @@ const customZodResolver = (schema: z.ZodSchema) => async (values: any) => {
   return { values: {}, errors };
 };
 
-// Zod Validation Schema matching all fields from screenshots
+const YEMENI_CITIES = [
+  { value: '', label: 'Select City (Yemen)' },
+  { value: "Sana'a", label: "Sana'a (صنعاء)" },
+  { value: 'Aden', label: 'Aden (عدن)' },
+  { value: 'Taiz', label: 'Taiz (تعز)' },
+  { value: 'Al Hudaydah', label: 'Al Hudaydah (الحديدة)' },
+  { value: 'Mukalla', label: 'Mukalla (المكلا)' },
+  { value: 'Ibb', label: 'Ibb (إب)' },
+  { value: 'Dhamar', label: 'Dhamar (ذمار)' },
+  { value: 'Amran', label: 'Amran (عمران)' },
+  { value: 'Sayyan', label: 'Sayyan / Seiyun (سيئون)' },
+  { value: 'Saada', label: 'Saada (صعدة)' },
+  { value: 'Al Mahrah', label: 'Al Mahrah (المهرة)' },
+  { value: 'Hajjah', label: 'Hajjah (حجة)' },
+  { value: 'Shabwah', label: 'Shabwah (شبوة)' },
+  { value: 'Abyan', label: 'Abyan (أبين)' },
+  { value: 'Lahij', label: 'Lahij (لحج)' },
+  { value: 'Marib', label: 'Marib (مأرب)' },
+  { value: 'Al Bayda', label: 'Al Bayda (البيضاء)' },
+  { value: 'Socotra', label: 'Socotra (سقطرى)' },
+  { value: 'Other City', label: 'Other City' }
+];
+
+const MARITAL_STATUS_OPTIONS = [
+  { value: '', label: 'Select Marital Status' },
+  { value: 'Single', label: 'Single' },
+  { value: 'Married', label: 'Married' },
+  { value: 'Divorced', label: 'Divorced' },
+  { value: 'Widowed', label: 'Widowed' }
+];
+
+// Zod Validation Schema matching all fields from screenshots + City & Marital Status
 const patientFormSchema = z.object({
   patientId: z.string().min(1, 'Patient ID / MRN is required'),
   age: z.coerce.number().optional().nullable(),
   gender: z.string().optional(),
+  city: z.string().optional(),
+  maritalStatus: z.string().optional(),
   occupation: z.string().optional(),
   admissionDate: z.string().optional(),
 
@@ -89,6 +122,8 @@ export const PatientForm: React.FC = () => {
     patientId: editingRecord?.patientId || '',
     age: editingRecord?.age ?? null,
     gender: editingRecord?.gender || 'Male',
+    city: editingRecord?.city || '',
+    maritalStatus: editingRecord?.maritalStatus || '',
     occupation: editingRecord?.occupation || '',
     admissionDate: editingRecord?.admissionDate || new Date().toISOString().split('T')[0],
     symptoms: {
@@ -152,6 +187,8 @@ export const PatientForm: React.FC = () => {
         patientId: data.patientId,
         age: data.age,
         gender: data.gender,
+        city: data.city,
+        maritalStatus: data.maritalStatus,
         occupation: data.occupation,
         admissionDate: data.admissionDate,
         symptoms: {
@@ -256,10 +293,19 @@ export const PatientForm: React.FC = () => {
               label="Gender"
               options={[
                 { value: 'Male', label: 'Male' },
-                { value: 'Female', label: 'Female' },
-                { value: 'Other', label: 'Other' },
+                { value: 'Female', label: 'Female' }
               ]}
               {...register('gender')}
+            />
+            <Select
+              label="City (Yemen)"
+              options={YEMENI_CITIES}
+              {...register('city')}
+            />
+            <Select
+              label="Marital Status"
+              options={MARITAL_STATUS_OPTIONS}
+              {...register('maritalStatus')}
             />
             <Input
               label="Occupation"

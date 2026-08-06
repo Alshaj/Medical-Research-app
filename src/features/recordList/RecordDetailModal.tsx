@@ -47,7 +47,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Stethoscope className="w-4 h-4" /> Demographics & Admission
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
                 <span className="text-slate-400 block">Age:</span>
                 <span className="font-semibold text-slate-700">{record.age ? `${record.age} years` : 'N/A'}</span>
@@ -55,6 +55,14 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
               <div>
                 <span className="text-slate-400 block">Gender:</span>
                 <span className="font-semibold text-slate-700">{record.gender || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block">City (Yemen):</span>
+                <span className="font-semibold text-slate-700">{record.city || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block">Marital Status:</span>
+                <span className="font-semibold text-slate-700">{record.maritalStatus || 'N/A'}</span>
               </div>
               <div>
                 <span className="text-slate-400 block">Occupation:</span>

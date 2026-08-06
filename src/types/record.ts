@@ -33,7 +33,9 @@ export interface MedicalRecord {
   // Demographics
   patientId: string; // MRN or anonymized Patient ID
   age?: number | null;
-  gender?: string;
+  gender?: 'Male' | 'Female' | string;
+  city?: string;
+  maritalStatus?: 'Single' | 'Married' | 'Divorced' | 'Widowed' | string;
   occupation?: string;
   admissionDate?: string;
 
