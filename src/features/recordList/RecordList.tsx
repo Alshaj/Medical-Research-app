@@ -38,11 +38,15 @@ export const RecordList: React.FC = () => {
         return false;
       }
 
-      // Search query across ID, diagnosis, subtype, complaint, outcome
+      // Search query across Study ID, MRN, diagnosis, subtype, complaint, outcome
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase();
+      const idStr = (rec.studyId || rec.patientId || '').toLowerCase();
+      const mrnStr = (rec.mrn || '').toLowerCase();
+
       return (
-        rec.patientId.toLowerCase().includes(q) ||
+        idStr.includes(q) ||
+        mrnStr.includes(q) ||
         rec.diagnosis.toLowerCase().includes(q) ||
         (rec.subType && rec.subType.toLowerCase().includes(q)) ||
         (rec.chiefComplaint && rec.chiefComplaint.toLowerCase().includes(q)) ||
@@ -51,8 +55,8 @@ export const RecordList: React.FC = () => {
     });
   }, [records, searchQuery, selectedOutcomeFilter]);
 
-  const handleDelete = async (id: string, patientId: string) => {
-    if (confirm(`Are you sure you want to delete patient record "${patientId}"?`)) {
+  const handleDelete = async (id: string, studyId: string) => {
+    if (confirm(`Are you sure you want to delete patient record "${studyId}"?`)) {
       await recordRepository.deleteRecord(id);
     }
   };
@@ -144,7 +148,7 @@ export const RecordList: React.FC = () => {
           <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
           <input
             type="text"
-            placeholder="Search by Patient ID, Diagnosis, Symptoms, Complaint..."
+            placeholder="Search by Study ID, MRN, Diagnosis, Symptoms, Complaint..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 shadow-sm"
@@ -202,7 +206,7 @@ export const RecordList: React.FC = () => {
                 setActiveTab('new');
               }}
               onView={() => setViewingRecord(record)}
-              onDelete={() => handleDelete(record.id, record.patientId)}
+              onDelete={() => handleDelete(record.id, record.studyId || record.patientId || 'Record')}
             />
           ))}
         </div>
@@ -219,7 +223,6 @@ interface RecordCardProps {
 }
 
 const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelete }) => {
-  // Count active symptoms
   const activeSymptomsCount = Object.values(record.symptoms || {}).filter(Boolean).length;
 
   const outcomeColors: Record<string, string> = {
@@ -234,12 +237,14 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
 
   const outcomeBadge = outcomeColors[record.outcome || ''] || 'bg-slate-100 text-slate-700 border-slate-200';
 
+  const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
+
   return (
     <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-4">
       <div>
         <div className="flex items-center justify-between">
           <span className="font-mono text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100">
-            {record.patientId}
+            Study ID: {record.studyId || record.patientId}
           </span>
           <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${outcomeBadge}`}>
             {record.outcome || 'No Outcome'}
@@ -251,14 +256,12 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
 
         <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-600">
           <div>
-            <span className="text-slate-400">Demographics:</span>{' '}
-            <span className="font-medium text-slate-700">
-              {record.age ? `${record.age}y` : 'N/A'}, {record.gender || 'N/A'}
-            </span>
+            <span className="text-slate-400">MRN:</span>{' '}
+            <span className="font-medium text-slate-700">{record.mrn || 'N/A'}</span>
           </div>
           <div>
-            <span className="text-slate-400">Admission:</span>{' '}
-            <span className="font-medium text-slate-700">{record.admissionDate || 'N/A'}</span>
+            <span className="text-slate-400">City:</span>{' '}
+            <span className="font-medium text-slate-700">{displayCity || 'N/A'}</span>
           </div>
           <div>
             <span className="text-slate-400">Hb / WBC:</span>{' '}

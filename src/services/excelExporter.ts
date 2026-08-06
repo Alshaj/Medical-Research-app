@@ -5,14 +5,18 @@ import { MedicalRecord } from '../types/record';
  * Transforms JSON MedicalRecord objects into flat Excel rows
  */
 export function transformRecordToExcelRow(record: MedicalRecord) {
+  const displayCity = record.city === 'Other City' && record.customCity
+    ? record.customCity
+    : record.city || '';
+
   return {
     'Record ID': record.id,
-    'Patient ID / MRN': record.patientId || '',
+    'Study ID': record.studyId || record.patientId || '',
+    'MRN': record.mrn || '',
     'Age': record.age !== undefined && record.age !== null ? record.age : '',
     'Gender': record.gender || '',
-    'City (Yemen)': record.city || '',
+    'City (Yemen)': displayCity,
     'Marital Status': record.maritalStatus || '',
-    'Occupation': record.occupation || '',
     'Admission Date': record.admissionDate || '',
     
     // Clinical Symptoms

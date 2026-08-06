@@ -7,12 +7,13 @@ export async function seedInitialDataIfEmpty() {
 
   const sampleRecords = [
     {
-      patientId: 'PT-2024-001',
+      studyId: 'STU-2024-001',
+      mrn: 'MRN-84920',
+      patientId: 'STU-2024-001',
       age: 45,
       gender: 'Male',
       city: "Sana'a",
       maritalStatus: 'Married',
-      occupation: 'Civil Engineer',
       admissionDate: '2024-05-12',
       symptoms: {
         fever: true,
@@ -54,12 +55,13 @@ export async function seedInitialDataIfEmpty() {
       outcome: 'Complete Remission'
     },
     {
-      patientId: 'PT-2024-002',
+      studyId: 'STU-2024-002',
+      mrn: 'MRN-73812',
+      patientId: 'STU-2024-002',
       age: 62,
       gender: 'Female',
       city: 'Aden',
       maritalStatus: 'Widowed',
-      occupation: 'Teacher',
       admissionDate: '2024-06-01',
       symptoms: {
         fever: false,
@@ -101,12 +103,14 @@ export async function seedInitialDataIfEmpty() {
       outcome: 'Stable'
     },
     {
-      patientId: 'PT-2024-003',
+      studyId: 'STU-2024-003',
+      mrn: 'MRN-91204',
+      patientId: 'STU-2024-003',
       age: 28,
       gender: 'Female',
-      city: 'Taiz',
+      city: 'Other City',
+      customCity: 'Yarim',
       maritalStatus: 'Single',
-      occupation: 'Software Developer',
       admissionDate: '2024-06-20',
       symptoms: {
         fever: true,

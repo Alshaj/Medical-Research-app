@@ -61,14 +61,15 @@ const MARITAL_STATUS_OPTIONS = [
   { value: 'Widowed', label: 'Widowed' }
 ];
 
-// Zod Validation Schema matching exact fields from screenshots
+// Zod Validation Schema
 const patientFormSchema = z.object({
-  patientId: z.string().min(1, 'Patient ID / MRN is required'),
+  studyId: z.string().min(1, 'Study ID is required'),
+  mrn: z.string().optional(),
   age: z.coerce.number().optional().nullable(),
   gender: z.string().optional(),
   city: z.string().optional(),
+  customCity: z.string().optional(),
   maritalStatus: z.string().optional(),
-  occupation: z.string().optional(),
   admissionDate: z.string().optional(),
 
   symptoms: z.object({
@@ -124,12 +125,13 @@ export const PatientForm: React.FC = () => {
   const [saveSuccess, setSaveSuccess] = React.useState(false);
 
   const defaultValues: PatientFormData = {
-    patientId: editingRecord?.patientId || '',
+    studyId: editingRecord?.studyId || editingRecord?.patientId || '',
+    mrn: editingRecord?.mrn || '',
     age: editingRecord?.age ?? null,
     gender: editingRecord?.gender || 'Male',
     city: editingRecord?.city || '',
+    customCity: editingRecord?.customCity || '',
     maritalStatus: editingRecord?.maritalStatus || '',
-    occupation: editingRecord?.occupation || '',
     admissionDate: editingRecord?.admissionDate || new Date().toISOString().split('T')[0],
     symptoms: {
       fever: editingRecord?.symptoms?.fever || false,
@@ -176,11 +178,14 @@ export const PatientForm: React.FC = () => {
     handleSubmit,
     control,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<PatientFormData>({
     resolver: customZodResolver(patientFormSchema),
     defaultValues,
   });
+
+  const selectedCity = watch('city');
 
   useEffect(() => {
     reset(defaultValues);
@@ -191,12 +196,14 @@ export const PatientForm: React.FC = () => {
       await recordRepository.saveRecord({
         id: editingRecord?.id,
         createdAt: editingRecord?.createdAt,
-        patientId: data.patientId,
+        studyId: data.studyId,
+        patientId: data.studyId, // legacy fallback
+        mrn: data.mrn,
         age: data.age,
         gender: data.gender,
         city: data.city,
+        customCity: data.city === 'Other City' ? data.customCity : undefined,
         maritalStatus: data.maritalStatus,
-        occupation: data.occupation,
         admissionDate: data.admissionDate,
         symptoms: {
           fever: !!data.symptoms.fever,
@@ -248,7 +255,7 @@ export const PatientForm: React.FC = () => {
             <ArrowLeft className="w-4 h-4" /> Back to Records
           </Button>
           <h1 className="text-2xl font-bold text-slate-800">
-            {editingRecord ? `Edit Patient Record (${editingRecord.patientId})` : 'New Patient Record'}
+            {editingRecord ? `Edit Patient Record (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Record'}
           </h1>
         </div>
 
@@ -282,11 +289,16 @@ export const PatientForm: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Input
-              label="Patient ID / MRN"
+              label="Study ID"
               required
-              placeholder="e.g. PT-2024-089"
-              error={errors.patientId?.message as string}
-              {...register('patientId')}
+              placeholder="e.g. STU-2024-001"
+              error={errors.studyId?.message as string}
+              {...register('studyId')}
+            />
+            <Input
+              label="MRN (Medical Record No)"
+              placeholder="e.g. MRN-98421"
+              {...register('mrn')}
             />
             <Input
               label="Age (Years)"
@@ -307,15 +319,20 @@ export const PatientForm: React.FC = () => {
               options={YEMENI_CITIES}
               {...register('city')}
             />
+
+            {/* Conditional Custom City Input */}
+            {selectedCity === 'Other City' && (
+              <Input
+                label="Custom City Name"
+                placeholder="Enter custom city name"
+                {...register('customCity')}
+              />
+            )}
+
             <Select
               label="Marital Status"
               options={MARITAL_STATUS_OPTIONS}
               {...register('maritalStatus')}
-            />
-            <Input
-              label="Occupation"
-              placeholder="Occupation"
-              {...register('occupation')}
             />
             <Input
               label="Admission Date"
@@ -385,7 +402,7 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 3: Laboratory Data (Exact Match to Screenshot) */}
+        {/* Section 3: Laboratory Data */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <FlaskConical className="w-5 h-5 text-teal-700" />

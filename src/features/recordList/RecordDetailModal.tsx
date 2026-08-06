@@ -20,16 +20,25 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
     .filter(([_, val]) => val)
     .map(([key]) => key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase()));
 
+  const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
+
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-8 animate-fade-in">
         {/* Header */}
         <div className="bg-teal-800 text-white p-5 flex items-center justify-between">
           <div>
-            <span className="text-xs uppercase tracking-wider bg-teal-700 text-teal-100 px-2.5 py-0.5 rounded font-mono">
-              {record.patientId}
-            </span>
-            <h2 className="text-xl font-bold mt-1">{record.diagnosis}</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-wider bg-teal-700 text-teal-100 px-2.5 py-0.5 rounded font-mono">
+                Study ID: {record.studyId || record.patientId}
+              </span>
+              {record.mrn && (
+                <span className="text-xs tracking-wider bg-teal-900 text-teal-200 px-2.5 py-0.5 rounded font-mono">
+                  MRN: {record.mrn}
+                </span>
+              )}
+            </div>
+            <h2 className="text-xl font-bold mt-1.5">{record.diagnosis}</h2>
             {record.subType && <p className="text-xs text-teal-200">{record.subType}</p>}
           </div>
           <button
@@ -49,24 +58,24 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
-                <span className="text-slate-400 block">Age:</span>
-                <span className="font-semibold text-slate-700">{record.age ? `${record.age} years` : 'N/A'}</span>
+                <span className="text-slate-400 block">Study ID:</span>
+                <span className="font-semibold text-slate-700">{record.studyId || record.patientId}</span>
               </div>
               <div>
-                <span className="text-slate-400 block">Gender:</span>
-                <span className="font-semibold text-slate-700">{record.gender || 'N/A'}</span>
+                <span className="text-slate-400 block">MRN:</span>
+                <span className="font-semibold text-slate-700">{record.mrn || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block">Age / Gender:</span>
+                <span className="font-semibold text-slate-700">{record.age ? `${record.age}y` : 'N/A'}, {record.gender || 'N/A'}</span>
               </div>
               <div>
                 <span className="text-slate-400 block">City (Yemen):</span>
-                <span className="font-semibold text-slate-700">{record.city || 'N/A'}</span>
+                <span className="font-semibold text-slate-700">{displayCity || 'N/A'}</span>
               </div>
               <div>
                 <span className="text-slate-400 block">Marital Status:</span>
                 <span className="font-semibold text-slate-700">{record.maritalStatus || 'N/A'}</span>
-              </div>
-              <div>
-                <span className="text-slate-400 block">Occupation:</span>
-                <span className="font-semibold text-slate-700">{record.occupation || 'N/A'}</span>
               </div>
               <div>
                 <span className="text-slate-400 block">Admission Date:</span>

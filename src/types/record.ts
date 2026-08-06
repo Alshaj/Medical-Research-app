@@ -38,12 +38,14 @@ export interface MedicalRecord {
   updatedAt: string; // ISO string
 
   // Demographics
-  patientId: string; // MRN or anonymized Patient ID
+  studyId: string; // Study ID (Required *)
+  mrn?: string; // Medical Record Number
+  patientId?: string; // Legacy fallback
   age?: number | null;
   gender?: 'Male' | 'Female' | string;
   city?: string;
+  customCity?: string;
   maritalStatus?: 'Single' | 'Married' | 'Divorced' | 'Widowed' | string;
-  occupation?: string;
   admissionDate?: string;
 
   // Clinical Symptoms
@@ -52,7 +54,7 @@ export interface MedicalRecord {
   // Medical History
   chiefComplaint?: string; // Chief Complaint & History Summary
 
-  // Laboratory Data (Exact match to screenshot)
+  // Laboratory Data
   labs: LaboratoryData;
 
   // Diagnosis & Outcome
