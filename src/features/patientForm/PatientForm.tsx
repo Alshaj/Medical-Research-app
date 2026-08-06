@@ -63,12 +63,13 @@ const MARITAL_STATUS_OPTIONS = [
 
 const LINE_OF_TREATMENT_OPTIONS = [
   { value: '', label: 'Select Line of Treatment' },
-  { value: 'First-Line / Induction Protocol', label: 'First-Line / Induction Protocol' },
-  { value: 'Second-Line / Relapsed Protocol', label: 'Second-Line / Relapsed Protocol' },
-  { value: 'Consolidation Therapy', label: 'Consolidation Therapy' },
-  { value: 'Maintenance Therapy', label: 'Maintenance Therapy' },
-  { value: 'Salvage Therapy', label: 'Salvage Therapy' },
+  { value: 'First-line Induction', label: 'First-line Induction' },
+  { value: 'Consolidation / Maintenance', label: 'Consolidation / Maintenance' },
+  { value: 'Second-line / Relapsed / Refractory', label: 'Second-line / Relapsed / Refractory' },
   { value: 'Palliative Care', label: 'Palliative Care' },
+  { value: 'Stem Cell Transplant', label: 'Stem Cell Transplant' },
+  { value: 'Observation / Watchful Waiting', label: 'Observation / Watchful Waiting' },
+  { value: 'Other', label: 'Other' }
 ];
 
 const TREATMENT_OUTCOME_OPTIONS = [
@@ -79,7 +80,7 @@ const TREATMENT_OUTCOME_OPTIONS = [
   { value: 'Relapse / Progressive Disease', label: 'Relapse / Progressive Disease' },
   { value: 'Refractory', label: 'Refractory' },
   { value: 'Deceased', label: 'Deceased' },
-  { value: 'Under Evaluation', label: 'Under Evaluation' },
+  { value: 'Under Evaluation', label: 'Under Evaluation' }
 ];
 
 // Zod Validation Schema matching exact fields from screenshots
@@ -150,6 +151,7 @@ const patientFormSchema = z.object({
   ihcMarkers: z.string().optional(),
 
   lineOfTreatment: z.string().optional(),
+  customLineOfTreatment: z.string().optional(),
   outcome: z.string().optional(),
 });
 
@@ -217,6 +219,7 @@ export const PatientForm: React.FC = () => {
     stageRiskGroup: editingRecord?.stageRiskGroup || '',
     ihcMarkers: editingRecord?.ihcMarkers || '',
     lineOfTreatment: editingRecord?.lineOfTreatment || editingRecord?.inductionProtocol || '',
+    customLineOfTreatment: editingRecord?.customLineOfTreatment || '',
     outcome: editingRecord?.outcome || editingRecord?.treatmentOutcome || '',
   };
 
@@ -234,6 +237,7 @@ export const PatientForm: React.FC = () => {
 
   const selectedCity = watch('city');
   const isOtherSymptomToggled = watch('symptoms.other');
+  const selectedLineOfTreatment = watch('lineOfTreatment');
 
   useEffect(() => {
     reset(defaultValues);
@@ -273,6 +277,7 @@ export const PatientForm: React.FC = () => {
         stageRiskGroup: data.stageRiskGroup,
         ihcMarkers: data.ihcMarkers,
         lineOfTreatment: data.lineOfTreatment,
+        customLineOfTreatment: data.lineOfTreatment === 'Other' ? data.customLineOfTreatment : undefined,
         inductionProtocol: data.lineOfTreatment,
         outcome: data.outcome,
         treatmentOutcome: data.outcome,
@@ -546,7 +551,7 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 5: Diagnosis (Exact match to Screenshot 5) */}
+        {/* Section 5: Diagnosis */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <FileText className="w-5 h-5 text-teal-700" />
@@ -570,7 +575,7 @@ export const PatientForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Section 6: Treatment & Outcome (Exact match to Screenshot 6) */}
+        {/* Section 6: Treatment & Outcome */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
           <div className="flex items-center gap-2 text-teal-800 font-semibold text-lg border-b border-slate-100 pb-3">
             <Award className="w-5 h-5 text-teal-700" />
@@ -578,11 +583,24 @@ export const PatientForm: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Select
-              label="Line of Treatment"
-              options={LINE_OF_TREATMENT_OPTIONS}
-              {...register('lineOfTreatment')}
-            />
+            <div>
+              <Select
+                label="Line of Treatment"
+                options={LINE_OF_TREATMENT_OPTIONS}
+                {...register('lineOfTreatment')}
+              />
+              {/* Conditional Input when Line of Treatment is 'Other' */}
+              {selectedLineOfTreatment === 'Other' && (
+                <div className="mt-3 animate-fade-in">
+                  <Input
+                    label="Specify Custom Line of Treatment"
+                    placeholder="Enter custom line of treatment..."
+                    {...register('customLineOfTreatment')}
+                  />
+                </div>
+              )}
+            </div>
+
             <Select
               label="Treatment Outcome"
               options={TREATMENT_OUTCOME_OPTIONS}

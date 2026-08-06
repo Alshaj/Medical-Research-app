@@ -82,8 +82,9 @@ export interface MedicalRecord {
   ihcMarkers?: string; // Immunohistochemistry (IHC) Markers
 
   // Section 6: Treatment & Outcome
-  inductionProtocol?: string; // Line of Treatment
   lineOfTreatment?: string;
+  customLineOfTreatment?: string; // Dynamic text input when Line of Treatment is 'Other'
+  inductionProtocol?: string; // Legacy fallback
   outcome?: string; // Treatment Outcome
   treatmentOutcome?: string;
 

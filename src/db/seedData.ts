@@ -62,10 +62,10 @@ export async function seedInitialDataIfEmpty() {
       subType: 'AML with t(8;21)',
       stageRiskGroup: 'Favorable Risk',
       ihcMarkers: 'MPO+, CD34+, CD117+',
-      inductionProtocol: '7+3 Cytarabine and Daunorubicin',
-      treatmentResponse: 'Complete Hematologic Response',
-      relapseDate: '',
-      outcome: 'Complete Remission'
+      lineOfTreatment: 'First-line Induction',
+      inductionProtocol: 'First-line Induction',
+      outcome: 'Complete Remission',
+      treatmentOutcome: 'Complete Remission'
     },
     {
       studyId: 'STU-2024-002',
@@ -123,10 +123,10 @@ export async function seedInitialDataIfEmpty() {
       subType: 'B-cell CLL',
       stageRiskGroup: 'Rai Stage II / Binet Stage B',
       ihcMarkers: 'CD5+, CD23+, ZAP-70 negative',
-      inductionProtocol: 'Ibrutinib monotherapy 420mg daily',
-      treatmentResponse: 'Partial Response with nodal regression',
-      relapseDate: '',
-      outcome: 'Stable'
+      lineOfTreatment: 'Consolidation / Maintenance',
+      inductionProtocol: 'Consolidation / Maintenance',
+      outcome: 'Stable Disease',
+      treatmentOutcome: 'Stable Disease'
     },
     {
       studyId: 'STU-2024-003',
@@ -186,10 +186,11 @@ export async function seedInitialDataIfEmpty() {
       subType: 'Hypergranular APL',
       stageRiskGroup: 'High Risk',
       ihcMarkers: 'MPO hyper-positive, CD33+',
-      inductionProtocol: 'ATRA + Arsenic Trioxide (ATO)',
-      treatmentResponse: 'Complete Molecular Remission',
-      relapseDate: '',
-      outcome: 'Complete Remission'
+      lineOfTreatment: 'Other',
+      customLineOfTreatment: 'ATRA + Arsenic Trioxide (ATO) Targeted Induction',
+      inductionProtocol: 'Other',
+      outcome: 'Complete Remission',
+      treatmentOutcome: 'Complete Remission'
     }
   ];
 

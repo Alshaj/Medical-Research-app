@@ -26,6 +26,11 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
 
   const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
 
+  const rawTreatment = record.lineOfTreatment || record.inductionProtocol;
+  const displayTreatment = (rawTreatment === 'Other') && record.customLineOfTreatment
+    ? record.customLineOfTreatment
+    : rawTreatment;
+
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-8 animate-fade-in">
@@ -213,7 +218,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div><span className="text-slate-400 block">Line of Treatment:</span><span className="font-semibold text-slate-800">{record.lineOfTreatment || record.inductionProtocol || 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">Line of Treatment:</span><span className="font-semibold text-slate-800">{displayTreatment || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">Treatment Outcome:</span><span className="font-bold text-emerald-700">{record.outcome || record.treatmentOutcome || 'N/A'}</span></div>
               </div>
             </div>

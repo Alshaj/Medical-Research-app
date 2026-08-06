@@ -9,6 +9,10 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     ? record.customCity
     : record.city || '';
 
+  const displayTreatment = (record.lineOfTreatment === 'Other' || record.inductionProtocol === 'Other') && record.customLineOfTreatment
+    ? record.customLineOfTreatment
+    : record.lineOfTreatment || record.inductionProtocol || '';
+
   return {
     'Record ID': record.id,
     'Study ID': record.studyId || record.patientId || '',
@@ -72,7 +76,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Immunohistochemistry (IHC) Markers': record.ihcMarkers || '',
 
     // Section 6: Treatment & Outcome
-    'Line of Treatment': record.lineOfTreatment || record.inductionProtocol || '',
+    'Line of Treatment': displayTreatment,
     'Treatment Outcome': record.treatmentOutcome || record.outcome || '',
     
     // Metadata
