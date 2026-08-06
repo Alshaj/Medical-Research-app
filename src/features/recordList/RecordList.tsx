@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Search, Download, Plus, Edit3, Trash2, Eye, Filter, FileSpreadsheet, Upload } from 'lucide-react';
+import { Search, Download, Plus, Edit3, Trash2, Eye, Filter, FileSpreadsheet, Upload, Trash } from 'lucide-react';
 
 import { db } from '../../db/database';
 import { recordRepository } from '../../db/repository';
@@ -59,6 +59,12 @@ export const RecordList: React.FC = () => {
   const handleDelete = async (id: string, studyId: string) => {
     if (confirm(`Are you sure you want to delete patient record "${studyId}"?`)) {
       await recordRepository.deleteRecord(id);
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (confirm('Are you sure you want to delete ALL patient records from this device? This action cannot be undone.')) {
+      await recordRepository.clearAllRecords();
     }
   };
 
@@ -128,6 +134,19 @@ export const RecordList: React.FC = () => {
               <Upload className="w-3.5 h-3.5" /> Restore JSON
             </span>
           </label>
+
+          {records.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-rose-600 border-rose-200 hover:bg-rose-50"
+              icon={<Trash className="w-3.5 h-3.5" />}
+              onClick={handleClearAll}
+              title="Clear all records"
+            >
+              Clear All
+            </Button>
+          )}
 
           <Button
             variant="primary"
