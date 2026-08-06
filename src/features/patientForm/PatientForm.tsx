@@ -61,6 +61,29 @@ const MARITAL_STATUS_OPTIONS = [
   { value: 'Widowed', label: 'Widowed' }
 ];
 
+// Exact Hematological Malignancy Diagnosis options from screenshots
+const DIAGNOSIS_OPTIONS = [
+  { value: '', label: 'Select Hematological Malignancy Diagnosis *' },
+  { value: 'Acute Myeloid Leukemia (AML)', label: 'Acute Myeloid Leukemia (AML)' },
+  { value: 'Acute Lymphoblastic Leukemia (ALL)', label: 'Acute Lymphoblastic Leukemia (ALL)' },
+  { value: 'Chronic Myeloid Leukemia (CML)', label: 'Chronic Myeloid Leukemia (CML)' },
+  { value: 'Chronic Lymphocytic Leukemia (CLL)', label: 'Chronic Lymphocytic Leukemia (CLL)' },
+  { value: 'Hodgkin Lymphoma', label: 'Hodgkin Lymphoma' },
+  { value: 'Non-Hodgkin Lymphoma', label: 'Non-Hodgkin Lymphoma' },
+  { value: 'Diffuse Large B-cell Lymphoma (DLBCL)', label: 'Diffuse Large B-cell Lymphoma (DLBCL)' },
+  { value: 'Burkitt Lymphoma', label: 'Burkitt Lymphoma' },
+  { value: 'Mantle Cell Lymphoma', label: 'Mantle Cell Lymphoma' },
+  { value: 'Follicular Lymphoma', label: 'Follicular Lymphoma' },
+  { value: 'T-cell Lymphoma', label: 'T-cell Lymphoma' },
+  { value: 'Multiple Myeloma', label: 'Multiple Myeloma' },
+  { value: 'Plasma Cell Leukemia', label: 'Plasma Cell Leukemia' },
+  { value: 'Myelodysplastic Syndrome (MDS)', label: 'Myelodysplastic Syndrome (MDS)' },
+  { value: 'Myeloproliferative Neoplasms (MPN)', label: 'Myeloproliferative Neoplasms (MPN)' },
+  { value: 'Chronic Myelomonocytic Leukemia (CMML)', label: 'Chronic Myelomonocytic Leukemia (CMML)' },
+  { value: 'Hairy Cell Leukemia', label: 'Hairy Cell Leukemia' },
+  { value: 'Other Hematological Malignancy', label: 'Other Hematological Malignancy' }
+];
+
 const LINE_OF_TREATMENT_OPTIONS = [
   { value: '', label: 'Select Line of Treatment' },
   { value: 'First-line Induction', label: 'First-line Induction' },
@@ -148,6 +171,7 @@ const patientFormSchema = z.object({
   }),
 
   diagnosis: z.string().min(1, 'Hematological Malignancy Diagnosis is required'),
+  customDiagnosis: z.string().optional(),
   subType: z.string().optional(),
   stageRiskGroup: z.string().optional(),
   ihcMarkers: z.string().optional(),
@@ -218,6 +242,7 @@ export const PatientForm: React.FC = () => {
       ctScanImaging: editingRecord?.diagnostics?.ctScanImaging || '',
     },
     diagnosis: editingRecord?.diagnosis || '',
+    customDiagnosis: editingRecord?.customDiagnosis || '',
     subType: editingRecord?.subType || '',
     stageRiskGroup: editingRecord?.stageRiskGroup || '',
     ihcMarkers: editingRecord?.ihcMarkers || '',
@@ -241,6 +266,7 @@ export const PatientForm: React.FC = () => {
   const selectedCity = watch('city');
   const isOtherSymptomToggled = watch('symptoms.other');
   const isLymphNodeBiopsyToggled = watch('diagnostics.lymphNodeBiopsyPerformed');
+  const selectedDiagnosis = watch('diagnosis');
   const selectedLineOfTreatment = watch('lineOfTreatment');
 
   useEffect(() => {
@@ -280,6 +306,7 @@ export const PatientForm: React.FC = () => {
           lymphNodeBiopsySummary: data.diagnostics.lymphNodeBiopsyPerformed ? data.diagnostics.lymphNodeBiopsySummary : undefined,
         },
         diagnosis: data.diagnosis,
+        customDiagnosis: data.diagnosis === 'Other Hematological Malignancy' ? data.customDiagnosis : undefined,
         subType: data.subType,
         stageRiskGroup: data.stageRiskGroup,
         ihcMarkers: data.ihcMarkers,
@@ -578,13 +605,26 @@ export const PatientForm: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              label="Hematological Malignancy Diagnosis"
-              required
-              placeholder="Hematological Malignancy Diagnosis *"
-              error={errors.diagnosis?.message as string}
-              {...register('diagnosis')}
-            />
+            <div>
+              <Select
+                label="Hematological Malignancy Diagnosis"
+                required
+                options={DIAGNOSIS_OPTIONS}
+                error={errors.diagnosis?.message as string}
+                {...register('diagnosis')}
+              />
+              {/* Conditional Input when Diagnosis is 'Other Hematological Malignancy' */}
+              {selectedDiagnosis === 'Other Hematological Malignancy' && (
+                <div className="mt-3 animate-fade-in">
+                  <Input
+                    label="Specify Custom Diagnosis"
+                    placeholder="Enter custom diagnosis..."
+                    {...register('customDiagnosis')}
+                  />
+                </div>
+              )}
+            </div>
+
             <Input label="Disease Subtype / FAB / WHO Classification" placeholder="Disease Subtype / FAB / WHO Classification" {...register('subType')} />
           </div>
 

@@ -26,6 +26,10 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
 
   const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
 
+  const displayDiagnosis = record.diagnosis === 'Other Hematological Malignancy' && record.customDiagnosis
+    ? record.customDiagnosis
+    : record.diagnosis;
+
   const rawTreatment = record.lineOfTreatment || record.inductionProtocol;
   const displayTreatment = (rawTreatment === 'Other') && record.customLineOfTreatment
     ? record.customLineOfTreatment
@@ -47,7 +51,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
                 </span>
               )}
             </div>
-            <h2 className="text-xl font-bold mt-1.5">{record.diagnosis}</h2>
+            <h2 className="text-xl font-bold mt-1.5">{displayDiagnosis}</h2>
             {record.subType && <p className="text-xs text-teal-200">{record.subType}</p>}
           </div>
           <button
@@ -205,7 +209,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
               <FileText className="w-4 h-4" /> 5. Diagnosis
             </h3>
             <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
-              <div><span className="text-slate-400 block">Hematological Malignancy Diagnosis:</span><span className="font-bold text-slate-800 text-sm">{record.diagnosis}</span></div>
+              <div><span className="text-slate-400 block">Hematological Malignancy Diagnosis:</span><span className="font-bold text-slate-800 text-sm">{displayDiagnosis}</span></div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                 <div><span className="text-slate-400 block">Subtype / Classification:</span><span className="font-semibold text-slate-700">{record.subType || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">Stage / Risk Group:</span><span className="font-semibold text-slate-700">{record.stageRiskGroup || 'N/A'}</span></div>

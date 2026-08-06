@@ -78,6 +78,7 @@ export interface MedicalRecord {
 
   // Section 5: Diagnosis
   diagnosis: string; // Hematological Malignancy Diagnosis * (Required)
+  customDiagnosis?: string; // Dynamic text box when Diagnosis is 'Other Hematological Malignancy'
   subType?: string; // Disease Subtype / FAB / WHO Classification
   stageRiskGroup?: string; // Stage / Risk Group
   ihcMarkers?: string; // Immunohistochemistry (IHC) Markers

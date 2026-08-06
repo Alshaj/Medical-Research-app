@@ -9,6 +9,10 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     ? record.customCity
     : record.city || '';
 
+  const displayDiagnosis = record.diagnosis === 'Other Hematological Malignancy' && record.customDiagnosis
+    ? record.customDiagnosis
+    : record.diagnosis || '';
+
   const displayTreatment = (record.lineOfTreatment === 'Other' || record.inductionProtocol === 'Other') && record.customLineOfTreatment
     ? record.customLineOfTreatment
     : record.lineOfTreatment || record.inductionProtocol || '';
@@ -71,7 +75,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'CT Scan / Imaging Findings': record.diagnostics?.ctScanImaging || '',
 
     // Section 5: Diagnosis
-    'Hematological Malignancy Diagnosis': record.diagnosis || '',
+    'Hematological Malignancy Diagnosis': displayDiagnosis,
     'Disease Subtype / FAB / WHO Classification': record.subType || '',
     'Stage / Risk Group': record.stageRiskGroup || '',
     'Immunohistochemistry (IHC) Markers': record.ihcMarkers || '',
