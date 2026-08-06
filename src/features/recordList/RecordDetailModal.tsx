@@ -36,40 +36,40 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
     : rawTreatment;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-8 animate-fade-in">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-auto animate-fade-in">
         {/* Header */}
-        <div className="bg-teal-800 text-white p-5 flex items-center justify-between">
+        <div className="bg-teal-800 text-white p-4 sm:p-5 flex items-start justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs uppercase tracking-wider bg-teal-700 text-teal-100 px-2.5 py-0.5 rounded font-mono">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="text-[10px] sm:text-xs uppercase tracking-wider bg-teal-700 text-teal-100 px-2 py-0.5 rounded font-mono">
                 Study ID: {record.studyId || record.patientId}
               </span>
               {record.mrn && (
-                <span className="text-xs tracking-wider bg-teal-900 text-teal-200 px-2.5 py-0.5 rounded font-mono">
+                <span className="text-[10px] sm:text-xs tracking-wider bg-teal-900 text-teal-200 px-2 py-0.5 rounded font-mono">
                   MRN: {record.mrn}
                 </span>
               )}
             </div>
-            <h2 className="text-xl font-bold mt-1.5">{displayDiagnosis}</h2>
-            {record.subType && <p className="text-xs text-teal-200">{record.subType}</p>}
+            <h2 className="text-lg sm:text-xl font-bold mt-1.5 leading-snug">{displayDiagnosis}</h2>
+            {record.subType && <p className="text-xs text-teal-200 mt-0.5">{record.subType}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-teal-200 hover:text-white hover:bg-teal-700 transition"
+            className="p-1.5 rounded-lg text-teal-200 hover:text-white hover:bg-teal-700 transition shrink-0"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto text-sm">
+        <div className="p-4 sm:p-6 space-y-5 max-h-[78vh] overflow-y-auto text-xs sm:text-sm">
           {/* Section 1 */}
           <div className="space-y-2">
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Stethoscope className="w-4 h-4" /> 1. General & Demographics
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
                 <span className="text-slate-400 block">Study ID:</span>
                 <span className="font-semibold text-slate-700">{record.studyId || record.patientId}</span>
@@ -102,13 +102,13 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Activity className="w-4 h-4" /> 2. Clinical Symptoms
             </h3>
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3">
+            <div className="bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 space-y-3">
               <div>
                 <span className="text-xs text-slate-400 block mb-1">Present Symptoms:</span>
                 {presentSymptoms.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5">
                     {presentSymptoms.map((sym) => (
-                      <span key={sym} className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800 border border-teal-200">
+                      <span key={sym} className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-teal-100 text-teal-800 border border-teal-200">
                         {sym}
                       </span>
                     ))}
@@ -121,7 +121,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
               {record.chiefComplaint && (
                 <div>
                   <span className="text-xs text-slate-400 block font-medium">Chief Complaint & History Summary:</span>
-                  <p className="text-xs text-slate-700 mt-0.5 whitespace-pre-wrap">{record.chiefComplaint}</p>
+                  <p className="text-xs text-slate-700 mt-0.5 whitespace-pre-wrap leading-relaxed">{record.chiefComplaint}</p>
                 </div>
               )}
             </div>
@@ -132,7 +132,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <FlaskConical className="w-4 h-4" /> 3. Laboratory Data
             </h3>
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
+            <div className="bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
               <div>
                 <span className="font-semibold text-slate-700 block mb-1">Complete Blood Count (CBC) Profile:</span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-slate-700">
@@ -169,7 +169,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Microchip className="w-4 h-4" /> 4. Diagnostics
             </h3>
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
+            <div className="bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 space-y-3 text-xs">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 <div><span className="text-slate-400 block">Peripheral Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.peripheralBlast ?? 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">BM Blast:</span><span className="font-semibold text-slate-700">{record.diagnostics?.boneMarrowBlast ?? 'N/A'}</span></div>
@@ -208,8 +208,8 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <FileText className="w-4 h-4" /> 5. Diagnosis
             </h3>
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
-              <div><span className="text-slate-400 block">Hematological Malignancy Diagnosis:</span><span className="font-bold text-slate-800 text-sm">{displayDiagnosis}</span></div>
+            <div className="bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
+              <div><span className="text-slate-400 block">Hematological Malignancy Diagnosis:</span><span className="font-bold text-slate-800 text-xs sm:text-sm">{displayDiagnosis}</span></div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                 <div><span className="text-slate-400 block">Subtype / Classification:</span><span className="font-semibold text-slate-700">{record.subType || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">Stage / Risk Group:</span><span className="font-semibold text-slate-700">{record.stageRiskGroup || 'N/A'}</span></div>
@@ -223,7 +223,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <Award className="w-4 h-4" /> 6. Treatment & Outcome
             </h3>
-            <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
+            <div className="bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div><span className="text-slate-400 block">Line of Treatment:</span><span className="font-semibold text-slate-800">{displayTreatment || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">Treatment Outcome:</span><span className="font-bold text-emerald-700">{record.outcome || record.treatmentOutcome || 'N/A'}</span></div>
@@ -233,9 +233,9 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <div className="p-3 sm:p-4 bg-slate-50 border-t border-slate-200 flex flex-row items-center justify-between gap-2">
           <Button variant="outline" size="sm" icon={<Copy className="w-4 h-4" />} onClick={handleCopyJSON}>
-            Copy JSON Document
+            Copy JSON
           </Button>
           <Button variant="primary" size="sm" onClick={onClose}>
             Close

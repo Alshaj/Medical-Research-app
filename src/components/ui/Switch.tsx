@@ -11,7 +11,10 @@ export const Switch: React.FC<SwitchProps> = ({ label, checked, onChange, id }) 
   const switchId = id || label.toLowerCase().replace(/\s+/g, '-');
 
   return (
-    <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
+    <div
+      onClick={() => onChange(!checked)}
+      className="flex items-center justify-between py-2.5 px-3 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 cursor-pointer active:bg-slate-50 transition-all select-none"
+    >
       <label htmlFor={switchId} className="text-sm font-medium text-slate-700 cursor-pointer select-none">
         {label}
       </label>
@@ -20,7 +23,10 @@ export const Switch: React.FC<SwitchProps> = ({ label, checked, onChange, id }) 
         type="button"
         role="switch"
         aria-checked={checked}
-        onClick={() => onChange(!checked)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onChange(!checked);
+        }}
         className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 ${
           checked ? 'bg-teal-700' : 'bg-slate-300'
         }`}

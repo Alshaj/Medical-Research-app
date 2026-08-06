@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stethoscope, FilePlus, List, BarChart2, Download, Wifi, WifiOff } from 'lucide-react';
+import { Stethoscope, FilePlus, List, Download, Wifi, WifiOff, FileSpreadsheet } from 'lucide-react';
 import { useRecordStore } from '../../stores/useRecordStore';
 import { usePWAStore } from '../../stores/usePWAStore';
 import { exportRecordsToExcel } from '../../services/excelExporter';
@@ -39,11 +39,11 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Center Navigation Tabs */}
+          {/* Desktop Navigation Tabs */}
           <nav className="hidden md:flex items-center gap-1 bg-teal-900/60 p-1 rounded-xl border border-teal-700/50">
             <button
               onClick={() => setActiveTab('list')}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition ${
                 activeTab === 'list'
                   ? 'bg-white text-teal-900 shadow-sm'
                   : 'text-teal-100 hover:text-white hover:bg-teal-800/60'
@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
                 setEditingRecord(null);
                 setActiveTab('new');
               }}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition ${
                 activeTab === 'new'
                   ? 'bg-white text-teal-900 shadow-sm'
                   : 'text-teal-100 hover:text-white hover:bg-teal-800/60'
@@ -67,15 +67,15 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Utilities */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Offline Status Badge */}
             <div
-              className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border font-medium ${
+              className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border font-medium ${
                 isOnline
                   ? 'bg-emerald-950/40 text-emerald-300 border-emerald-700/60'
                   : 'bg-amber-950/40 text-amber-300 border-amber-700/60'
               }`}
-              title={isOnline ? 'Online (Data stays local in IndexedDB)' : 'Device is offline - Fully functional!'}
+              title={isOnline ? 'Offline-Ready (Data stays local in IndexedDB)' : 'Device is offline - Fully functional!'}
             >
               {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
               <span className="hidden sm:inline">{isOnline ? 'Offline-Ready' : 'Offline Mode'}</span>
@@ -87,37 +87,39 @@ export const Navbar: React.FC = () => {
                 onClick={handleInstallClick}
                 className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1.5 animate-pulse"
               >
-                <Download className="w-3.5 h-3.5" /> Install App
+                <Download className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Install App</span><span className="sm:hidden">Install</span>
               </button>
             )}
 
             {/* Quick Export Button */}
             <button
               onClick={handleQuickExport}
-              className="bg-teal-700 hover:bg-teal-600 text-teal-100 text-xs font-medium px-3 py-1.5 rounded-lg border border-teal-600 transition hidden sm:inline-flex items-center gap-1.5"
+              className="bg-teal-700 hover:bg-teal-600 text-teal-100 text-xs font-medium px-3 py-1.5 rounded-lg border border-teal-600 transition flex items-center gap-1.5"
+              title="Export all records to Excel"
             >
-              Export Excel
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-300" />
+              <span className="hidden sm:inline">Export Excel</span>
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Tabs */}
+        {/* Touch-Friendly Mobile Navigation Tabs */}
         <div className="flex md:hidden border-t border-teal-700/50 py-2 justify-around text-xs">
           <button
             onClick={() => setActiveTab('list')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg ${
-              activeTab === 'list' ? 'bg-white text-teal-900 font-bold' : 'text-teal-100'
+            className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl transition-all font-semibold ${
+              activeTab === 'list' ? 'bg-white text-teal-900 shadow-sm' : 'text-teal-100 hover:bg-teal-700/50'
             }`}
           >
-            <List className="w-4 h-4" /> Records
+            <List className="w-4 h-4" /> Patient Records
           </button>
           <button
             onClick={() => {
               setEditingRecord(null);
               setActiveTab('new');
             }}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg ${
-              activeTab === 'new' ? 'bg-white text-teal-900 font-bold' : 'text-teal-100'
+            className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl transition-all font-semibold ${
+              activeTab === 'new' ? 'bg-white text-teal-900 shadow-sm' : 'text-teal-100 hover:bg-teal-700/50'
             }`}
           >
             <FilePlus className="w-4 h-4" /> Add Patient
