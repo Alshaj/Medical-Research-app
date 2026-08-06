@@ -34,8 +34,9 @@ export const RecordList: React.FC = () => {
   const filteredRecords = React.useMemo(() => {
     return (records || []).filter((rec: MedicalRecord) => {
       // Outcome filter
-      if (selectedOutcomeFilter !== 'ALL' && rec.outcome !== selectedOutcomeFilter) {
-        return false;
+      if (selectedOutcomeFilter !== 'ALL') {
+        const recOutcome = rec.outcome || rec.treatmentOutcome;
+        if (recOutcome !== selectedOutcomeFilter) return false;
       }
 
       // Search query across Study ID, MRN, diagnosis, subtype, complaint, outcome
@@ -171,13 +172,14 @@ export const RecordList: React.FC = () => {
             className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 shadow-sm appearance-none"
           >
             <option value="ALL">All Outcomes</option>
-            <option value="Complete Remission">Complete Remission</option>
-            <option value="Partial Remission">Partial Remission</option>
-            <option value="Relapse">Relapse</option>
-            <option value="Refractory">Refractory</option>
-            <option value="Stable">Stable</option>
+            <option value="Complete Remission (CR)">Complete Remission (CR)</option>
+            <option value="Partial Remission (PR)">Partial Remission (PR)</option>
+            <option value="Stable Disease (SD)">Stable Disease (SD)</option>
+            <option value="Progressive Disease (PD)">Progressive Disease (PD)</option>
+            <option value="Relapsed">Relapsed</option>
             <option value="Deceased">Deceased</option>
-            <option value="Under Treatment">Under Treatment</option>
+            <option value="Lost to Follow-up">Lost to Follow-up</option>
+            <option value="Ongoing Treatment">Ongoing Treatment</option>
           </select>
         </div>
       </div>
@@ -226,16 +228,18 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
   const activeSymptomsCount = Object.values(record.symptoms || {}).filter(Boolean).length;
 
   const outcomeColors: Record<string, string> = {
-    'Complete Remission': 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    'Partial Remission': 'bg-teal-100 text-teal-800 border-teal-200',
-    'Relapse': 'bg-rose-100 text-rose-800 border-rose-200',
-    'Refractory': 'bg-amber-100 text-amber-800 border-amber-200',
-    'Stable': 'bg-sky-100 text-sky-800 border-sky-200',
+    'Complete Remission (CR)': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    'Partial Remission (PR)': 'bg-teal-100 text-teal-800 border-teal-200',
+    'Stable Disease (SD)': 'bg-sky-100 text-sky-800 border-sky-200',
+    'Progressive Disease (PD)': 'bg-amber-100 text-amber-800 border-amber-200',
+    'Relapsed': 'bg-rose-100 text-rose-800 border-rose-200',
     'Deceased': 'bg-slate-100 text-slate-800 border-slate-300',
-    'Under Treatment': 'bg-indigo-100 text-indigo-800 border-indigo-200',
+    'Lost to Follow-up': 'bg-purple-100 text-purple-800 border-purple-200',
+    'Ongoing Treatment': 'bg-indigo-100 text-indigo-800 border-indigo-200',
   };
 
-  const outcomeBadge = outcomeColors[record.outcome || ''] || 'bg-slate-100 text-slate-700 border-slate-200';
+  const currentOutcome = record.outcome || record.treatmentOutcome || 'No Outcome';
+  const outcomeBadge = outcomeColors[currentOutcome] || 'bg-slate-100 text-slate-700 border-slate-200';
 
   const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
 
@@ -247,7 +251,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
             Study ID: {record.studyId || record.patientId}
           </span>
           <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${outcomeBadge}`}>
-            {record.outcome || 'No Outcome'}
+            {currentOutcome}
           </span>
         </div>
 

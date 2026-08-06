@@ -64,8 +64,8 @@ export async function seedInitialDataIfEmpty() {
       ihcMarkers: 'MPO+, CD34+, CD117+',
       lineOfTreatment: 'First-line Induction',
       inductionProtocol: 'First-line Induction',
-      outcome: 'Complete Remission',
-      treatmentOutcome: 'Complete Remission'
+      outcome: 'Complete Remission (CR)',
+      treatmentOutcome: 'Complete Remission (CR)'
     },
     {
       studyId: 'STU-2024-002',
@@ -125,8 +125,8 @@ export async function seedInitialDataIfEmpty() {
       ihcMarkers: 'CD5+, CD23+, ZAP-70 negative',
       lineOfTreatment: 'Consolidation / Maintenance',
       inductionProtocol: 'Consolidation / Maintenance',
-      outcome: 'Stable Disease',
-      treatmentOutcome: 'Stable Disease'
+      outcome: 'Stable Disease (SD)',
+      treatmentOutcome: 'Stable Disease (SD)'
     },
     {
       studyId: 'STU-2024-003',
@@ -189,8 +189,8 @@ export async function seedInitialDataIfEmpty() {
       lineOfTreatment: 'Other',
       customLineOfTreatment: 'ATRA + Arsenic Trioxide (ATO) Targeted Induction',
       inductionProtocol: 'Other',
-      outcome: 'Complete Remission',
-      treatmentOutcome: 'Complete Remission'
+      outcome: 'Complete Remission (CR)',
+      treatmentOutcome: 'Complete Remission (CR)'
     }
   ];
 

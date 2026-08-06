@@ -72,15 +72,17 @@ const LINE_OF_TREATMENT_OPTIONS = [
   { value: 'Other', label: 'Other' }
 ];
 
+// Exact Treatment Outcome options from screenshot
 const TREATMENT_OUTCOME_OPTIONS = [
   { value: '', label: 'Select Treatment Outcome' },
-  { value: 'Complete Remission', label: 'Complete Remission' },
-  { value: 'Partial Remission', label: 'Partial Remission' },
-  { value: 'Stable Disease', label: 'Stable Disease' },
-  { value: 'Relapse / Progressive Disease', label: 'Relapse / Progressive Disease' },
-  { value: 'Refractory', label: 'Refractory' },
+  { value: 'Complete Remission (CR)', label: 'Complete Remission (CR)' },
+  { value: 'Partial Remission (PR)', label: 'Partial Remission (PR)' },
+  { value: 'Stable Disease (SD)', label: 'Stable Disease (SD)' },
+  { value: 'Progressive Disease (PD)', label: 'Progressive Disease (PD)' },
+  { value: 'Relapsed', label: 'Relapsed' },
   { value: 'Deceased', label: 'Deceased' },
-  { value: 'Under Evaluation', label: 'Under Evaluation' }
+  { value: 'Lost to Follow-up', label: 'Lost to Follow-up' },
+  { value: 'Ongoing Treatment', label: 'Ongoing Treatment' }
 ];
 
 // Zod Validation Schema matching exact fields from screenshots
