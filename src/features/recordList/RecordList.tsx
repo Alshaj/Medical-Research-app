@@ -9,61 +9,14 @@ import { exportRecordsToExcel } from '../../services/excelExporter';
 import { MedicalRecord } from '../../types/record';
 import { Button } from '../../components/ui/Button';
 
-const YEMENI_CITIES = [
-  "Sana'a",
-  'Aden',
-  'Taiz',
-  'Al Hudaydah',
-  'Mukalla',
-  'Ibb',
-  'Dhamar',
-  'Amran',
-  'Sayyan',
-  'Saada',
-  'Al Mahrah',
-  'Hajjah',
-  'Shabwah',
-  'Abyan',
-  'Lahij',
-  'Marib',
-  'Al Bayda',
-  'Socotra',
-  'Other City'
-];
-
-const DIAGNOSIS_LIST = [
-  'Acute Myeloid Leukemia (AML)',
-  'Acute Lymphoblastic Leukemia (ALL)',
-  'Chronic Myeloid Leukemia (CML)',
-  'Chronic Lymphocytic Leukemia (CLL)',
-  'Hodgkin Lymphoma',
-  'Non-Hodgkin Lymphoma',
-  'Diffuse Large B-cell Lymphoma (DLBCL)',
-  'Burkitt Lymphoma',
-  'Mantle Cell Lymphoma',
-  'Follicular Lymphoma',
-  'T-cell Lymphoma',
-  'Multiple Myeloma',
-  'Plasma Cell Leukemia',
-  'Myelodysplastic Syndrome (MDS)',
-  'Myeloproliferative Neoplasms (MPN)',
-  'Chronic Myelomonocytic Leukemia (CMML)',
-  'Hairy Cell Leukemia',
-  'Other Hematological Malignancy'
-];
-
 export const RecordList: React.FC = () => {
   const {
     searchQuery,
     setSearchQuery,
-    selectedGenderFilter,
-    setSelectedGenderFilter,
-    selectedCityFilter,
-    setSelectedCityFilter,
-    selectedDiagnosisFilter,
-    setSelectedDiagnosisFilter,
-    selectedOutcomeFilter,
-    setSelectedOutcomeFilter,
+    selectedSexFilter,
+    setSelectedSexFilter,
+    selectedPreviousCKDFilter,
+    setSelectedPreviousCKDFilter,
     resetFilters,
     setActiveTab,
     setEditingRecord,
@@ -73,7 +26,7 @@ export const RecordList: React.FC = () => {
   // Reactive IndexedDB query using Dexie liveQuery
   const records = useLiveQuery(
     async () => {
-      let collection = db.records.orderBy('updatedAt').reverse();
+      const collection = db.records.orderBy('updatedAt').reverse();
       return await collection.toArray();
     },
     [],
@@ -82,59 +35,39 @@ export const RecordList: React.FC = () => {
 
   const hasActiveFilters =
     searchQuery.trim() !== '' ||
-    selectedGenderFilter !== 'ALL' ||
-    selectedCityFilter !== 'ALL' ||
-    selectedDiagnosisFilter !== 'ALL' ||
-    selectedOutcomeFilter !== 'ALL';
+    selectedSexFilter !== 'ALL' ||
+    selectedPreviousCKDFilter !== 'ALL';
 
-  // Filter records based on user search query & multi-filters
+  // Filter records based on search query & filters
   const filteredRecords = React.useMemo(() => {
     return (records || []).filter((rec: MedicalRecord) => {
-      // Gender filter
-      if (selectedGenderFilter !== 'ALL' && rec.gender !== selectedGenderFilter) {
+      // Sex filter
+      const recSex = rec.sex || rec.gender || '';
+      if (selectedSexFilter !== 'ALL' && recSex !== selectedSexFilter) {
         return false;
       }
 
-      // City filter
-      if (selectedCityFilter !== 'ALL') {
-        if (selectedCityFilter === 'Other City') {
-          if (rec.city !== 'Other City') return false;
-        } else if (rec.city !== selectedCityFilter) {
-          return false;
-        }
+      // Previous CKD filter
+      if (selectedPreviousCKDFilter !== 'ALL') {
+        const recCKD = rec.previousCKD || rec.pmhx?.previousCKD || '';
+        if (recCKD !== selectedPreviousCKDFilter) return false;
       }
 
-      // Diagnosis filter
-      if (selectedDiagnosisFilter !== 'ALL') {
-        const displayDiag = rec.diagnosis === 'Other Hematological Malignancy' && rec.customDiagnosis
-          ? rec.customDiagnosis
-          : rec.diagnosis;
-        if (rec.diagnosis !== selectedDiagnosisFilter && displayDiag !== selectedDiagnosisFilter) {
-          return false;
-        }
-      }
-
-      // Outcome filter
-      if (selectedOutcomeFilter !== 'ALL') {
-        const recOutcome = rec.outcome || rec.treatmentOutcome;
-        if (recOutcome !== selectedOutcomeFilter) return false;
-      }
-
-      // Search query across Study ID, MRN, diagnosis, subtype, complaint, outcome
+      // Search query across ID, age, sex, labs
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase();
-      const idStr = (rec.studyId || rec.patientId || '').toLowerCase();
-      const mrnStr = (rec.mrn || '').toLowerCase();
+      const idStr = (rec.studyId || rec.patientId || rec.id).toLowerCase();
+      const ageStr = rec.age !== undefined && rec.age !== null ? String(rec.age) : '';
 
       return (
         idStr.includes(q) ||
-        mrnStr.includes(q) ||
-        (rec.diagnosis && rec.diagnosis.toLowerCase().includes(q)) ||
-        (rec.subType && rec.subType.toLowerCase().includes(q)) ||
-        (rec.outcome && rec.outcome.toLowerCase().includes(q))
+        ageStr.includes(q) ||
+        recSex.toLowerCase().includes(q) ||
+        (rec.labs?.hb && rec.labs.hb.toLowerCase().includes(q)) ||
+        (rec.labs?.ldh && rec.labs.ldh.toLowerCase().includes(q))
       );
     });
-  }, [records, searchQuery, selectedGenderFilter, selectedCityFilter, selectedDiagnosisFilter, selectedOutcomeFilter]);
+  }, [records, searchQuery, selectedSexFilter, selectedPreviousCKDFilter]);
 
   const handleDelete = async (id: string, studyId: string) => {
     if (confirm(`Are you sure you want to delete patient record "${studyId}"?`)) {
@@ -244,7 +177,7 @@ export const RecordList: React.FC = () => {
           <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
           <input
             type="text"
-            placeholder="Search by Study ID, MRN, Diagnosis, Symptoms, Complaint..."
+            placeholder="Search by ID, Age, Sex, Lab values..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white shadow-sm"
@@ -259,73 +192,33 @@ export const RecordList: React.FC = () => {
           )}
         </div>
 
-        {/* Filter Dropdowns Grid: Gender, City, Diagnosis, Outcome */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-1">
-          {/* 1. Gender Filter */}
+        {/* Filter Dropdowns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          {/* Sex Filter */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Gender</label>
+            <label className="block text-[11px] font-medium text-slate-500 mb-1">Sex</label>
             <select
-              value={selectedGenderFilter}
-              onChange={(e) => setSelectedGenderFilter(e.target.value)}
+              value={selectedSexFilter}
+              onChange={(e) => setSelectedSexFilter(e.target.value)}
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
             >
-              <option value="ALL">All Genders</option>
+              <option value="ALL">All</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
           </div>
 
-          {/* 2. City Filter */}
+          {/* Previous CKD Filter */}
           <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">City (Yemen)</label>
+            <label className="block text-[11px] font-medium text-slate-500 mb-1">Previous CKD</label>
             <select
-              value={selectedCityFilter}
-              onChange={(e) => setSelectedCityFilter(e.target.value)}
+              value={selectedPreviousCKDFilter}
+              onChange={(e) => setSelectedPreviousCKDFilter(e.target.value)}
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
             >
-              <option value="ALL">All Cities</option>
-              {YEMENI_CITIES.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* 3. Diagnosis Filter */}
-          <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Diagnosis</label>
-            <select
-              value={selectedDiagnosisFilter}
-              onChange={(e) => setSelectedDiagnosisFilter(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
-            >
-              <option value="ALL">All Diagnoses</option>
-              {DIAGNOSIS_LIST.map((diag) => (
-                <option key={diag} value={diag}>
-                  {diag}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* 4. Outcome Filter */}
-          <div>
-            <label className="block text-[11px] font-medium text-slate-500 mb-1">Treatment Outcome</label>
-            <select
-              value={selectedOutcomeFilter}
-              onChange={(e) => setSelectedOutcomeFilter(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
-            >
-              <option value="ALL">All Outcomes</option>
-              <option value="Complete Remission (CR)">Complete Remission (CR)</option>
-              <option value="Partial Remission (PR)">Partial Remission (PR)</option>
-              <option value="Stable Disease (SD)">Stable Disease (SD)</option>
-              <option value="Progressive Disease (PD)">Progressive Disease (PD)</option>
-              <option value="Relapsed">Relapsed</option>
-              <option value="Deceased">Deceased</option>
-              <option value="Lost to Follow-up">Lost to Follow-up</option>
-              <option value="Ongoing Treatment">Ongoing Treatment</option>
+              <option value="ALL">All</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select>
           </div>
         </div>
@@ -340,7 +233,7 @@ export const RecordList: React.FC = () => {
           <h3 className="text-base font-semibold text-slate-700">No Patient Records Found</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
             {records.length === 0
-              ? 'Your local IndexedDB is currently empty. Click "New Patient" to add a record.'
+              ? 'Your local database is currently empty. Click "New Patient" to add a record.'
               : 'No records match your active search and filter criteria.'}
           </p>
           {hasActiveFilters && (
@@ -360,7 +253,7 @@ export const RecordList: React.FC = () => {
                 setActiveTab('new');
               }}
               onView={() => setViewingRecord(record)}
-              onDelete={() => handleDelete(record.id, record.studyId || record.patientId || 'Record')}
+              onDelete={() => handleDelete(record.id, record.studyId || record.patientId || record.id)}
             />
           ))}
         </div>
@@ -377,61 +270,53 @@ interface RecordCardProps {
 }
 
 const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelete }) => {
-  const activeSymptomsCount = Object.values(record.symptoms || {}).filter(Boolean).length;
-
-  const outcomeColors: Record<string, string> = {
-    'Complete Remission (CR)': 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    'Partial Remission (PR)': 'bg-teal-100 text-teal-800 border-teal-200',
-    'Stable Disease (SD)': 'bg-sky-100 text-sky-800 border-sky-200',
-    'Progressive Disease (PD)': 'bg-amber-100 text-amber-800 border-amber-200',
-    'Relapsed': 'bg-rose-100 text-rose-800 border-rose-200',
-    'Deceased': 'bg-slate-100 text-slate-800 border-slate-300',
-    'Lost to Follow-up': 'bg-purple-100 text-purple-800 border-purple-200',
-    'Ongoing Treatment': 'bg-indigo-100 text-indigo-800 border-indigo-200',
-  };
-
-  const currentOutcome = record.outcome || record.treatmentOutcome || 'No Outcome';
-  const outcomeBadge = outcomeColors[currentOutcome] || 'bg-slate-100 text-slate-700 border-slate-200';
-
-  const displayCity = record.city === 'Other City' && record.customCity ? record.customCity : record.city;
-
-  const displayDiagnosis = record.diagnosis === 'Other Hematological Malignancy' && record.customDiagnosis
-    ? record.customDiagnosis
-    : record.diagnosis;
+  const displayId = record.studyId || record.patientId || record.id;
+  const displayAge = record.age !== undefined && record.age !== null ? `${record.age}y` : 'N/A';
+  const displaySex = record.sex || record.gender || 'N/A';
+  const displayPreviousCKD = record.previousCKD || record.pmhx?.previousCKD || 'N/A';
 
   return (
     <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-4">
       <div>
         <div className="flex items-center justify-between">
           <span className="font-mono text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100">
-            Study ID: {record.studyId || record.patientId}
+            ID: {displayId}
           </span>
-          <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${outcomeBadge}`}>
-            {currentOutcome}
-          </span>
+          {displayPreviousCKD !== 'N/A' && (
+            <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${
+              displayPreviousCKD === 'Yes'
+                ? 'bg-rose-100 text-rose-800 border-rose-200'
+                : 'bg-emerald-100 text-emerald-800 border-emerald-200'
+            }`}>
+              Prior CKD: {displayPreviousCKD}
+            </span>
+          )}
         </div>
-
-        <h3 className="text-base font-bold text-slate-800 mt-3 line-clamp-1">{displayDiagnosis}</h3>
-        {record.subType && <p className="text-xs text-slate-500">{record.subType}</p>}
 
         <div className="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs text-slate-600">
           <div>
-            <span className="text-slate-400">MRN:</span>{' '}
-            <span className="font-medium text-slate-700">{record.mrn || 'N/A'}</span>
+            <span className="text-slate-400">Age:</span>{' '}
+            <span className="font-medium text-slate-700">{displayAge}</span>
           </div>
           <div>
-            <span className="text-slate-400">Gender / Age:</span>{' '}
-            <span className="font-medium text-slate-700">{record.gender || 'N/A'}{record.age ? `, ${record.age}y` : ''}</span>
+            <span className="text-slate-400">Sex:</span>{' '}
+            <span className="font-medium text-slate-700">{displaySex}</span>
           </div>
           <div>
-            <span className="text-slate-400">City:</span>{' '}
-            <span className="font-medium text-slate-700">{displayCity || 'N/A'}</span>
+            <span className="text-slate-400">Hb:</span>{' '}
+            <span className="font-medium text-slate-700">{record.labs?.hb ?? 'N/A'}</span>
           </div>
           <div>
-            <span className="text-slate-400">Hb / WBC:</span>{' '}
-            <span className="font-medium text-slate-700">
-              {record.labs?.hb ?? '-'} / {record.labs?.wbcCount ?? '-'}
-            </span>
+            <span className="text-slate-400">WBC:</span>{' '}
+            <span className="font-medium text-slate-700">{record.labs?.wbcCount ?? 'N/A'}</span>
+          </div>
+          <div>
+            <span className="text-slate-400">S. Cr:</span>{' '}
+            <span className="font-medium text-slate-700">{record.labs?.sCr ?? 'N/A'}</span>
+          </div>
+          <div>
+            <span className="text-slate-400">eGFR:</span>{' '}
+            <span className="font-medium text-slate-700">{record.labs?.egfr ?? 'N/A'}</span>
           </div>
         </div>
       </div>

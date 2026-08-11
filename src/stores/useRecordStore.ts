@@ -5,17 +5,11 @@ interface RecordStoreState {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
 
-  selectedGenderFilter: string;
-  setSelectedGenderFilter: (gender: string) => void;
+  selectedSexFilter: string;
+  setSelectedSexFilter: (sex: string) => void;
 
-  selectedCityFilter: string;
-  setSelectedCityFilter: (city: string) => void;
-
-  selectedDiagnosisFilter: string;
-  setSelectedDiagnosisFilter: (diagnosis: string) => void;
-
-  selectedOutcomeFilter: string;
-  setSelectedOutcomeFilter: (outcome: string) => void;
+  selectedPreviousCKDFilter: string;
+  setSelectedPreviousCKDFilter: (ckd: string) => void;
 
   activeTab: 'list' | 'new' | 'analytics';
   setActiveTab: (tab: 'list' | 'new' | 'analytics') => void;
@@ -33,17 +27,11 @@ export const useRecordStore = create<RecordStoreState>((set) => ({
   searchQuery: '',
   setSearchQuery: (query) => set({ searchQuery: query }),
 
-  selectedGenderFilter: 'ALL',
-  setSelectedGenderFilter: (gender) => set({ selectedGenderFilter: gender }),
+  selectedSexFilter: 'ALL',
+  setSelectedSexFilter: (sex) => set({ selectedSexFilter: sex }),
 
-  selectedCityFilter: 'ALL',
-  setSelectedCityFilter: (city) => set({ selectedCityFilter: city }),
-
-  selectedDiagnosisFilter: 'ALL',
-  setSelectedDiagnosisFilter: (diagnosis) => set({ selectedDiagnosisFilter: diagnosis }),
-
-  selectedOutcomeFilter: 'ALL',
-  setSelectedOutcomeFilter: (outcome) => set({ selectedOutcomeFilter: outcome }),
+  selectedPreviousCKDFilter: 'ALL',
+  setSelectedPreviousCKDFilter: (ckd) => set({ selectedPreviousCKDFilter: ckd }),
 
   activeTab: 'list',
   setActiveTab: (tab) => set({ activeTab: tab }),
@@ -57,9 +45,7 @@ export const useRecordStore = create<RecordStoreState>((set) => ({
   resetFilters: () =>
     set({
       searchQuery: '',
-      selectedGenderFilter: 'ALL',
-      selectedCityFilter: 'ALL',
-      selectedDiagnosisFilter: 'ALL',
-      selectedOutcomeFilter: 'ALL',
+      selectedSexFilter: 'ALL',
+      selectedPreviousCKDFilter: 'ALL',
     }),
 }));
