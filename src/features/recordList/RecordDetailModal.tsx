@@ -17,6 +17,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
   };
 
   const displayAge = record.age !== undefined && record.age !== null ? String(record.age) : 'N/A';
+  const displayWeight = record.weight !== undefined && record.weight !== null ? String(record.weight) : 'N/A';
   const displayPreviousCKD = record.previousCKD || record.pmhx?.previousCKD || 'N/A';
 
   return (
@@ -47,7 +48,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <User className="w-4 h-4" /> 1. Demographics
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
                 <span className="text-slate-400 block">ID:</span>
                 <span className="font-semibold text-slate-700">{record.studyId || record.patientId || 'N/A'}</span>
@@ -63,6 +64,10 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
               <div>
                 <span className="text-slate-400 block">Date of Admission:</span>
                 <span className="font-semibold text-slate-700">{record.admissionDate || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block">Weight:</span>
+                <span className="font-semibold text-slate-700">{displayWeight}</span>
               </div>
             </div>
           </div>
@@ -92,6 +97,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
                 <div><span className="text-slate-400 block">Platelets count:</span> <span className="font-medium">{record.labs?.plateletsCount || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">S. Cr:</span> <span className="font-medium">{record.labs?.sCr || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">eGFR:</span> <span className="font-medium">{record.labs?.egfr || 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">RI:</span> <span className="font-medium">{record.labs?.ri || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">B. Urea:</span> <span className="font-medium">{record.labs?.bUrea || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">Ca:</span> <span className="font-medium">{record.labs?.ca || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">LDH:</span> <span className="font-medium">{record.labs?.ldh || 'N/A'}</span></div>

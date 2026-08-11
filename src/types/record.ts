@@ -15,6 +15,7 @@ export interface LabsData {
   plateletsCount?: string;
   sCr?: string;
   egfr?: string; // eGFR (after S. Cr)
+  ri?: string; // RI (after eGFR)
   bUrea?: string;
   ca?: string;
   ldh?: string;
@@ -43,6 +44,7 @@ export interface MedicalRecord {
   sex?: string; // Sex
   gender?: string; // Alias for sex
   admissionDate?: string; // Date of admission
+  weight?: number | string | null; // Weight (accepts rational numbers)
 
   // Section 2: PMHX (Past Medical History)
   previousCKD?: string; // 'Yes' | 'No'

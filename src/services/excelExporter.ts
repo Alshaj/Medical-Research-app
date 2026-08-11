@@ -11,6 +11,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Age': record.age !== undefined && record.age !== null ? record.age : '',
     'Sex': record.sex || record.gender || '',
     'Date of Admission': record.admissionDate || '',
+    'Weight': record.weight !== undefined && record.weight !== null ? record.weight : '',
 
     // Section 2: PMHX
     'Previous CKD?': record.previousCKD || record.pmhx?.previousCKD || '',
@@ -21,6 +22,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Platelets count': record.labs?.plateletsCount ?? '',
     'S. Cr': record.labs?.sCr ?? '',
     'eGFR': record.labs?.egfr ?? '',
+    'RI': record.labs?.ri ?? '',
     'B. Urea': record.labs?.bUrea ?? '',
     'Ca': record.labs?.ca ?? '',
     'LDH': record.labs?.ldh ?? '',

@@ -47,6 +47,7 @@ const patientFormSchema = z.object({
   age: z.string().optional(), // Accepts number in fraction e.g. 0.5 (5 months)
   sex: z.string().optional(),
   admissionDate: z.string().optional(),
+  weight: z.string().optional(), // Accepts rational numbers e.g. 70 or 68.5
 
   // Section 2: PMHX
   previousCKD: z.string().optional(),
@@ -58,6 +59,7 @@ const patientFormSchema = z.object({
     plateletsCount: z.string().optional(),
     sCr: z.string().optional(),
     egfr: z.string().optional(), // eGFR (right after S. Cr)
+    ri: z.string().optional(), // RI (right after eGFR)
     bUrea: z.string().optional(),
     ca: z.string().optional(),
     ldh: z.string().optional(),
@@ -86,6 +88,7 @@ export const PatientForm: React.FC = () => {
     age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
     sex: editingRecord?.sex || editingRecord?.gender || '',
     admissionDate: editingRecord?.admissionDate || new Date().toISOString().split('T')[0],
+    weight: editingRecord?.weight !== undefined && editingRecord?.weight !== null ? String(editingRecord.weight) : '',
     previousCKD: editingRecord?.previousCKD || editingRecord?.pmhx?.previousCKD || '',
     labs: {
       hb: editingRecord?.labs?.hb ?? '',
@@ -93,6 +96,7 @@ export const PatientForm: React.FC = () => {
       plateletsCount: editingRecord?.labs?.plateletsCount ?? '',
       sCr: editingRecord?.labs?.sCr ?? '',
       egfr: editingRecord?.labs?.egfr ?? '',
+      ri: editingRecord?.labs?.ri ?? '',
       bUrea: editingRecord?.labs?.bUrea ?? '',
       ca: editingRecord?.labs?.ca ?? '',
       ldh: editingRecord?.labs?.ldh ?? '',
@@ -137,6 +141,7 @@ export const PatientForm: React.FC = () => {
         sex: data.sex,
         gender: data.sex,
         admissionDate: data.admissionDate,
+        weight: data.weight ? parseFloat(data.weight) || data.weight : null,
         previousCKD: data.previousCKD,
         pmhx: {
           previousCKD: data.previousCKD,
@@ -204,7 +209,7 @@ export const PatientForm: React.FC = () => {
             <span>1. Demographics</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
             <Input
               label="ID"
               placeholder="e.g. PAT-1002 (Optional)"
@@ -226,6 +231,13 @@ export const PatientForm: React.FC = () => {
               label="Date of admission"
               type="date"
               {...register('admissionDate')}
+            />
+            <Input
+              label="Weight"
+              type="number"
+              step="any"
+              placeholder="e.g. 70 or 68.5"
+              {...register('weight')}
             />
           </div>
         </div>
@@ -279,6 +291,11 @@ export const PatientForm: React.FC = () => {
               label="eGFR"
               placeholder="eGFR (mL/min/1.73m²)"
               {...register('labs.egfr')}
+            />
+            <Input
+              label="RI"
+              placeholder="RI (Resistive Index)"
+              {...register('labs.ri')}
             />
             <Input
               label="B. Urea"
