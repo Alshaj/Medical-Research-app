@@ -5,85 +5,37 @@ import { MedicalRecord } from '../types/record';
  * Transforms JSON MedicalRecord objects into flat Excel rows
  */
 export function transformRecordToExcelRow(record: MedicalRecord) {
-  const displayCity = record.city === 'Other City' && record.customCity
-    ? record.customCity
-    : record.city || '';
-
-  const displayDiagnosis = record.diagnosis === 'Other Hematological Malignancy' && record.customDiagnosis
-    ? record.customDiagnosis
-    : record.diagnosis || '';
-
-  const displayTreatment = (record.lineOfTreatment === 'Other' || record.inductionProtocol === 'Other') && record.customLineOfTreatment
-    ? record.customLineOfTreatment
-    : record.lineOfTreatment || record.inductionProtocol || '';
-
   return {
     'Record ID': record.id,
-    'Study ID': record.studyId || record.patientId || '',
-    'MRN': record.mrn || '',
-    'Age (Years)': record.age !== undefined && record.age !== null ? record.age : '',
-    'Gender': record.gender || '',
-    'City (Yemen)': displayCity,
-    'Marital Status': record.maritalStatus || '',
-    'Admission Date': record.admissionDate || '',
-    
-    // Clinical Symptoms
-    'Fever': record.symptoms?.fever ? 'Yes' : 'No',
-    'Pallor': record.symptoms?.pallor ? 'Yes' : 'No',
-    'Bleeding': record.symptoms?.bleeding ? 'Yes' : 'No',
-    'Weight Loss': record.symptoms?.weightLoss ? 'Yes' : 'No',
-    'Night Sweats': record.symptoms?.nightSweats ? 'Yes' : 'No',
-    'Lymphadenopathy': record.symptoms?.lymphadenopathy ? 'Yes' : 'No',
-    'Hepatomegaly': record.symptoms?.hepatomegaly ? 'Yes' : 'No',
-    'Splenomegaly': record.symptoms?.splenomegaly ? 'Yes' : 'No',
-    'Other Symptoms': record.symptoms?.other ? 'Yes' : 'No',
-    'Other Symptoms Description': record.otherSymptomsText || '',
+    'ID': record.studyId || record.patientId || record.id,
+    'Age': record.age !== undefined && record.age !== null ? record.age : '',
+    'Sex': record.sex || record.gender || '',
+    'Date of Admission': record.admissionDate || '',
 
-    // Narrative History Summary
-    'Chief Complaint & History Summary': record.chiefComplaint || '',
+    // Section 2: PMHX
+    'Previous CKD?': record.previousCKD || record.pmhx?.previousCKD || '',
 
-    // Section 3: Laboratory Data
-    'Hemoglobin (Hb)': record.labs?.hemoglobin ?? '',
-    'WBC Count': record.labs?.wbcCount ?? '',
-    'RBC Count': record.labs?.rbcCount ?? '',
-    'Hematocrit (HCT)': record.labs?.hematocrit ?? '',
-    'Platelet Count': record.labs?.plateletCount ?? '',
-    'MCV': record.labs?.mcv ?? '',
-    'MCH': record.labs?.mch ?? '',
-    'MCHC': record.labs?.mchc ?? '',
-    'RDW': record.labs?.rdw ?? '',
-    'Absolute Granulocytes': record.labs?.absoluteGranulocytes ?? '',
-    'Absolute Lymphocytes': record.labs?.absoluteLymphocytes ?? '',
-    'Differential Count': record.labs?.differentialCount || '',
+    // Section 3: Labs
+    'Hb': record.labs?.hb ?? '',
+    'WBC count': record.labs?.wbcCount ?? '',
+    'Platelets count': record.labs?.plateletsCount ?? '',
+    'S. Cr': record.labs?.sCr ?? '',
+    'eGFR': record.labs?.egfr ?? '',
+    'B. Urea': record.labs?.bUrea ?? '',
+    'Ca': record.labs?.ca ?? '',
     'LDH': record.labs?.ldh ?? '',
-    'Uric Acid': record.labs?.uricAcid ?? '',
-    'Serum Creatinine': record.labs?.serumCreatinine ?? '',
-    'ALT': record.labs?.alt ?? '',
-    'AST': record.labs?.ast ?? '',
+    'uric acid': record.labs?.uricAcid ?? '',
+    'B2 Microglobulin': record.labs?.b2Microglobulin ?? '',
+    'Bone Marrow Plasma Cell %': record.labs?.bmPlasmaCellPercent ?? '',
 
-    // Section 4: Diagnostics
-    'Peripheral Blast': record.diagnostics?.peripheralBlast ?? '',
-    'Bone Marrow Blast': record.diagnostics?.boneMarrowBlast ?? '',
-    'Peripheral Blood Smear Findings': record.diagnostics?.pbsFindings || '',
-    'Bone Marrow Cellularity': record.diagnostics?.bmCellularity || '',
-    'Bone Marrow Biopsy Summary': record.diagnostics?.bmBiopsySummary || '',
-    'Lymph Node Biopsy Performed': record.diagnostics?.lymphNodeBiopsyPerformed ? 'Yes' : 'No',
-    'Lymph Node Biopsy Summary': record.diagnostics?.lymphNodeBiopsySummary || '',
-    'Flow Cytometry Immunophenotyping': record.diagnostics?.flowCytometry || '',
-    'Cytogenetics (Karyotype)': record.diagnostics?.cytogenetics || '',
-    'Molecular Genetics': record.diagnostics?.molecularGenetics || '',
-    'CT Scan / Imaging Findings': record.diagnostics?.ctScanImaging || '',
+    // SPEP Bands
+    'SPEP - Albumin': record.labs?.spepAlbumin ?? '',
+    'SPEP - Alpha 1 Globulin': record.labs?.spepAlpha1Globulin ?? '',
+    'SPEP - Alpha 2 Globulin': record.labs?.spepAlpha2Globulin ?? '',
+    'SPEP - Beta Globulin': record.labs?.spepBetaGlobulin ?? '',
+    'SPEP - Gamma Globulin': record.labs?.spepGammaGlobulin ?? '',
+    'SPEP - A/G Ratio': record.labs?.spepAgRatio ?? '',
 
-    // Section 5: Diagnosis
-    'Hematological Malignancy Diagnosis': displayDiagnosis,
-    'Disease Subtype / FAB / WHO Classification': record.subType || '',
-    'Stage / Risk Group': record.stageRiskGroup || '',
-    'Immunohistochemistry (IHC) Markers': record.ihcMarkers || '',
-
-    // Section 6: Treatment & Outcome
-    'Line of Treatment': displayTreatment,
-    'Treatment Outcome': record.treatmentOutcome || record.outcome || '',
-    
     // Metadata
     'Date Created': record.createdAt ? new Date(record.createdAt).toLocaleDateString() : '',
     'Last Updated': record.updatedAt ? new Date(record.updatedAt).toLocaleDateString() : ''

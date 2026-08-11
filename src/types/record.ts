@@ -1,50 +1,34 @@
-export interface ClinicalSymptoms {
-  fever: boolean;
-  pallor: boolean;
-  bleeding: boolean;
-  weightLoss: boolean;
-  nightSweats: boolean;
-  lymphadenopathy: boolean;
-  hepatomegaly: boolean;
-  splenomegaly: boolean;
-  other: boolean;
+export interface DemographicsData {
+  id?: string;
+  age?: number | string | null;
+  sex?: string;
+  admissionDate?: string;
 }
 
-export interface LaboratoryData {
-  // Complete Blood Count (CBC) Profile - Accepts numbers or strings (e.g. 0.2, "12-14", "<0.5")
-  hemoglobin?: number | string | null;
-  wbcCount?: number | string | null;
-  rbcCount?: number | string | null;
-  hematocrit?: number | string | null;
-  plateletCount?: number | string | null;
-  mcv?: number | string | null;
-  mch?: number | string | null;
-  mchc?: number | string | null;
-  rdw?: number | string | null;
-  absoluteGranulocytes?: number | string | null;
-  absoluteLymphocytes?: number | string | null;
-  differentialCount?: string;
-
-  // Biochemistry & Other Labs - Accepts numbers or strings
-  ldh?: number | string | null;
-  uricAcid?: number | string | null;
-  serumCreatinine?: number | string | null;
-  alt?: number | string | null;
-  ast?: number | string | null;
+export interface PMHXData {
+  previousCKD?: string;
 }
 
-export interface DiagnosticsData {
-  peripheralBlast?: number | string | null;
-  boneMarrowBlast?: number | string | null;
-  pbsFindings?: string;
-  bmCellularity?: string;
-  bmBiopsySummary?: string;
-  lymphNodeBiopsyPerformed?: boolean;
-  lymphNodeBiopsySummary?: string;
-  flowCytometry?: string;
-  cytogenetics?: string;
-  molecularGenetics?: string;
-  ctScanImaging?: string;
+export interface LabsData {
+  hb?: string;
+  wbcCount?: string;
+  plateletsCount?: string;
+  sCr?: string;
+  egfr?: string; // eGFR (after S. Cr)
+  bUrea?: string;
+  ca?: string;
+  ldh?: string;
+  uricAcid?: string;
+  b2Microglobulin?: string;
+  bmPlasmaCellPercent?: string;
+
+  // Serum protein electrophoresis bands
+  spepAlbumin?: string;
+  spepAlpha1Globulin?: string;
+  spepAlpha2Globulin?: string;
+  spepBetaGlobulin?: string;
+  spepGammaGlobulin?: string;
+  spepAgRatio?: string;
 }
 
 export interface MedicalRecord {
@@ -53,43 +37,22 @@ export interface MedicalRecord {
   updatedAt: string; // ISO string
 
   // Section 1: Demographics (All optional)
-  studyId?: string; // Optional
-  mrn?: string; // Optional
-  patientId?: string; // Legacy fallback
-  age?: number | string | null; // Accepts decimal/fraction e.g. 0.2
-  gender?: 'Male' | 'Female' | string;
-  city?: string;
-  customCity?: string;
-  maritalStatus?: 'Single' | 'Married' | 'Divorced' | 'Widowed' | string;
-  admissionDate?: string;
+  studyId?: string;
+  patientId?: string; // ID field
+  age?: number | string | null; // Numbers in fraction (e.g., 0.5 = 5 months)
+  sex?: string; // Sex
+  gender?: string; // Alias for sex
+  admissionDate?: string; // Date of admission
 
-  // Section 2: Clinical Symptoms (All optional)
-  symptoms: ClinicalSymptoms;
-  otherSymptomsText?: string;
+  // Section 2: PMHX (Past Medical History)
+  previousCKD?: string; // 'Yes' | 'No'
+  pmhx?: PMHXData;
 
-  // Medical History Summary
-  chiefComplaint?: string;
+  // Section 3: Labs (All optional, accept strings)
+  labs?: LabsData;
 
-  // Section 3: Laboratory Data (All optional, accepts string/number)
-  labs: LaboratoryData;
-
-  // Section 4: Diagnostics (All optional, accepts string/number)
-  diagnostics: DiagnosticsData;
-
-  // Section 5: Diagnosis (Only Hematological Malignancy Diagnosis is REQUIRED)
-  diagnosis: string; // Required *
-  customDiagnosis?: string;
-  subType?: string;
-  stageRiskGroup?: string;
-  ihcMarkers?: string;
-
-  // Section 6: Treatment & Outcome (All optional)
-  lineOfTreatment?: string;
-  customLineOfTreatment?: string;
-  inductionProtocol?: string;
-  outcome?: string;
-  treatmentOutcome?: string;
-
+  // Metadata fields
+  diagnosis?: string;
   tags?: string[];
   notes?: string;
 }

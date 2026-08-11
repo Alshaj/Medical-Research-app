@@ -8,19 +8,7 @@ export const recordRepository = {
   async saveRecord(record: MedicalRecordInput): Promise<string> {
     const now = new Date().toISOString();
     const id = record.id || `PAT-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    const studyId = record.studyId || record.patientId || `STU-${Date.now().toString().slice(-6)}`;
-
-    const defaultSymptoms = {
-      fever: false,
-      pallor: false,
-      bleeding: false,
-      weightLoss: false,
-      nightSweats: false,
-      lymphadenopathy: false,
-      hepatomegaly: false,
-      splenomegaly: false,
-      other: false,
-    };
+    const studyId = record.studyId || record.patientId || `PAT-${Date.now().toString().slice(-6)}`;
 
     const fullRecord: MedicalRecord = {
       ...record,
@@ -29,15 +17,8 @@ export const recordRepository = {
       patientId: studyId,
       createdAt: record.createdAt || now,
       updatedAt: now,
-      symptoms: {
-        ...defaultSymptoms,
-        ...(record.symptoms || {}),
-      },
       labs: {
         ...(record.labs || {}),
-      },
-      diagnostics: {
-        ...(record.diagnostics || {}),
       },
     };
 
@@ -86,7 +67,7 @@ export const recordRepository = {
 
       await db.transaction('rw', db.records, async () => {
         for (const record of records) {
-          if (record.id && record.diagnosis) {
+          if (record.id) {
             await db.records.put(record);
           }
         }

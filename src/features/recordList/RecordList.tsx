@@ -129,9 +129,8 @@ export const RecordList: React.FC = () => {
       return (
         idStr.includes(q) ||
         mrnStr.includes(q) ||
-        rec.diagnosis.toLowerCase().includes(q) ||
+        (rec.diagnosis && rec.diagnosis.toLowerCase().includes(q)) ||
         (rec.subType && rec.subType.toLowerCase().includes(q)) ||
-        (rec.chiefComplaint && rec.chiefComplaint.toLowerCase().includes(q)) ||
         (rec.outcome && rec.outcome.toLowerCase().includes(q))
       );
     });
@@ -431,7 +430,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
           <div>
             <span className="text-slate-400">Hb / WBC:</span>{' '}
             <span className="font-medium text-slate-700">
-              {record.labs?.hemoglobin ?? '-'} / {record.labs?.wbcCount ?? '-'}
+              {record.labs?.hb ?? '-'} / {record.labs?.wbcCount ?? '-'}
             </span>
           </div>
         </div>
