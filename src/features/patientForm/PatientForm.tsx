@@ -212,7 +212,6 @@ export const PatientForm: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
             <Input
               label="ID"
-              placeholder="e.g. PAT-1002 (Optional)"
               {...register('id')}
             />
             <Input
@@ -269,62 +268,50 @@ export const PatientForm: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <Input
               label="Hb"
-              placeholder="Hb (Hemoglobin)"
               {...register('labs.hb')}
             />
             <Input
               label="WBC count"
-              placeholder="WBC count"
               {...register('labs.wbcCount')}
             />
             <Input
               label="Platelets count"
-              placeholder="Platelets count"
               {...register('labs.plateletsCount')}
             />
             <Input
               label="S. Cr"
-              placeholder="Serum Creatinine"
               {...register('labs.sCr')}
             />
             <Input
               label="eGFR"
-              placeholder="eGFR (mL/min/1.73m²)"
               {...register('labs.egfr')}
             />
             <Input
               label="RI"
-              placeholder="RI (Resistive Index)"
               {...register('labs.ri')}
             />
             <Input
               label="B. Urea"
-              placeholder="Blood Urea"
               {...register('labs.bUrea')}
             />
             <Input
               label="Ca"
-              placeholder="Calcium (Ca)"
               {...register('labs.ca')}
             />
             <Input
               label="LDH"
-              placeholder="LDH"
               {...register('labs.ldh')}
             />
             <Input
               label="uric acid"
-              placeholder="Uric acid"
               {...register('labs.uricAcid')}
             />
             <Input
               label="B2 Microglobulin"
-              placeholder="B2 Microglobulin"
               {...register('labs.b2Microglobulin')}
             />
             <Input
               label="Bone marrow plasma cell percentage"
-              placeholder="e.g. 15%"
               {...register('labs.bmPlasmaCellPercent')}
             />
           </div>
@@ -337,32 +324,26 @@ export const PatientForm: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <Input
                 label="Albumin"
-                placeholder="Albumin band level"
                 {...register('labs.spepAlbumin')}
               />
               <Input
                 label="Alpha 1 Globulin"
-                placeholder="Alpha 1 Globulin level"
                 {...register('labs.spepAlpha1Globulin')}
               />
               <Input
                 label="Alpha 2 Globulin"
-                placeholder="Alpha 2 Globulin level"
                 {...register('labs.spepAlpha2Globulin')}
               />
               <Input
                 label="Beta Globulin"
-                placeholder="Beta Globulin level"
                 {...register('labs.spepBetaGlobulin')}
               />
               <Input
                 label="Gamma Globulin"
-                placeholder="Gamma Globulin level"
                 {...register('labs.spepGammaGlobulin')}
               />
               <Input
                 label="A/G Ratio"
-                placeholder="Albumin / Globulin Ratio"
                 {...register('labs.spepAgRatio')}
               />
             </div>
