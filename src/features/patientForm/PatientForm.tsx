@@ -87,7 +87,7 @@ export const PatientForm: React.FC = () => {
     id: editingRecord?.studyId || editingRecord?.patientId || '',
     age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
     sex: (editingRecord?.sex === '1' || editingRecord?.sex === '1 = Male') ? 'Male' : (editingRecord?.sex === '2' || editingRecord?.sex === '2 = Female') ? 'Female' : (editingRecord?.sex || editingRecord?.gender || ''),
-    admissionDate: editingRecord?.admissionDate || new Date().toISOString().split('T')[0],
+    admissionDate: editingRecord?.admissionDate || '',
     weight: editingRecord?.weight !== undefined && editingRecord?.weight !== null ? String(editingRecord.weight) : '',
     previousCKD: (editingRecord?.previousCKD === '1' || editingRecord?.previousCKD === '1 = Yes') ? 'Yes' : (editingRecord?.previousCKD === '0' || editingRecord?.previousCKD === '0 = No') ? 'No' : (editingRecord?.previousCKD || editingRecord?.pmhx?.previousCKD || ''),
     labs: {
@@ -130,23 +130,42 @@ export const PatientForm: React.FC = () => {
     if (isSubmitting || saveSuccess) return;
 
     try {
-      const generatedStudyId = data.id?.trim() || `PAT-${Date.now().toString().slice(-6)}`;
+      const enteredId = data.id?.trim() || null;
 
       await recordRepository.saveRecord({
         id: editingRecord?.id,
         createdAt: editingRecord?.createdAt,
-        studyId: generatedStudyId,
-        patientId: generatedStudyId,
-        age: data.age ? parseFloat(data.age) || data.age : null,
-        sex: data.sex,
-        gender: data.sex,
-        admissionDate: data.admissionDate,
-        weight: data.weight ? parseFloat(data.weight) || data.weight : null,
-        previousCKD: data.previousCKD,
+        studyId: enteredId,
+        patientId: enteredId,
+        age: data.age?.trim() ? data.age.trim() : null,
+        sex: data.sex?.trim() ? data.sex.trim() : null,
+        gender: data.sex?.trim() ? data.sex.trim() : null,
+        admissionDate: data.admissionDate?.trim() ? data.admissionDate.trim() : null,
+        weight: data.weight?.trim() ? data.weight.trim() : null,
+        previousCKD: data.previousCKD?.trim() ? data.previousCKD.trim() : null,
         pmhx: {
-          previousCKD: data.previousCKD,
+          previousCKD: data.previousCKD?.trim() ? data.previousCKD.trim() : null,
         },
-        labs: data.labs,
+        labs: {
+          hb: data.labs?.hb?.trim() || null,
+          wbcCount: data.labs?.wbcCount?.trim() || null,
+          plateletsCount: data.labs?.plateletsCount?.trim() || null,
+          sCr: data.labs?.sCr?.trim() || null,
+          egfr: data.labs?.egfr?.trim() || null,
+          ri: data.labs?.ri?.trim() || null,
+          bUrea: data.labs?.bUrea?.trim() || null,
+          ca: data.labs?.ca?.trim() || null,
+          ldh: data.labs?.ldh?.trim() || null,
+          uricAcid: data.labs?.uricAcid?.trim() || null,
+          b2Microglobulin: data.labs?.b2Microglobulin?.trim() || null,
+          bmPlasmaCellPercent: data.labs?.bmPlasmaCellPercent?.trim() || null,
+          spepAlbumin: data.labs?.spepAlbumin?.trim() || null,
+          spepAlpha1Globulin: data.labs?.spepAlpha1Globulin?.trim() || null,
+          spepAlpha2Globulin: data.labs?.spepAlpha2Globulin?.trim() || null,
+          spepBetaGlobulin: data.labs?.spepBetaGlobulin?.trim() || null,
+          spepGammaGlobulin: data.labs?.spepGammaGlobulin?.trim() || null,
+          spepAgRatio: data.labs?.spepAgRatio?.trim() || null,
+        },
       });
 
       setSaveSuccess(true);
@@ -177,7 +196,7 @@ export const PatientForm: React.FC = () => {
             <ArrowLeft className="w-4 h-4" /> Back to Records
           </Button>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-800">
-            {editingRecord ? `Edit Case (${editingRecord.studyId || editingRecord.patientId})` : 'New Patient Case'}
+            {editingRecord ? `Edit Case (${editingRecord.studyId || editingRecord.patientId || 'Unassigned ID'})` : 'New Patient Case'}
           </h1>
         </div>
 

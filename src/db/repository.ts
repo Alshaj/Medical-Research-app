@@ -7,14 +7,14 @@ export const recordRepository = {
    */
   async saveRecord(record: MedicalRecordInput): Promise<string> {
     const now = new Date().toISOString();
-    const id = record.id || `PAT-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    const studyId = record.studyId || record.patientId || `PAT-${Date.now().toString().slice(-6)}`;
+    const id = record.id || `REC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const studyId = record.studyId !== undefined ? record.studyId : (record.patientId !== undefined ? record.patientId : null);
 
     const fullRecord: MedicalRecord = {
       ...record,
       id,
-      studyId,
-      patientId: studyId,
+      studyId: studyId || null,
+      patientId: studyId || null,
       createdAt: record.createdAt || now,
       updatedAt: now,
       labs: {

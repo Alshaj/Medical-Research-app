@@ -31,7 +31,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
           <div>
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="text-[10px] sm:text-xs uppercase tracking-wider bg-teal-700 text-teal-100 px-2 py-0.5 rounded font-mono">
-                ID: {record.studyId || record.patientId || record.id}
+                ID: {record.studyId || record.patientId || 'Unassigned'}
               </span>
             </div>
             <h2 className="text-lg sm:text-xl font-bold mt-1.5 leading-snug">Patient Case Detail</h2>

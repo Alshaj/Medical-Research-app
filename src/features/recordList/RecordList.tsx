@@ -274,7 +274,7 @@ interface RecordCardProps {
 }
 
 const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelete }) => {
-  const displayId = record.studyId || record.patientId || record.id;
+  const displayId = record.studyId || record.patientId || 'Unassigned';
   const displayAge = record.age !== undefined && record.age !== null ? `${record.age}y` : 'N/A';
   const rawSex = record.sex || record.gender || 'N/A';
   const displaySex = (rawSex === '1' || rawSex === '1 = Male') ? 'Male' : (rawSex === '2' || rawSex === '2 = Female') ? 'Female' : rawSex;
