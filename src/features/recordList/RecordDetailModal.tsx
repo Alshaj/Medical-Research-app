@@ -18,7 +18,10 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
 
   const displayAge = record.age !== undefined && record.age !== null ? String(record.age) : 'N/A';
   const displayWeight = record.weight !== undefined && record.weight !== null ? String(record.weight) : 'N/A';
-  const displayPreviousCKD = record.previousCKD || record.pmhx?.previousCKD || 'N/A';
+  const rawSex = record.sex || record.gender || '';
+  const displaySex = rawSex === '1' ? '1 = Male' : rawSex === '2' ? '2 = Female' : (rawSex || 'N/A');
+  const rawCKD = record.previousCKD || record.pmhx?.previousCKD || '';
+  const displayPreviousCKD = rawCKD === '1' ? '1 = Yes' : rawCKD === '0' ? '0 = No' : (rawCKD || 'N/A');
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -59,7 +62,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
               </div>
               <div>
                 <span className="text-slate-400 block">Sex:</span>
-                <span className="font-semibold text-slate-700">{record.sex || record.gender || 'N/A'}</span>
+                <span className="font-semibold text-slate-700">{displaySex}</span>
               </div>
               <div>
                 <span className="text-slate-400 block">Date of Admission:</span>
