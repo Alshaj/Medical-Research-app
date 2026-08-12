@@ -96,7 +96,7 @@ export const PatientForm: React.FC = () => {
       plateletsCount: editingRecord?.labs?.plateletsCount ?? '',
       sCr: editingRecord?.labs?.sCr ?? '',
       egfr: editingRecord?.labs?.egfr ?? '',
-      ri: editingRecord?.labs?.ri ?? '',
+      ri: (editingRecord?.labs?.ri === '1' || editingRecord?.labs?.ri === '1 = Yes') ? 'Yes' : (editingRecord?.labs?.ri === '0' || editingRecord?.labs?.ri === '0 = No') ? 'No' : (editingRecord?.labs?.ri ?? ''),
       bUrea: editingRecord?.labs?.bUrea ?? '',
       ca: editingRecord?.labs?.ca ?? '',
       ldh: editingRecord?.labs?.ldh ?? '',
@@ -305,8 +305,9 @@ export const PatientForm: React.FC = () => {
               label="eGFR"
               {...register('labs.egfr')}
             />
-            <Input
+            <Select
               label="RI"
+              options={YES_NO_OPTIONS}
               {...register('labs.ri')}
             />
             <Input

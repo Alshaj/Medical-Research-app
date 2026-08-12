@@ -22,6 +22,8 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
   const displaySex = (rawSex === '1' || rawSex === '1 = Male') ? 'Male' : (rawSex === '2' || rawSex === '2 = Female') ? 'Female' : (rawSex || 'N/A');
   const rawCKD = record.previousCKD || record.pmhx?.previousCKD || '';
   const displayPreviousCKD = (rawCKD === '1' || rawCKD === '1 = Yes') ? 'Yes' : (rawCKD === '0' || rawCKD === '0 = No') ? 'No' : (rawCKD || 'N/A');
+  const rawRI = record.labs?.ri || '';
+  const displayRI = (rawRI === '1' || rawRI === '1 = Yes') ? 'Yes' : (rawRI === '0' || rawRI === '0 = No') ? 'No' : (rawRI || 'N/A');
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -100,7 +102,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
                 <div><span className="text-slate-400 block">Platelets count:</span> <span className="font-medium">{record.labs?.plateletsCount || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">S. Cr:</span> <span className="font-medium">{record.labs?.sCr || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">eGFR:</span> <span className="font-medium">{record.labs?.egfr || 'N/A'}</span></div>
-                <div><span className="text-slate-400 block">RI:</span> <span className="font-medium">{record.labs?.ri || 'N/A'}</span></div>
+                <div><span className="text-slate-400 block">RI:</span> <span className="font-medium">{displayRI}</span></div>
                 <div><span className="text-slate-400 block">B. Urea:</span> <span className="font-medium">{record.labs?.bUrea || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">Ca:</span> <span className="font-medium">{record.labs?.ca || 'N/A'}</span></div>
                 <div><span className="text-slate-400 block">LDH:</span> <span className="font-medium">{record.labs?.ldh || 'N/A'}</span></div>

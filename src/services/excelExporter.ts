@@ -27,6 +27,17 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     ckdVal = rawCKD;
   }
 
+  // Map RI: Yes -> 1, No -> 0
+  let riVal: number | string = '';
+  const rawRI = (record.labs?.ri || '').trim();
+  if (rawRI.toLowerCase() === 'yes' || rawRI === '1' || rawRI === '1 = Yes') {
+    riVal = 1;
+  } else if (rawRI.toLowerCase() === 'no' || rawRI === '0' || rawRI === '0 = No') {
+    riVal = 0;
+  } else if (rawRI) {
+    riVal = rawRI;
+  }
+
   return {
     'ID': record.studyId || record.patientId || '',
     'Age': record.age !== undefined && record.age !== null ? record.age : '',
@@ -43,7 +54,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
     'Platelets count': record.labs?.plateletsCount ?? '',
     'S. Cr': record.labs?.sCr ?? '',
     'eGFR': record.labs?.egfr ?? '',
-    'RI': record.labs?.ri ?? '',
+    'RI': riVal,
     'B. Urea': record.labs?.bUrea ?? '',
     'Ca': record.labs?.ca ?? '',
     'LDH': record.labs?.ldh ?? '',
