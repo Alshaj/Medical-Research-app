@@ -30,14 +30,14 @@ const customZodResolver = (schema: z.ZodSchema) => async (values: any) => {
 
 const SEX_OPTIONS = [
   { value: '', label: 'Select Sex' },
-  { value: '1', label: '1 = Male' },
-  { value: '2', label: '2 = Female' },
+  { value: 'Male', label: 'Male' },
+  { value: 'Female', label: 'Female' },
 ];
 
 const YES_NO_OPTIONS = [
   { value: '', label: 'Select Option' },
-  { value: '1', label: '1 = Yes' },
-  { value: '0', label: '0 = No' },
+  { value: 'Yes', label: 'Yes' },
+  { value: 'No', label: 'No' },
 ];
 
 // Zod Validation Schema - All fields are optional!
@@ -86,10 +86,10 @@ export const PatientForm: React.FC = () => {
   const defaultValues: PatientFormData = {
     id: editingRecord?.studyId || editingRecord?.patientId || '',
     age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
-    sex: editingRecord?.sex === 'Male' ? '1' : editingRecord?.sex === 'Female' ? '2' : (editingRecord?.sex || editingRecord?.gender || ''),
+    sex: (editingRecord?.sex === '1' || editingRecord?.sex === '1 = Male') ? 'Male' : (editingRecord?.sex === '2' || editingRecord?.sex === '2 = Female') ? 'Female' : (editingRecord?.sex || editingRecord?.gender || ''),
     admissionDate: editingRecord?.admissionDate || new Date().toISOString().split('T')[0],
     weight: editingRecord?.weight !== undefined && editingRecord?.weight !== null ? String(editingRecord.weight) : '',
-    previousCKD: editingRecord?.previousCKD === 'Yes' ? '1' : editingRecord?.previousCKD === 'No' ? '0' : (editingRecord?.previousCKD || editingRecord?.pmhx?.previousCKD || ''),
+    previousCKD: (editingRecord?.previousCKD === '1' || editingRecord?.previousCKD === '1 = Yes') ? 'Yes' : (editingRecord?.previousCKD === '0' || editingRecord?.previousCKD === '0 = No') ? 'No' : (editingRecord?.previousCKD || editingRecord?.pmhx?.previousCKD || ''),
     labs: {
       hb: editingRecord?.labs?.hb ?? '',
       wbcCount: editingRecord?.labs?.wbcCount ?? '',

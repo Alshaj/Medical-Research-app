@@ -5,16 +5,38 @@ import { MedicalRecord } from '../types/record';
  * Transforms JSON MedicalRecord objects into flat Excel rows
  */
 export function transformRecordToExcelRow(record: MedicalRecord) {
+  // Map Sex: Male -> 1, Female -> 2
+  let sexVal: number | string = '';
+  const rawSex = (record.sex || record.gender || '').trim();
+  if (rawSex.toLowerCase() === 'male' || rawSex === '1' || rawSex === '1 = Male') {
+    sexVal = 1;
+  } else if (rawSex.toLowerCase() === 'female' || rawSex === '2' || rawSex === '2 = Female') {
+    sexVal = 2;
+  } else if (rawSex) {
+    sexVal = rawSex;
+  }
+
+  // Map Previous CKD?: Yes -> 1, No -> 0
+  let ckdVal: number | string = '';
+  const rawCKD = (record.previousCKD || record.pmhx?.previousCKD || '').trim();
+  if (rawCKD.toLowerCase() === 'yes' || rawCKD === '1' || rawCKD === '1 = Yes') {
+    ckdVal = 1;
+  } else if (rawCKD.toLowerCase() === 'no' || rawCKD === '0' || rawCKD === '0 = No') {
+    ckdVal = 0;
+  } else if (rawCKD) {
+    ckdVal = rawCKD;
+  }
+
   return {
     'Record ID': record.id,
     'ID': record.studyId || record.patientId || record.id,
     'Age': record.age !== undefined && record.age !== null ? record.age : '',
-    'Sex': record.sex || record.gender || '',
+    'Sex': sexVal,
     'Date of Admission': record.admissionDate || '',
     'Weight': record.weight !== undefined && record.weight !== null ? record.weight : '',
 
     // Section 2: PMHX
-    'Previous CKD?': record.previousCKD || record.pmhx?.previousCKD || '',
+    'Previous CKD?': ckdVal,
 
     // Section 3: Labs
     'Hb': record.labs?.hb ?? '',

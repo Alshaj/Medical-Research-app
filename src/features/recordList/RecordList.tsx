@@ -44,17 +44,17 @@ export const RecordList: React.FC = () => {
       // Sex filter
       const recSex = rec.sex || rec.gender || '';
       if (selectedSexFilter !== 'ALL') {
-        if (selectedSexFilter === '1' && recSex !== '1' && recSex !== 'Male') return false;
-        if (selectedSexFilter === '2' && recSex !== '2' && recSex !== 'Female') return false;
-        if (selectedSexFilter !== '1' && selectedSexFilter !== '2' && recSex !== selectedSexFilter) return false;
+        if (selectedSexFilter === 'Male' && recSex !== 'Male' && recSex !== '1' && recSex !== '1 = Male') return false;
+        if (selectedSexFilter === 'Female' && recSex !== 'Female' && recSex !== '2' && recSex !== '2 = Female') return false;
+        if (selectedSexFilter !== 'Male' && selectedSexFilter !== 'Female' && recSex !== selectedSexFilter) return false;
       }
 
       // Previous CKD filter
       if (selectedPreviousCKDFilter !== 'ALL') {
         const recCKD = rec.previousCKD || rec.pmhx?.previousCKD || '';
-        if (selectedPreviousCKDFilter === '1' && recCKD !== '1' && recCKD !== 'Yes') return false;
-        if (selectedPreviousCKDFilter === '0' && recCKD !== '0' && recCKD !== 'No') return false;
-        if (selectedPreviousCKDFilter !== '1' && selectedPreviousCKDFilter !== '0' && recCKD !== selectedPreviousCKDFilter) return false;
+        if (selectedPreviousCKDFilter === 'Yes' && recCKD !== 'Yes' && recCKD !== '1' && recCKD !== '1 = Yes') return false;
+        if (selectedPreviousCKDFilter === 'No' && recCKD !== 'No' && recCKD !== '0' && recCKD !== '0 = No') return false;
+        if (selectedPreviousCKDFilter !== 'Yes' && selectedPreviousCKDFilter !== 'No' && recCKD !== selectedPreviousCKDFilter) return false;
       }
 
       // Search query across ID, age, sex, labs
@@ -207,8 +207,8 @@ export const RecordList: React.FC = () => {
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
             >
               <option value="ALL">All</option>
-              <option value="1">1 = Male</option>
-              <option value="2">2 = Female</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
           </div>
 
@@ -221,8 +221,8 @@ export const RecordList: React.FC = () => {
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white"
             >
               <option value="ALL">All</option>
-              <option value="1">1 = Yes</option>
-              <option value="0">0 = No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select>
           </div>
         </div>
@@ -277,9 +277,9 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
   const displayId = record.studyId || record.patientId || record.id;
   const displayAge = record.age !== undefined && record.age !== null ? `${record.age}y` : 'N/A';
   const rawSex = record.sex || record.gender || 'N/A';
-  const displaySex = rawSex === '1' ? '1 = Male' : rawSex === '2' ? '2 = Female' : rawSex;
+  const displaySex = (rawSex === '1' || rawSex === '1 = Male') ? 'Male' : (rawSex === '2' || rawSex === '2 = Female') ? 'Female' : rawSex;
   const rawCKD = record.previousCKD || record.pmhx?.previousCKD || 'N/A';
-  const displayPreviousCKD = rawCKD === '1' ? '1 = Yes' : rawCKD === '0' ? '0 = No' : rawCKD;
+  const displayPreviousCKD = (rawCKD === '1' || rawCKD === '1 = Yes') ? 'Yes' : (rawCKD === '0' || rawCKD === '0 = No') ? 'No' : rawCKD;
 
   return (
     <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-4">
@@ -290,7 +290,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
           </span>
           {displayPreviousCKD !== 'N/A' && (
             <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${
-              displayPreviousCKD === '1 = Yes' || displayPreviousCKD === 'Yes' || displayPreviousCKD === '1'
+              displayPreviousCKD === 'Yes' || displayPreviousCKD === '1' || displayPreviousCKD === '1 = Yes'
                 ? 'bg-rose-100 text-rose-800 border-rose-200'
                 : 'bg-emerald-100 text-emerald-800 border-emerald-200'
             }`}>
