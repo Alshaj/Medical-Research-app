@@ -57,14 +57,16 @@ export const RecordList: React.FC = () => {
         if (selectedPreviousCKDFilter !== 'Yes' && selectedPreviousCKDFilter !== 'No' && recCKD !== selectedPreviousCKDFilter) return false;
       }
 
-      // Search query across ID, age, sex, labs
+      // Search query across ID, Profile No, age, sex, labs
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase();
       const idStr = (rec.studyId || rec.patientId || rec.id).toLowerCase();
+      const profStr = (rec.profileNo || '').toLowerCase();
       const ageStr = rec.age !== undefined && rec.age !== null ? String(rec.age) : '';
 
       return (
         idStr.includes(q) ||
+        profStr.includes(q) ||
         ageStr.includes(q) ||
         recSex.toLowerCase().includes(q) ||
         (rec.labs?.hb && rec.labs.hb.toLowerCase().includes(q)) ||
@@ -285,9 +287,16 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, onEdit, onView, onDelet
     <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-4">
       <div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100">
-            ID: {displayId}
-          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-mono text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-100">
+              ID: {displayId}
+            </span>
+            {record.profileNo && (
+              <span className="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200" title="Profile No">
+                Prof: {record.profileNo}
+              </span>
+            )}
+          </div>
           {displayPreviousCKD !== 'N/A' && (
             <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium border ${
               displayPreviousCKD === 'Yes' || displayPreviousCKD === '1' || displayPreviousCKD === '1 = Yes'

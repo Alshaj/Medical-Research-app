@@ -44,6 +44,7 @@ const YES_NO_OPTIONS = [
 const patientFormSchema = z.object({
   // Section 1: Demographics
   id: z.string().optional(),
+  profileNo: z.string().optional(),
   age: z.string().optional(), // Accepts number in fraction e.g. 0.5 (5 months)
   sex: z.string().optional(),
   admissionDate: z.string().optional(),
@@ -85,6 +86,7 @@ export const PatientForm: React.FC = () => {
 
   const defaultValues: PatientFormData = {
     id: editingRecord?.studyId || editingRecord?.patientId || '',
+    profileNo: editingRecord?.profileNo || '',
     age: editingRecord?.age !== undefined && editingRecord?.age !== null ? String(editingRecord.age) : '',
     sex: (editingRecord?.sex === '1' || editingRecord?.sex === '1 = Male') ? 'Male' : (editingRecord?.sex === '2' || editingRecord?.sex === '2 = Female') ? 'Female' : (editingRecord?.sex || editingRecord?.gender || ''),
     admissionDate: editingRecord?.admissionDate || '',
@@ -137,6 +139,7 @@ export const PatientForm: React.FC = () => {
         createdAt: editingRecord?.createdAt,
         studyId: enteredId,
         patientId: enteredId,
+        profileNo: data.profileNo?.trim() || null,
         age: data.age?.trim() ? data.age.trim() : null,
         sex: data.sex?.trim() ? data.sex.trim() : null,
         gender: data.sex?.trim() ? data.sex.trim() : null,
@@ -228,10 +231,14 @@ export const PatientForm: React.FC = () => {
             <span>1. Demographics</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <Input
               label="ID"
               {...register('id')}
+            />
+            <Input
+              label="Profile No"
+              {...register('profileNo')}
             />
             <Input
               label="Age"

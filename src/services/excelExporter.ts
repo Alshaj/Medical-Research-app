@@ -40,6 +40,7 @@ export function transformRecordToExcelRow(record: MedicalRecord) {
 
   return {
     'ID': record.studyId || record.patientId || '',
+    'Profile No': record.profileNo || '',
     'Age': record.age !== undefined && record.age !== null ? record.age : '',
     'Sex': sexVal,
     'Date of Admission': record.admissionDate || '',

@@ -1,5 +1,6 @@
 export interface DemographicsData {
   id?: string;
+  profileNo?: string | null;
   age?: number | string | null;
   sex?: string;
   admissionDate?: string;
@@ -40,6 +41,7 @@ export interface MedicalRecord {
   // Section 1: Demographics (All optional)
   studyId?: string;
   patientId?: string; // ID field
+  profileNo?: string | null; // Profile No
   age?: number | string | null; // Numbers in fraction (e.g., 0.5 = 5 months)
   sex?: string; // Sex
   gender?: string; // Alias for sex

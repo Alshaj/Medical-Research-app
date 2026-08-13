@@ -53,10 +53,14 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({ record, on
             <h3 className="font-semibold text-slate-800 flex items-center gap-2 text-teal-800">
               <User className="w-4 h-4" /> 1. Demographics
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 bg-slate-50 p-3 sm:p-3.5 rounded-xl border border-slate-100 text-xs">
               <div>
                 <span className="text-slate-400 block">ID:</span>
                 <span className="font-semibold text-slate-700">{record.studyId || record.patientId || 'N/A'}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 block">Profile No:</span>
+                <span className="font-semibold text-slate-700">{record.profileNo || 'N/A'}</span>
               </div>
               <div>
                 <span className="text-slate-400 block">Age:</span>
